@@ -52,7 +52,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
         )}
         {nextPage && (
           <Link href={`/${basePath}/page/${currentPage + 1}`} rel="next">
-            Next
+            下一页
           </Link>
         )}
       </nav>
