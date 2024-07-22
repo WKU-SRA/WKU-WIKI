@@ -3,7 +3,6 @@ import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import AuthorLayout from '@/layouts/AuthorLayout'
 import { coreContent } from 'pliny/utils/contentlayer'
 import { genPageMetadata } from 'app/seo'
-import Link from 'next/link'
 
 export const metadata = genPageMetadata({ title: '关于我们' })
 

@@ -39,7 +39,8 @@
     "**/*.json",
     ".contentlayer/generated",
     ".contentlayer/generated/**/*.json",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "data/blog/ielts.mdx"
   ],
   "exclude": ["node_modules"]
 }
