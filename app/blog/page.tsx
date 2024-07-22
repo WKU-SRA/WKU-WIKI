@@ -24,7 +24,7 @@ export default function BlogPage() {
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="文章"
+      title="articles"
     />
   )
 }
