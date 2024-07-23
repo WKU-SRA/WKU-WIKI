@@ -8,7 +8,7 @@ import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
-  const tag = decodeURI(params.tag)
+  const tag = decodeURI(decodeURI(params.tag))
   return genPageMetadata({
     title: tag,
     description: `${siteMetadata.title} ${tag} tagged content`,
