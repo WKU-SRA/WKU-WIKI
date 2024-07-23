@@ -1,6 +1,6 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: '温州科协科研飞跃手册',
+  title: '温肯科协科研飞跃手册',
   author: 'WKU-SRA',
   headerTitle: '科研飞跃手册',
   description: '申研、科研、创新、竞赛、实习、就业、留学',
