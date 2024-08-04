@@ -7,13 +7,14 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is;
-  style-src 'self' 'unsafe-inline';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app  analytics.umami.is https://static.cloudflareinsights.com;
+  style-src 'self'  'unsafe-inline';
   img-src * blob: data:;
   media-src *.s3.amazonaws.com;
   connect-src *;
   font-src 'self';
-  frame-src giscus.app
+  frame-src 'self'  www.python.org python.org https://python.org pythontutor.com http://pythontutor.com https://pythontutor.com www.pythontutor.com giscus.app player.bilibili.com youtube.com https://react.dev www.react.dev www.bilibili.com www.codesandbox.io https://codesandbox.io;
+  child-src 'self' giscus.app player.bilibili.com youtube.com;
 `
 
 const securityHeaders = [
@@ -30,7 +31,7 @@ const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   {
     key: 'X-Frame-Options',
-    value: 'DENY',
+    value: 'SAMEORIGIN',
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
   {
@@ -76,6 +77,10 @@ module.exports = () => {
         {
           protocol: 'https',
           hostname: 'picsum.photos',
+        },
+        {
+          protocol: 'https',
+          hostname: 'krseoul.imgtbl.com',
         },
       ],
       unoptimized,

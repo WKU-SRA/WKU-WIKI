@@ -1,0 +1,378 @@
+---
+title: '初探编程语言'
+date: '2024-08-01'
+tags: ['CPS', '教程', 'SRA 编程入门之夏']
+draft: true
+summary: '编程语言这么多，他们到底有啥区别'
+authors: ['default']
+---
+
+import Player from 'components/Player'
+import Divider from '@/components/ui/divider'
+import { TimeStampPlayer } from 'components/Player'
+import ImageWrapper from 'components/ImageWrapper'
+
+# 欢迎
+
+欢迎登舰 🧑‍✈️ 来杯咖啡？☕️
+
+<Divider />
+
+# 编程语言的历史
+
+<TimeStampPlayer
+  description="下一个改变历史的也许就是你"
+  heading="编程语言的历史"
+  summary=" A new level of abstraction ! 为什么需要了解编程语言的历史呢？纵观人类发展史，无论是科研或是工程，人类都是在不断抽象已有的知识和经验，以更高层次的抽象来简化复杂问题，提高效率和生产力。了解编程语言发展史便也是对抽象哲学的再理解    "
+  checkPoints={[
+    {
+      label: '低级语言',
+      time: '00:01:37',
+      content:
+        '低级语言是计算机编程语言中最接近机器语言的语言。它们通常包括机器语言和汇编语言。低级语言直接与计算机硬件交互，提供了对硬件资源的精细控制。由于其接近硬件的特性，低级语言通常用于系统编程、嵌入式系统和性能关键的应用近硬件的特性，低级语言通常用于系统编程、嵌入式系统和性能关键的应用。',
+    },
+    {
+      label: '高级语言',
+      time: '00:04:00',
+      content:
+        '高级语言是抽象程度较高的编程语言，旨在简化编程过程，使程序员能够更容易地编写、阅读和维护代码。高级语言通常提供丰富的库和框架，支持更高层次的编程概念，如面向对象编程、函数式编程等。',
+    },
+  ]}
+  link={
+    '//player.bilibili.com/player.html?isOutside=true&aid=21376839&bvid=BV1EW411u7th&cid=36394036&p=11'
+  }
+/>
+
+<Divider />
+
+# 编程语言概览
+
+Fireship 的视频已经很详细地介绍了各种编程语言的特性和应用场景，我们在这里就不赘述了，接下来我们把重心放到编程范式上。
+
+<Player
+  link={
+    '//player.bilibili.com/player.html?isOutside=true&aid=472440059&bvid=BV15T411F7js&cid=817843452&p=1'
+  }
+/>
+
+<Divider />
+
+# 编程范式
+
+## 面向对象编程（OOP）：Object-Oriented Programming (OOP)
+
+> Object-oriented programs are offered as alternatives to correct ones”  
+> Edsger W. Dijkstra (1989) 荷兰计算机科学家，图灵奖获得者
+
+在论坛 stackoverflow 里，面向对象的诞生是不是程序史上最糟糕的一天一直是极具争议的几个话题之一。而作为 WKUer，面向对象无疑是大多 WKUer 接触的第一种编程范式，在接触了面向对象如此完美的编程范式后，很多时候我们便不愿意去接触其他编程范式，毕竟万物皆可 Object。
+所以在大家和 Java 私定终身前，我们先来揭开 OOP 神秘的面纱，来看看我们大学生涯伴随我们最久的编程语言究竟是何方神圣。
+
+<div className="pb-12 pt-12 text-sm leading-loose  text-muted-foreground">
+
+### 📚 前置知识：
+
+<p>
+  `public`,`private`
+  是访问修饰符，人有边界，程序也一样，我们通过设置这些访问修饰符来限定一些东西的访问权限
+</p>
+
+<p>`int` `double`, `boolean` 是 `primitive data type`（初始数据类型）, 字如其意，他们就是用来限定一些类型的，限制变量的行为，减少因类型不同而产生的错误，
+不同类型之间会有区别，而每个类型的实现方式也不同，具体内容将在之后的教程中涉及，当然，也有动态类型，比如python，移步到下面代码，你会发现python的属性没有任何修饰</p>
+<p> `def` 是 Python 的关键字`key word` 保留字`reserved word`，字如其名，用来定义一些东西，比如定义一个方法呀，定义一个属性呀</p>
+</div>
+
+很多人都幻想着退休以后开一个咖啡厅 ☕️，奶茶店 🥛，也许万物的尽头是餐饮吧。假设我们在程序世界开了一家梦想咖啡厅，对外售卖美味的咖啡饮品。店里有一个咖啡师小C，他很喜欢繁琐的工作，追求极致的细节。店里有很多台咖啡机，甚至都是同一个型号的，但严谨的小C依然遵守着操作手册（你的代码），日复一日做着同一杯咖啡。
+
+小C的工作方式其实有点像C语言中的面向过程编程。在C语言中，我们会为每个具体任务编写具体的函数，每个函数负责特定的操作。对于小C来说，每个咖啡机都有一套具体的操作手册（函数），无论这些操作多么相似，都需要单独处理。这种方法的优点是操作简单、直观，容易理解和实现，但缺点是代码可能会冗长重复，不够灵活。
+
+有一天，来了一个新的咖啡师叫Java。他觉得小C完全没必要这么麻烦，店里那么多咖啡机，完全没必要把它们看作完全不同的东西。Java同学总结了咖啡机的特性，发现它们拥有一些共同的属性，比如运行状态、咖啡量、温度，而且这些咖啡机都在做一些很相似的事情，比如设定温度、查看温度、提前加热等等。
+
+Java同学总结出了一个模板（template，blueprint），凡是具有相同属性并实现相同方法的对象，就是实现这个模板的实例。Java同学的这种总结方法使得我们不再需要为每一台咖啡机编写独立的操作手册，只需要基于这个模板创建实例，就可以简化工作流程并提高效率。这种方法类似于Java和Python中的面向对象编程，通过定义类和对象，使得代码更加模块化、重用性更强。
+
+### **数据封装**：
+
+Java 同学还指出，我们需要保护每台咖啡机的内部状态，防止外界直接修改。你不想 Java 同学随便就能提升咖啡机的温度吧，万一 Java 同学一个手滑，咖啡机一下被调到1000度怎么办，这就像我们不能随便打开咖啡机的盖子调整内部零件一样，对数据的封装，使系统内部更加稳定和安全。
+于是，他将咖啡机的属性（如运行状态、咖啡量、温度）设为私有的（private），并通过公开的方法（如getters和setters）来访问和修改这些属性。这样做的好处是，确保了咖啡机的内部状态只能通过受控的方式改变，避免了不一致的状态。
+
+<ImageWrapper link="https://www.researchgate.net/profile/Jingyuan-Yan/publication/283760779/figure/fig7/AS:614002757468175@1523401073558/Exploded-view-of-espresso-machine.png" />
+
+```java
+public class CoffeeMachine {
+    private boolean isOn;// these there are attributes
+    private double coffeeAmount;
+    private double temperature;
+
+    //Getter and Setter, I separate them with operations, because they are specified to the operations on data
+    public boolean getSth() {
+       //here is internal logic, no need to know
+    }
+
+    public void setSth(boolean isOn) {
+        this.isOn = isOn;
+    }
+
+
+    // Method, function, also operation
+    public void preHeat() {
+
+    }
+}
+```
+
+### **继承**：
+
+不久后，咖啡厅引入了新的设备—牛奶打泡机。Java同学发现，牛奶打泡机和咖啡机有很多相似的地方：它们都有运行状态、温度等属性，也需要加热和维护温度。于是，Java同学创建了一个通用的基类`Machine`，包含这些共同的属性和方法，然后让`CoffeeMachine`和`MilkFrother`类继承这个基类。
+
+```java
+public class Machine {
+    private boolean isOn;// all machines should have these two attribute
+    private double temperature;
+
+    //general getter, setter, and opertation
+    public generalMethod(){
+
+    }
+
+    //....
+
+}
+
+public class CoffeeMachine extends Machine {
+    private double coffeeAmount;//Specific only to the coffee machine because not all machines have a coffee amount setting
+
+    // Additional methods specific to CoffeeMachine
+    public void someOperations(){
+
+    }
+}
+
+public class MilkFrother extends Machine {
+    private double milkAmount;// see coffee machine, they both tell the same story
+
+    public double getMilkAmount() {
+        return milkAmount;
+    }
+
+    public void setMilkAmount(double milkAmount) {
+        this.milkAmount = milkAmount;
+    }
+
+    // Additional methods specific to MilkFrother
+    public void someOperations(){
+
+    }
+}
+```
+
+### **多态**：
+
+Java同学在操作牛奶打泡机的时候发现咖啡机和牛奶打泡机作为机器的儿子（子类），他们都能执行操作机器的方法，于是他更进一步，通过多态性简化操作。
+
+由于所有设备都继承自`Machine`类，我们可以编写通用的方法来处理这些设备，而不需要关心具体是哪种设备。
+
+```java
+public void operateMachine(Machine machine) {
+    machine.preHeat();
+    System.out.println("Machine is now ready.");
+}
+
+public static void main(String[] args) {
+    CoffeeMachine coffeeMachine = new CoffeeMachine();
+    MilkFrother milkFrother = new MilkFrother();
+
+    operateMachine(coffeeMachine);
+    operateMachine(milkFrother);
+}
+```
+
+通过这种方式，我们只需要编写一次操作逻辑，就可以应用于所有类型的设备。这种多态性的好处是代码更加简洁、灵活，易于扩展。
+
+Python's class:
+
+```python
+class CoffeeMachine:
+    def __init__(self):
+        self.is_on = False # attribute here, same as java
+        self.coffee_amount = 0.0
+        self.temperature = 20.0
+
+    def doSth():
+      # doSth, operation, same as java,
+```
+
+### OOP的缺陷
+
+`Java` `C++` 是比较典型的面向对象语言，面向对象在有一段时间内可谓说是风靡全球，几乎没有语言不想实现面向对象范式，但面向对象真的是最好的范式吗？值得很多程序员困于这个舒适圈而不愿意接触其他编程范式吗？我们不妨看看反对者的声音
+
+有人说OOP完全是**过度设计（Overengineering）**，OOP的原则和设计模式鼓励将问题分解为对象和类，这有时会导致过度设计。开发者可能会创建过多的类和继承层次，使代码变得复杂和难以维护，有时候我们完全不用类来实现业务逻辑，比如爬取学校教授科研方向，
+业务逻辑很简单，获取学校官网，解析html，筛选师资信息里的publication，完全没必要创建类，类都没有肯定也不会涉及继承。**设计模式的滥用**，许多开发者在不需要的情况下使用复杂的设计模式，导致代码冗长和难以理解，类似`singleton`, `factory`, `decorator`, even more canbe replaced by functions, functions, and even more functions 😝 。
+OOP同时也会带来不必要的**开销**，OOP中的抽象层次和多态机制（如虚函数调用）可能会增加运行时的开销，导致性能下降。这在需要高性能的系统中（如游戏开发、嵌入式系统）尤为明显。**代码膨胀（Code Bloat）**，OOP中的类和对象往往会导致
+代码量增加（见下代码对比），特别是在大型系统中。这样会使代码库变得臃肿，难以管理。
+
+```java
+//java
+public class MyFirstProgram{
+  public static void main (String[] args){
+    System.out.println("HELLO WORLD !")
+  }
+}
+```
+
+```python
+#python
+pring("HELLO WORLD !")
+```
+
+<Divider />
+
+# 函数式编程（FP）：Functional Programming (FP)
+
+函数式编程强调使用纯函数、不可变数据和高阶函数。我们试图避免状态变化和副作用以降低系统复杂度，以高代码的可预测性和可测试性。以咖啡店为例：
+
+```python
+def turn_on_machine():
+    return "Machine is on"
+
+def set_temperature(temp):
+    return f"Temperature set to {temp} degrees"
+
+def brew_coffee():
+    return "Brewing coffee"
+
+"""
+this is a higher order function, you are passing function to another function,
+but imo, js is better to illustrate hof, because functions are the first class
+citizen there. And if you have taken the courese we will give you about higher
+order function, you will find this function did not recieve any parameters, but
+it you can see it is a function, cause it are seeking the parameters from the
+global scope.
+"""
+
+def make_coffee():
+    steps = [turn_on_machine, set_temperature, brew_coffee]
+    for step in steps:
+        result = step() if step != set_temperature else step(90.0)
+        print(result)
+
+make_coffee()
+
+```
+
+在这个例子中，每个函数都是纯函数（没有副作用），你没有修改变量，没有改变外界的状态，而且我们通过高阶函数和函数组合的方式来实现整个咖啡制作流程。
+当然了，Python 不是纯粹的函数式编程语言，我支持≠我是，这里只是用Python模拟，就像C语言不是OOP，但是也能模仿OOP的特性，纯粹的函数式编程语言有`Haskell`,`Lisp`,
+`Clojure`（closure）等，也有吸收函数式编程精华的框架如`React`
+
+函数式编程的思想非常美，唯一的输入得到唯一的输出，不改变任何东西，转念一想，世间万物不都是函数吗 ☺️
+
+关于函数式编程哲学，大家可以阅读下面 React （JavaScript 库，常用于网页开发）文档，想一想为什么Immutable（不可变）能降低程序的复杂度，减少错误的产生，
+这里给大家 React 的英语文档，是因为阅读英语文档，阅读自己未知领域的文本，是程序员的必备技能，我们希望大家在阅读本教程时能提升多方面能力，而不是只是掌握了 Python 就 OK 了
+
+<div className="relative overflow-hidden">
+  <iframe
+    allowFullScreen
+    className="min-h-[600px] w-full"
+    src="https://react.dev/learn/keeping-components-pure#purity-components-as-formulas"
+  />
+</div>
+
+<Divider />
+
+# 过程式编程：Procedural Programming
+
+在面向过程编程中，我们通过编写一系列步骤或过程来完成任务。每个过程都是独立的函数，通过调用这些函数来完成整个工作流程。以咖啡店为例：
+
+```c
+#include <stdio.h>
+
+// function in C
+void turnOnMachine() {
+    printf("Turning on the coffee machine...\n");
+}
+
+void setTemperature(double temp) {
+    printf("Setting temperature to %.1f degrees...\n", temp);
+}
+
+void brewCoffee() {
+    printf("Brewing coffee...\n");
+}
+
+int main() {
+    // procedure
+    turnOnMachine();
+    setTemperature(90.0);
+    brewCoffee();
+    return 0;
+}
+```
+
+在这种方式中，每个步骤都是一个独立的函数，整个流程通过函数调用顺序来实现。这种方法简单直观，但当系统变复杂时，代码的可维护性和扩展性可能会下降。
+
+<Divider />
+
+# 命令式编程：Imperative Programming
+
+在命令式编程中，程序员需要详细描述每一步的操作，告诉计算机如何一步一步地完成任务。就像一位咖啡店的经理，他需要给咖啡师详细的指示，描述每一步该怎么做
+在我们的咖啡店里，经理Java（是的我升职了😎）特别喜欢掌控每一个细节。他认为只有这样，才能确保每一杯咖啡都能达到最佳口感。于是，Java给咖啡师小C提供了一份详细的操作手册，每一步都写得清清楚楚。
+
+手册内容如下：
+
+1. **打开咖啡机**：按下电源按钮，等待咖啡机启动。
+2. **设置温度**：将温度调节到90摄氏度。
+3. **添加咖啡豆**：将30克咖啡豆倒入咖啡机的磨豆器。
+4. **研磨咖啡豆**：按下研磨按钮，研磨咖啡豆。
+5. **加水**：向水箱中添加200毫升的水。
+6. **冲泡咖啡**：按下冲泡按钮，开始冲泡咖啡。
+7. **倒出咖啡**：将冲泡好的咖啡倒入咖啡杯中。
+
+小C按照这些步骤，一步一步地操作，最终制作出一杯香浓的咖啡。这种方式就是命令式编程，程序员需要详细描述每一步的操作过程。
+
+<Divider />
+
+# 声明式编程：Declarative Programming
+
+在声明式编程中，程序员需要描述的是“要做什么”，而不是“如何做”。就像咖啡店里的另一位经理html，她只告诉咖啡师她希望得到什么样的咖啡，而不是详细说明每一步的操作。
+html认为咖啡师sql已经非常熟练，不需要详细的指示。她只需要告诉sql她想要一杯怎样的咖啡，sql就会知道该怎么做。于是，html告诉sql：
+
+“请给我一杯90摄氏度的咖啡，使用30克咖啡豆，加入200毫升的水。”
+
+```sql
+-- create a table（DDL）is to give the definition
+CREATE TABLE CoffeeOrders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    temperature INT,
+    coffee_beans_weight INT,
+    water_volume INT,
+    status VARCHAR(50)
+);
+
+-- Do something（DML）,as you can see, sql are giving you a cup of coffee with 90 degree, 30g coffee beans, 200ml water
+INSERT INTO CoffeeOrders (temperature, coffee_beans_weight, water_volume, status)
+VALUES (90, 30, 200, 'Pending');
+SELECT * FROM CoffeeOrders WHERE status = "Pending";
+```
+
+小sql知道如何去操作咖啡机，如何研磨咖啡豆，如何冲泡咖啡。他按照自己的方式和步骤，最终制作出一杯符合小丽要求的咖啡。这种方式就是声明式编程，程序员只需要描述目标和结果，而具体的操作过程由底层系统处理。
+
+关于声明式编程，为什么要使用它，大家可以阅读下面 React （JavaScript 库，常用于网页开发） 文档
+
+<div className="relative overflow-hidden">
+  <iframe
+    allowFullScreen
+    className="min-h-[600px] w-full"
+    src="https://react.dev/learn/reacting-to-input-with-state#how-declarative-ui-compares-to-imperative"
+  />
+</div>
+
+<Divider />
+
+# Labs:
+
+- 阅读React对应文档，为什么要使用声明式编程，你能举个类似的例子吗？
+- 模仿咖啡店，写一个描述OOP的故事
+- 收集 pure function 和 immutability 的资料，展示你的理解
+
+<p className="text-muted-foreground">
+  欢迎大家在评论区展示自己的
+  labs，无论你的labs做得怎么样，我们都会为你留下评论，希望在评论区和你一起讨论
+</p>

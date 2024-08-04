@@ -1,6 +1,5 @@
 import 'css/prism.css'
 import 'katex/dist/katex.css'
-
 import PageTitle from '@/components/PageTitle'
 import { components } from '@/components/MDXComponents'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
@@ -13,6 +12,10 @@ import PostBanner from '@/layouts/PostBanner'
 import { Metadata } from 'next'
 import siteMetadata from '@/data/siteMetadata'
 import { notFound } from 'next/navigation'
+import ClientComponent from './wrapper'
+import GiscusComments from '@/components/GiscusComments'
+import BlogSidebar from '@/components/BlogSideBar'
+import { list } from 'postcss'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -90,6 +93,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   const prev = sortedCoreContents[postIndex + 1]
   const next = sortedCoreContents[postIndex - 1]
   const post = allBlogs.find((p) => p.slug === slug) as Blog
+  const lists = post?.toc as unknown as { value: string; url: string; depth: number }[]
   const authorList = post?.authors || ['default']
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
@@ -108,13 +112,16 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <ClientComponent
+        jsonLd={jsonLd}
+        mainContent={mainContent}
+        authorDetails={authorDetails}
+        next={next}
+        prev={prev}
+        post={post}
       />
-      <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
-        <MDXLayoutRenderer code={post.body.code} components={components} toc={post.toc} />
-      </Layout>
+      <BlogSidebar lists={lists} />
+      <GiscusComments />
     </>
   )
 }

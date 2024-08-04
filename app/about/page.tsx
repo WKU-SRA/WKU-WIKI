@@ -11,7 +11,7 @@ export default function Page() {
   const mainContent = coreContent(author)
 
   return (
-    <div>
+    <div className="flex flex-col">
       <AuthorLayout content={mainContent}>
         <MDXLayoutRenderer code={author.body.code} />
       </AuthorLayout>
