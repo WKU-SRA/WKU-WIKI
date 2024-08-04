@@ -158,11 +158,14 @@ export const MobileSidebar = ({ className, children, ...props }: React.Component
 }
 
 export const SidebarLink = ({
+  style,
   link,
   className,
   action,
   ...props
 }: {
+  expanded?: boolean
+  style?: React.CSSProperties
   link: Links
   className?: string
   props?: LinkProps
@@ -171,6 +174,7 @@ export const SidebarLink = ({
   const { open, animate } = useSidebar()
   return (
     <Link
+      style={style}
       onClick={action}
       href={link.href}
       className={cn('group/sidebar flex items-center justify-start  gap-2 py-2', className)}

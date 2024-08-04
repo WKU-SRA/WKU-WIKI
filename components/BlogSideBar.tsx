@@ -68,7 +68,7 @@ export default function BlogSidebar({ lists }: SidebarProps) {
   return (
     <div
       className={cn(
-        'fixed left-1 top-2 mx-auto max-h-[90vh] w-auto max-w-7xl flex-1 flex-col overflow-auto rounded-md border border-neutral-200 bg-gray-100 dark:border-neutral-700 dark:bg-neutral-800 md:min-h-[300px] md:flex-row',
+        'fixed left-1 top-2 mx-auto max-h-[90vh] w-auto max-w-7xl flex-1 flex-col overflow-auto rounded-md border border-neutral-200 bg-gray-100 opacity-30 hover:opacity-100 dark:border-neutral-700 dark:bg-neutral-800 md:min-h-[300px] md:flex-row md:opacity-60 lg:opacity-100',
         'h-auto'
       )}
     >
@@ -79,14 +79,23 @@ export default function BlogSidebar({ lists }: SidebarProps) {
             <div className="mt-8 flex flex-col gap-2">
               {links.map((link, idx) =>
                 link.label !== '本页导航' ? (
-                  <SidebarLink key={idx} link={link} />
+                  <SidebarLink expanded key={idx} link={link} />
                 ) : (
                   <>
-                    <SidebarLink action={() => setCollapsed(!collapsed)} key={idx} link={link} />
+                    <SidebarLink
+                      expanded
+                      action={() => {
+                        console.log('hi')
+                        setCollapsed(!collapsed)
+                      }}
+                      key={idx}
+                      link={link}
+                    />
                     {lists.map(
                       (list, idx) =>
                         collapsed && (
                           <SidebarLink
+                            style={{ paddingLeft: `${32 * (list.depth - 1)}px` }}
                             action={() => handleCollapse(list.url)}
                             key={idx}
                             link={{
@@ -96,7 +105,7 @@ export default function BlogSidebar({ lists }: SidebarProps) {
                                 <IconRocket className="h-5 w-5 flex-shrink-0 text-primary-500 dark:text-neutral-200" />
                               ),
                             }}
-                            className={`pl-${(list.depth - 1) * 4}`}
+                            className={cn(`pl-${list.depth * 4}`)}
                           />
                         )
                     )}
