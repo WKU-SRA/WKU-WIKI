@@ -5,8 +5,11 @@ import { Sidebar, SidebarBody, SidebarLink } from 'components/ui/sidebar'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { SideBarButton } from 'components/ui/sidebar'
+import getRandom from 'lib/utils/random-utils'
 
 import {
+  IconSchool,
   IconAlignBoxBottomLeftFilled,
   IconArticle,
   IconNotebook,
@@ -82,10 +85,9 @@ export default function BlogSidebar({ lists }: SidebarProps) {
                   <SidebarLink expanded key={idx} link={link} />
                 ) : (
                   <>
-                    <SidebarLink
+                    <SideBarButton
                       expanded
                       action={() => {
-                        console.log('hi')
                         setCollapsed(!collapsed)
                       }}
                       key={idx}
@@ -102,10 +104,13 @@ export default function BlogSidebar({ lists }: SidebarProps) {
                               label: list.value,
                               href: list.url,
                               icon: (
-                                <IconRocket className="h-5 w-5 flex-shrink-0 text-primary-500 dark:text-neutral-200" />
+                                <IconSchool className="h-5 w-5 flex-shrink-0 text-primary-500 dark:text-neutral-200" />
                               ),
                             }}
-                            className={cn(`pl-${list.depth * 4}`)}
+                            className={cn(
+                              `pl-${list.depth * 4}`,
+                              open ? 'flex justify-start' : 'hidden'
+                            )}
                           />
                         )
                     )}

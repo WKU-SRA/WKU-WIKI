@@ -194,3 +194,40 @@ export const SidebarLink = ({
     </Link>
   )
 }
+
+export const SideBarButton = ({
+  style,
+  link,
+  className,
+  action,
+  ...props
+}: {
+  expanded?: boolean
+  style?: React.CSSProperties
+  link: Links
+  className?: string
+  props?: LinkProps
+  action?: () => void
+}) => {
+  const { open, animate } = useSidebar()
+  return (
+    <button
+      style={style}
+      onClick={action}
+      className={cn('group/sidebar flex items-center justify-start  gap-2 py-2', className)}
+      {...props}
+    >
+      {link.icon}
+
+      <motion.span
+        animate={{
+          display: animate ? (open ? 'inline-block' : 'none') : 'inline-block',
+          opacity: animate ? (open ? 1 : 0) : 1,
+        }}
+        className="!m-0 inline-block whitespace-pre !p-0 text-sm text-neutral-700 transition duration-150 group-hover/sidebar:translate-x-1 dark:text-neutral-200"
+      >
+        {link.label}
+      </motion.span>
+    </button>
+  )
+}

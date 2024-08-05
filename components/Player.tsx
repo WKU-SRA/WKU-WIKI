@@ -1,6 +1,6 @@
 'use client'
 
-import { transformTimeToSeconds } from 'lib/utils/dateTime'
+import { transformTimeToSeconds } from 'lib/utils/date-utils'
 import React, { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import TimeStampChecker from './TimeStampChecker'

@@ -44,15 +44,16 @@ export default function ImageWrapper({
 
       {modalIsOpen && (
         <div className="fixed inset-0 z-50 flex h-screen w-screen items-center justify-center bg-black bg-opacity-50">
-          <div className="rounded bg-white p-4 shadow-lg">
+          <div className="relative flex h-5/6 w-5/6 items-center justify-center rounded bg-white p-4 shadow-lg">
             <img
-              className="h-full w-full"
+              className="max-h-full max-w-full"
               src={link}
               alt="此图片来自互联网，托管服务商可能删除了此图片"
-              width={500}
-              height={500}
             />
-            <button onClick={closeModal} className="mt-4 rounded bg-gray-200 p-2">
+            <button
+              onClick={closeModal}
+              className="absolute left-2 top-2 rounded bg-gray-200 p-2 hover:bg-red-600 dark:bg-apple-primary-dark-to dark:hover:bg-red-950"
+            >
               关闭
             </button>
           </div>
