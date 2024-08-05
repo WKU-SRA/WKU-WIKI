@@ -87,6 +87,8 @@ Fireship 的视频已经很详细地介绍了各种编程语言的特性和应�
 </div>
 </div>
 
+### 抽象
+
 很多人都幻想着退休以后开一个咖啡厅 ☕️，奶茶店 🥛，也许万物的尽头是餐饮吧。假设我们在程序世界开了一家梦想咖啡厅，对外售卖美味的咖啡饮品。店里有一个咖啡师小C，他很喜欢繁琐的工作，追求极致的细节。店里有很多台咖啡机，甚至都是同一个型号的，但严谨的小C依然遵守着操作手册（你的代码），日复一日做着同一杯咖啡。
 
 小C的工作方式其实有点像C语言中的面向过程编程。在C语言中，我们会为每个具体任务编写具体的函数，每个函数负责特定的操作。对于小C来说，每个咖啡机都有一套具体的操作手册（函数），无论这些操作多么相似，都需要单独处理。这种方法的优点是操作简单、直观，容易理解和实现，但缺点是代码可能会冗长重复，不够灵活。
@@ -95,7 +97,7 @@ Fireship 的视频已经很详细地介绍了各种编程语言的特性和应�
 
 Java同学总结出了一个模板（template，blueprint），凡是具有相同属性并实现相同方法的对象，就是实现这个模板的实例。Java同学的这种总结方法使得我们不再需要为每一台咖啡机编写独立的操作手册，只需要基于这个模板创建实例，就可以简化工作流程并提高效率。这种方法类似于Java和Python中的面向对象编程，通过定义类和对象，使得代码更加模块化、重用性更强。
 
-### **数据封装**：
+### 数据封装
 
 Java 同学还指出，我们需要保护每台咖啡机的内部状态，防止外界直接修改。你不想 Java 同学随便就能提升咖啡机的温度吧，万一 Java 同学一个手滑，咖啡机一下被调到1000度怎么办，这就像我们不能随便打开咖啡机的盖子调整内部零件一样，对数据的封装，使系统内部更加稳定和安全。
 于是，他将咖啡机的属性（如运行状态、咖啡量、温度）设为私有的（private），并通过公开的方法（如getters和setters）来访问和修改这些属性。这样做的好处是，确保了咖啡机的内部状态只能通过受控的方式改变，避免了不一致的状态。
@@ -104,11 +106,11 @@ Java 同学还指出，我们需要保护每台咖啡机的内部状态，防止
 
 ```java
 public class CoffeeMachine {
-    private boolean isOn;// these there are attributes
+    private boolean isOn;// 这里是属性，其他类获取不到这个属性，只有这个类内部可以获取到
     private double coffeeAmount;
     private double temperature;
 
-    //Getter and Setter, I separate them with operations, because they are specified to the operations on data
+    //Getter and Setter, 虽然都是方法，但是和方法区分一下，因为他们是用来获取和设置属性的
     public boolean getSth() {
        //here is internal logic, no need to know
     }
@@ -125,18 +127,18 @@ public class CoffeeMachine {
 }
 ```
 
-### **继承**：
+### 继承
 
 不久后，咖啡厅引入了新的设备—牛奶打泡机。Java同学发现，牛奶打泡机和咖啡机有很多相似的地方：它们都有运行状态、温度等属性，也需要加热和维护温度。于是，Java同学创建了一个通用的基类`Machine`，包含这些共同的属性和方法，然后让`CoffeeMachine`和`MilkFrother`类继承这个基类。
 
 ```java
 public class Machine {
-    private boolean isOn;// all machines should have these two attribute
+    private boolean isOn;// all machines should have these two attribute，我们从牛奶打泡机和咖啡机的属性中抽象而出来的，也叫 refactor，oop里面的一个重要概念
     private double temperature;
 
     //general getter, setter, and opertation
-    public generalMethod(){
-
+    public void generalMethod(){
+    //here is internal logic, no need to know
     }
 
     //....
@@ -144,7 +146,7 @@ public class Machine {
 }
 
 public class CoffeeMachine extends Machine {
-    private double coffeeAmount;//Specific only to the coffee machine because not all machines have a coffee amount setting
+    private double coffeeAmount;//不是所有机械都有咖啡量的属性吧，咱专属的属性就不要给别人了，毕竟牛奶打泡机你可没有，那就放这里了吧
 
     // Additional methods specific to CoffeeMachine
     public void someOperations(){
@@ -206,13 +208,15 @@ class CoffeeMachine:
       # doSth, operation, same as java,
 ```
 
+因为Java对OOP更依赖所以这里不对Python进行重复，我们后面会有专门的一节来讲解Python的OOP
+
 ### OOP的缺陷
 
 `Java` `C++` 是比较典型的面向对象语言，面向对象在有一段时间内可谓说是风靡全球，几乎没有语言不想实现面向对象范式，但面向对象真的是最好的范式吗？值得很多程序员困于这个舒适圈而不愿意接触其他编程范式吗？我们不妨看看反对者的声音
 
-有人说OOP完全是**过度设计（Overengineering）**，OOP的原则和设计模式鼓励将问题分解为对象和类，这有时会导致过度设计。开发者可能会创建过多的类和继承层次，使代码变得复杂和难以维护，有时候我们完全不用类来实现业务逻辑，比如爬取学校教授科研方向，
-业务逻辑很简单，获取学校官网，解析html，筛选师资信息里的publication，完全没必要创建类，类都没有肯定也不会涉及继承。**设计模式的滥用**，许多开发者在不需要的情况下使用复杂的设计模式，导致代码冗长和难以理解，类似`singleton`, `factory`, `decorator`, even more canbe replaced by functions, functions, and even more functions 😝 。
-OOP同时也会带来不必要的**开销**，OOP中的抽象层次和多态机制（如虚函数调用）可能会增加运行时的开销，导致性能下降。这在需要高性能的系统中（如游戏开发、嵌入式系统）尤为明显。**代码膨胀（Code Bloat）**，OOP中的类和对象往往会导致
+有人说OOP完全是**过度设计（Overengineering）**，OOP的原则和设计模式鼓励将问题分解为对象和类，但是捏，这有时会导致过度设计。开发者可能会创建过多的类和继承层次，使代码变得复杂和难以维护，有时候我们完全不用类来实现业务逻辑，比如爬取某个学校教授的科研方向，
+业务逻辑很简单，获取学校官网html，解析html，筛选师资信息里的publications，完全没必要创建类，类都没有肯定也不会涉及继承。**设计模式的滥用**，许多开发者在不需要的情况下使用复杂的设计模式，导致代码冗长和难以理解，类似`singleton`, `factory`, `decorator`, 这些其实很多都能被函数代替，一个函数不行就多来点函数嘛 😝 。
+OOP同时也会带来不必要的**开销**，OOP中的抽象层次和多态机制（如虚函数调用）会增加运行时的开销，导致性能下降。这在需要高性能的系统中（如游戏开发、嵌入式系统）尤为明显。**代码膨胀（Code Bloat）**，OOP中的类和对象往往会导致
 代码量增加（见下代码对比），特别是在大型系统中。这样会使代码库变得臃肿，难以管理。
 
 ```java
@@ -228,6 +232,8 @@ public class MyFirstProgram{
 #python
 pring("HELLO WORLD !")
 ```
+
+哦，还是Python简单些呀
 
 <Divider />
 
@@ -246,12 +252,16 @@ def brew_coffee():
     return "Brewing coffee"
 
 """
-this is a higher order function, you are passing function to another function,
+This is a higher order function, you are passing function to another function,
 but imo, js is better to illustrate hof, because functions are the first class
 citizen there. And if you have taken the courese we will give you about higher
 order function, you will find this function did not recieve any parameters, but
-it you can see it is a function, cause it are seeking the parameters from the
+it you can see it is a higher order function, cause it are seeking the parameters from the
 global scope.
+这是一个高阶函数，你正在将一个函数传递给另一个函数，但在我看来，JavaScript 更适合用来说明高阶函数，
+因为在 JavaScript 中函数是一等公民。如果你参加了我们关于高阶函数的课程，你会发现这个函数没有接收任何参数，
+但你可以看到它是一个函数，因为它正在从全局作用域中寻找参数。
+你更喜欢在注释里用英文还是中文呢？还是双语呢，在评论区留下你的想法，我们会根据大家的反馈来调整注释的语言。
 """
 
 def make_coffee():
@@ -358,7 +368,7 @@ VALUES (90, 30, 200, 'Pending');
 SELECT * FROM CoffeeOrders WHERE status = "Pending";
 ```
 
-小sql知道如何去操作咖啡机，如何研磨咖啡豆，如何冲泡咖啡。他按照自己的方式和步骤，最终制作出一杯符合小丽要求的咖啡。这种方式就是声明式编程，程序员只需要描述目标和结果，而具体的操作过程由底层系统处理。
+小sql知道如何去操作咖啡机，如何研磨咖啡豆，如何冲泡咖啡。他按照自己的方式和步骤，最终制作出一杯符合html要求的咖啡。这种方式就是声明式编程，程序员只需要描述目标和结果，而具体的操作过程由底层系统处理。
 
 关于声明式编程，为什么要使用它，大家可以阅读下面 React （JavaScript 库，常用于网页开发） 文档
 
@@ -375,8 +385,9 @@ SELECT * FROM CoffeeOrders WHERE status = "Pending";
 # Labs:
 
 - 阅读React对应文档，为什么要使用声明式编程，你能举个类似的例子吗？
-- 模仿咖啡店，写一个描述OOP的故事
+- 模仿咖啡店，写一个描述OOP的故事，用到抽象，继承和多态
 - 收集 pure function 和 immutability 的资料，展示你的理解
+- 收集 refactor，abstraction 的资料，展示你的理解
 
 <div className="text-muted-foreground">
   欢迎大家在评论区展示自己的

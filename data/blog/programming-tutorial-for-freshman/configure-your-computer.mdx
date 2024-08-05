@@ -13,8 +13,6 @@ import { TimeStampPlayer } from 'components/Player'
 import Divider from '@/components/ui/divider'
 import ImageWrapper from 'components/ImageWrapper'
 
-[了解更多关于 Anaconda](#什么是-anaconda为什么要用-anaconda-37)
-
 # 欢迎登船
 
 <span style={{ whiteSpace: 'pre-wrap' }}>{getCurrentDateTime()}</span> !
@@ -126,13 +124,16 @@ MacOS一般自带Python,检查Python是否安装成功：
    访问 [Python 官方网站](https://www.python.org/downloads/) 并下载适用于 Windows 的最新版本的 Python 安装包。
 
 2. **运行安装程序**：
-   双击下载的安装包，勾选 "Add Python to PATH" 选项，然后点击 "Install Now" 进行安装。
+   双击下载的安装包，勾选 **"Add Python to PATH"** 选项，然后点击 "Install Now" 进行安装。
 
 3. **验证安装**：
    打开命令提示符（按 `Win + R`，输入 `cmd`，然后按回车），输入以下命令检查 Python 版本：
+
    ```sh
    python --version
    ```
+
+   若未添加python到环境变量，请参考[下文](configure-your-computer/#解决方案)的解决方案。
 
 <Divider />
 
@@ -144,14 +145,17 @@ MacOS一般自带Python,检查Python是否安装成功：
 的 🌰 ） 已经被很多程序 🦍 实现了，而程序 🦍 们 又是一个极其爱偷懒又乐于分享的人群，于是他们把自己的代码上传到库管理平台，比如 `PyPi`，`Maven`，`npm` 等等，这样我们就可以通过 `pip`，`npm` 等等工具来
 下载这些库，然后在我们的代码中使用这些库，运行他们写好的逻辑，这样我们就没必要自己去写这些代码了。
 
-那 `Anaconda` 呢? `Anaconda` 是一个开源的软件包管理和环境管理系统，用于科学计算、数据分析和机器学习。Anaconda 包含了 `conda`、`Python` 和一大堆科学计算和数据分析的库，这样你就没必要
+那 `Anaconda` 呢? `Anaconda` 是一个开源的软件包管理和环境管理系统，用于科学计算、数据分析和机器学习。Anaconda 包含了 `conda`、`Python` 和一大堆科学计算和数据分析的库，这样你就没必要担心依赖管理和环境配置的问题了。
+
+以前你要下载一个库，你可能会这样：
 
 ```bash
 pip install something-that-will-destroy-your-project-due-to-dependency-conflict
 ```
 
-阿咧咧，为什么会摧毁我的项目呢？我不就下了几个库吗？当然是因为依赖冲突啦，首先我们引入的库作者写一个东西肯定是要迭代的，那么就会出现不同的版本，采用不同的逻辑，需求也会在版本迭代中变化， 某个库可能会有特定的依
-赖，当你的项目需要 `numpy` 1.19.2，而你下载的库需要 `numpy` 1.20.0，这时候也会出现冲突，这时候你就需要手动去解决这个问题，而 `Anaconda` 就是为了解决这个问题的。
+阿咧咧，为什么`pip install`会摧毁我的项目呢？我不就下了几个库吗？当然是因为依赖冲突啦，首先我们引入的库作者写一个东西肯定是要迭代的，那么就会出现不同的版本，采用不同的逻辑，需求也会在版本迭代中变化， 某个库可能会有特定的依
+赖，当你的项目需要 `numpy` 1.19.2，而你下载的库需要 `numpy` 1.20.0，这时候也会出现冲突，这时候你就需要手动去解决这个问题，而且吧，pip 默认安装包到全局环境，这会导致不同项目之间的包和依赖冲突。虽然可以使用 `virtualenv`
+创建虚拟环境，但管理多个虚拟环境可能会比较繁琐。而 `Anaconda` 就是为了解决这个问题的。
 
 <div className="flex w-full flex-row justify-center">
   <img
@@ -271,13 +275,13 @@ pip install something-that-will-destroy-your-project-due-to-dependency-conflict
 
 # Labs：
 
-- 完成 GitHub 学生权益申请
+- 完成 GitHub 学生权益申请，加入科协GitHub组织，以后科协组织开发的程序或者科研项目会发布到这里 😝
 - 安装 Python 并完成环境配置
 - 运行 Jupter Notebook （Anaconda 自带），并写下你的第一个 Python 程序
 - 安装 PyCharm 或 VSCode
-- 安装 IntelliJ IDEA 和 JDK，并配置环境变量，请大家自行学习安装，这也是 CPS 的核心竞争力哦  
+- 安装 IntelliJ IDEA 和 JDK，并配置环境变量，请大家自行学习安装，自学能力也是 CPS 的核心竞争力哦  
   o(￣▽￣)ｄ （CPS only）
 
-# Pick 你的深度学习框架
+# 选择你的深度学习框架
 
 欢迎加入科协，这个系列的教程大概会在下学期公布，这里就不多展开了！
