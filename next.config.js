@@ -13,9 +13,7 @@ const ContentSecurityPolicy = `
   media-src *.s3.amazonaws.com;
   connect-src *;
   font-src 'self';
-  frame-src 'self'  www.python.org python.org https://python.org pythontutor.com http://pythontutor.com https://pythontutor.com www.pythontutor.com giscus.app player.bilibili.com youtube.com https://react.dev www.react.dev www.bilibili.com www.codesandbox.io https://codesandbox.io;
-  child-src 'self' giscus.app player.bilibili.com youtube.com;
-`
+  frame-src 'self' www.python.org python.org pythontutor.com giscus.app player.bilibili.com youtube.com react.dev bilibili.com codesandbox.io;`
 
 const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
