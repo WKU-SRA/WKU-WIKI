@@ -1,18 +1,13 @@
 # WKU-SRA-WIKI
 
-<div style="display: flex; justify-content: center; align-items: center;">
-<img style="margin-top: 25px;" src="./public/static/favicons/mstile-150x150.png" alt="Logo" width="150" height="150">
-<img src="./public/static/images/logo.png" alt="Logo" width="100" height="100">
-</div>
 
-
-Hi, WKU-SRA-WIKI is a vault of knowledge especially research information, philosophy, and learning for students at WKU, deveolped, mantained, deployed by the members of the WKU-SRA. It's more than just a research manual; it's a living and collective wisdom and passion of its creators.
+Hi, WKU-SRA-WIKI is a vault of knowledge, especially research information, philosophy, and learning for students at WKU. It was developed, maintained, and deployed by the members of the WKU-SRA. It's more than just a research manual; it's a living and collective wisdom and passion of its creators.
 
 The primary content of our website is currently in Chinese. Because Wenzhou-Kean University (WKU) is a Sino-US joint school. We are considering the possibility of offering an English version of our website. Should you be interested in contributing to such a translation effort, your assistance would be greatly appreciated.
 
 ## Table of Contents
 
-- [Tech Stack](#tech-stack)
+- [Tech Stack](#major-tech-stack)
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Contributing](#contributing)
@@ -20,7 +15,7 @@ The primary content of our website is currently in Chinese. Because Wenzhou-Kean
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
-## Major Tech Stack
+## Primary Tech Stack
 
 - [Next.js](https://nextjs.org)
 - [React](https://reactjs.org)
@@ -266,6 +261,6 @@ MIT © WKU-SRA
 贡献者：  
 
 <a href="https://wkusci.com">
-<img src="./public/static/images/logo.png" alt="Logo" width="100" height="100">
+温肯科协
 </a>
 
