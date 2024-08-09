@@ -2,7 +2,7 @@
 title: '函数'
 date: '2024-08-02'
 tags: ['CPS', '教程', 'SRA 编程入门之夏']
-draft: true
+draft: falseconda activate base
 summary: ''
 authors: ['default']
 ---
@@ -11,8 +11,9 @@ import Player from 'components/Player'
 import Divider from '@/components/ui/divider'
 import { TimeStampPlayer } from 'components/Player'
 import ImageWrapper from 'components/ImageWrapper'
-import FrameModal from 'components/IframWrapper'
+import FrameModal from 'components/IframeWrapper'
 import Quote from 'components/QuoteWrapper'
+import Modal from 'components/ui/modal'
 
 # 引言
 
@@ -42,9 +43,9 @@ import Quote from 'components/QuoteWrapper'
       content: '为 DQ 1 做准备',
     },
     {
-      label: 'Names, assignment, user defined | 名称、赋值、自定义',
+      label: 'Names, assignment, user defined | 名称、赋值',
       time: '00:18:13',
-      content: '',
+      content: '很重要的课题，会在群里讨论，或以后专开一节',
     },
     { label: 'Summary | 小结', time: '00:25:35', content: '总结了表达式和语句的基本概念。' },
     {
@@ -96,16 +97,80 @@ import Quote from 'components/QuoteWrapper'
 
 Python 代码由表达式和语句组成。广义上讲，计算机程序包括以下两类指令：
 
-1. 计算某个值 **表达式**
+1. **表达式**： 计算某个值
 
 ```python
-# python, 注意 >>> 代表在 python conso 中的输入，后文不再赘述
+# python, 注意 >>> 代表在 python console 中的输入，后文不再赘述
 >>> 2 + 2
 ```
 
-2. 执行某个操作（即产生副作用，例如在 Java 中的 `void`（字如其意，不返回任何东西） 方法） **语句**
+<Modal
+  element={
+    <Quote
+      quote={{
+        author: 'CS 61a lecture',
+        href: 'https://cs61a.org/',
+      }}
+      element={
+        <div className="leading-loose">
+          <p>An expression describes a computation and evaluates to a value</p>
+        </div>
+      }
+    />
+  }
+/>
+
+2. **语句**：执行某个操作（即产生副作用，例如在 Java 中的 `void`（字如其意，为不返回任何东西的方法）
+
+<Modal
+  element={
+    <Quote
+      quote={{
+        author: 'CS 61a  lecture',
+        href: 'https://cs61a.org/',
+      }}
+      element={
+        <div className="leading-loose">
+          <p>Statements typically describe actions.</p>
+        </div>
+      }
+    />
+  }
+/>
+
+```python
+# python, 注意 >>> 代表在 python console 中的输入，后文不再赘述
+>>> we = "WKU SRA" # Assignment statement, 赋值语句
+>>> print(we) # Print statement, 输出语句
+```
+
+你可以观察到上述均执行一个操作
+
+> 其实到这里区别已经很明显了，如果你已经完全理解了这两个概念，那么你可以跳过这一部分，直接跳转 names 小节。
 
 ## 表达式
+
+表达式，你可以把他看成是编程语言中的基本原子 ⚛️，构建块。
+
+### 调用表达式
+
+- 函数: 一个定义了特定操作或计算的小型机器，它接受输入并产生输出。
+- 调用表达式: 一个表达式，它调用一个函数。由一个函数表达式和一组参数表达式组成。
+
+```python
+# 函数定义
+def add(a, b):
+    return a + b
+
+# 调用表达式
+result = add(2, 3)  # 这里的 add(2, 3) 就是一个调用表达式
+print(result)  # 输出 5
+```
+
+有啥区别，我感觉这俩个不都是一个东西啊，为什么要分开说呢？
+首先不抬杠，我们来看看这个例子，`add(2, 3)` 这个调用表达式，它调用了一个函数 `add`，这个函数接受两个参数 `2` 和 `3`，然后返回了一个值 `5`，这个值被赋给了 `result`，然后被输出。
+你发现了吗，他在计算一个值，而 `def add(a, b):` 这是个函数定义，他是一个操作，他只是定义了一个操作，没有调用也没干任何事情。
+所以呢，其实就是文字游戏，没必要去记
 
 <Quote
   paraphrased
@@ -115,25 +180,9 @@ Python 代码由表达式和语句组成。广义上讲，计算机程序包括�
   }}
   element={
     <div className="leading-loose">
-      <p>An expression describes a computation and evaluates to a value</p>
-      <p>表达式并非cs独创，在数学中大家应该就接触过多种多样的表达式了 </p>
-      <div className="flex flex-row justify-between"></div>
-
-      <p>无论多复杂，他们的目的都是一个，就是为了计算求值</p>
-    </div>
-  }
-/>
-
-表达式，你可以把他看成是编程语言中的基本的原子 ⚛️，它是一个计算结果的代码片段。表达式可以是一个值 （1，2，3 “4”,boolean）、一个变量（x）、一个函数调用`max(1,2)`等。在编程中，我们通常使用表达式来计算数值、判断条件、执行循环等。
-
-<Quote
-  quote={{
-    author: 'CS 61 a lecture',
-    href: 'https://cs61a.org/',
-  }}
-  element={
-    <div className="leading-loose">
       <p>All expression can be functions call, but not all functions call are expressions.</p>
+      <p classname="text-muted-foreground">所有表达式都能被用于函数调用，但不是所有函数调用都是表达式</p>
+
       <p>
         Call expression is a expression that calls a function. It consists of a function expression
         that produces a function value and a list of expressions that produce the arguments to the
@@ -141,16 +190,22 @@ Python 代码由表达式和语句组成。广义上讲，计算机程序包括�
         from left to right. The function value is then called with the arguments, and the call
         expression evaluates to the result of the function call.
       </p>
+
+      <p classname="text-muted-foreground">
+        调用表达式是调用函数的表达式。它由一个生成函数值的函数表达式和一个生成函数参数的表达式列表（参数列表）组成。
+        首先计算函数表达式，然后从左到右计算参数。然后使用这些参数调用函数值，调用表达式的结果就是函数调用的结果。
+      </p>
+
     </div>
-  }
+
+}
 />
 
 - 表达式可以被用于函数调用
 
 ```python
 >>> max(1,2) # Call expression is a expression that calls a function.
-2 #  It consists of a function expression that
-     produces a function value
+2 #  It consists of a function expression that produces a function value
 >>> max(max(3,4),min(1,2)) # and a list of expressions that produce the arguments to the function.
 4
 
@@ -159,23 +214,56 @@ Python 代码由表达式和语句组成。广义上讲，计算机程序包括�
 - 但不是所有函数都是表达式
 
 ```python
->>> print("WKU SRA")# 执行了一个操作，但是没有返回值
+>>> print("WKU SRA")# 执行了一个操作，但是没有返回值，他没有直接参与计算（内部计算不考虑），所以不是表达式
 ```
 
-非纯粹的 print 函数
+### 非纯粹的 print 函数
 
-在本文中，我们将区分两种类型的函数。
+我们将区分两种类型的函数。
 
-纯函数。函数有一些输入（它们的参数）并返回一些输出（应用它们的结果）。内置函数
+纯函数。函数有一些输入（它们的参数）并返回一些输出（应用它们的结果）。
 
 ```python
->>> abs(-2)
-2
+>>> def pure_func()
+...     return 2
+...     #回车，这里只做演示，如何使用交互式解释器，下文不再赘述
+>>> pure_func()
+2 //如你所见，他返回了一个值，没有任何副作用（side effect）是纯函数
 ```
 
-可以被描述为一个小型机器，它接受输入并产生输出。
+```java
+// Java
+public int pureFunction(int a){
+    return a;
+}
+//如你所见，他返回了一个字，没有任何副作用，对java
+```
 
-函数 `abs` 是纯粹的。纯函数的特性是应用它们除了返回一个值之外没有其他效果。而且，纯函数在使用相同参数调用两次时必须始终返回相同的值。
+### Quiz: 纯函数｜请结合昨天的拓展课程，判断以下函数是否为纯函数
+
+```python
+we = "WKU SRA"
+
+def func(a, b):
+    we = "SRA" # 很迷惑人的地方，这里和python的作用域有关
+    return a + b
+```
+
+是纯函数吗？
+
+```python
+we = "WKU SRA"
+
+def func():
+    global we  # 声明we为全局变量
+    we = "Modified SRA"  # 修改全局变量we的值
+
+func()
+```
+
+是纯函数吗？
+
+会在群里公布及评论区同时公布答案
 
 非纯粹函数。除了返回一个值之外，应用非纯函数还可以产生副作用，这些副作用会对解释器或计算机的状态进行某些更改。常见的副作用是使用 `print` 函数生成超出返回值的额外输出。
 
@@ -184,9 +272,8 @@ Python 代码由表达式和语句组成。广义上讲，计算机程序包括�
 1 2 3
 ```
 
-虽然 `print` 和 `abs` 在这些例子中看起来是相似的，但它们的工作方式根本不同。`print` 返回的值始终是 `None`，这是一个表示没有任何内容的特殊 Python 值。交互式 Python 解释器不会自动打印值 `None`。在 `print` 的情况下，函数本身在被调用时作为副作用打印输出。
-
-嵌套的 `print` 调用表达式突出了该函数的非纯粹特性。
+`print` 返回的值始终是 `None`，这是一个表示没有任何内容的特殊 Python 值。交互式 Python 解释器不会自动打印值 `None`。
+在 `print` 的情况下，函数本身在被调用时作为副作用打印输出。
 
 ```python
 >>> print(print(1), print(2))
@@ -197,114 +284,155 @@ None None
 
 如果你发现这个输出出乎意料，请绘制一个表达式树来澄清为什么评估这个表达式会产生这种奇特的输出。
 
-小心使用 `print`！它返回 `None` 的事实意味着它不应作为赋值语句中的表达式。
-
-```python
->>> two = print(2)
-2
->>> print(two)
-None
-```
-
-纯函数的限制在于它们不能有副作用或随时间改变行为。施加这些限制会带来实质性好处。首先，纯函数可以更可靠地组合成复合调用表达式。我们可以看到在上述非纯函数示例中，`print` 在作为操作数表达式时不返回有用的结果。另一方面，我们已经看到 `max`、`pow` 和 `sqrt` 等函数可以有效地用于嵌套表达式中。
-
+纯函数的限制在于它们不能有副作用或随时间改变行为。施加这些限制会带来实质性好处。首先，纯函数可以更可靠地组合成复合调用表达式。
 其次，纯函数通常更易于测试。参数列表始终会导致相同的返回值，这可以与预期返回值进行比较。测试将在本章稍后详细讨论。
+第三，第四章将说明纯函数对于编写并发程序是必不可少的，因为其不修改外部状态，因此多个线程可以安全地调用纯函数而不需要担心数据竞争或死锁。
 
-第三，第四章将说明纯函数对于编写并发程序是必不可少的，其中多个调用表达式可以同时进行评估。
+举个 🌰
 
-相比之下，第二章探讨了一系列非纯函数并描述了它们的用途。
+- 我们假设食死徒（异步程序）的咒语 `Avada Kedavra 阿瓦达啃大瓜` 只能通过伏地魔（计算机）的魔杖（外部状态）才能使用
+- 伏地魔下达生死决斗的任务（调用函数，并传入决斗参数）
+- 我们已知道触发`Avada Kedavra`的前提是得到魔杖
+- 有俩个食死徒都要同时使用这个咒语，但是只有一个魔杖
 
-出于这些原因，在本章的剩余部分我们将重点放在创建和使用纯函数上。`print` 函数仅用于让我们看到计算的中间结果。
+这是一场食死徒之间的对决，他们不会等待对方，而是同时发动攻击（`异步`），而他们争夺魔杖的过程中就是对外部状态进行改变的过程，他们都在改变魔杖使用者的状态。
+这就是`racing condition`即竞态，我们不知道谁能先拿到魔杖，而这种不确定性是伏地魔（计算机）最讨厌的。伏地魔通过预言得知，只有食死徒A 战死，哈利才不会降生，
+但是突然你告诉伏地魔（计算机），我不能保障这场战斗的结果（计算结果），伏地魔便只能无能狂怒（抛出异常），终止他的计划（程序）。
 
-### 嵌套表达式
+但是在纯函数世界一切都不一样了
 
-### 嵌套表达式
+- 我们假设食死徒（异步程序）的咒语 `Avada Kedavra 阿瓦达啃大瓜` 无需通过伏地魔（计算机）的魔杖（外部状态）才能使用，即不改变外部状态
+- 伏地魔下达生死决斗的任务（调用函数，并传入决斗参数）
+- 俩个食死徒各自拥有属于自己的魔杖（各自维持一个`Avada Kedavra 阿瓦达啃大瓜`纯函数）
 
-## 嵌套表达式
+纯函数接受`决斗`和`对手`俩个参数，假设`Avada Kedavra 阿瓦达啃大瓜`内有一套复杂的逻辑，通过读取自身信息与对手信息，便能知道调用者的生死，那么输出结果就是确定的，
+不会因为外部状态的改变而改变，伏地魔就很高兴了，因为只要知道是谁在决斗就知道结果，那么后面一系列事也就能安排了。
 
-## 嵌套表达式
+### 异步
 
-### 嵌套表达式
+Bonus， 会在群里讲解
 
-接下来我们继续讨论
+### 内嵌表达式
 
-> The function expression is evaluated first, and then the arguments are evaluated from left to right. The
-> function value is then called with the arguments, and the call expression evaluates to the result of the function call.
+来看看嵌套表达式，嵌套表达式是指一个表达式中包含另一个表达式。在 Python 中，嵌套表达式的求值顺序是从内到外的。也就是说，内部表达式首先被求值，然后外部表达式被求值。其遵守的规则是：
 
-首先来看看嵌套表达式，嵌套表达式是指一个表达式中包含另一个表达式。嵌套表达式可以使代码更加简洁和灵活。例如：
-
-```python
-# nested
-def calculate_cost_in_wku(a, b):
-    return a + b
-
-
-def eating_cost_in_wku(count):
-    return count * 12
-
-
-def eating_cost_outside_campus(count):
-    return count * 20
-
-
-print(calculate_cost_in_wku(eating_cost_in_wku(1), eating_cost_in_wku(2)))  # 先 1 * 12 再计算 2 * 12 最后相加 36
-```
-
-不嵌套就有一点不好看了
-
-```python
-x = calculate_cost_in_wku(1)
-y = calculate_cost_in_wku(2)
-z = calculate_cost_in_wku(x,y)
-print(z)
-```
-
-嵌套表达式的求值
-
-本章的目标之一是分离关于过程思维的问题。作为一个例子，让我们考虑一下，在求值嵌套调用表达式时，解释器本身正在遵循一个过程。
-
-要对一个调用表达式求值，Python 将执行以下步骤：
-
-1. 评估操作符和操作数子表达式，然后
+1. 评估（evaluate）操作符（operator）和操作数子（operand）表达式，然后
 2. 将作为操作符子表达式值的函数应用于作为操作数子表达式值的参数。
 
-即使是这个简单的过程也说明了一些关于过程的一般重要点。第一步规定，为了完成对一个调用表达式的求值过程，我们必须首先评估其他表达式。因此，评估过程本质上是递归的；也就是说，它包含了作为其步骤之一的需要调用规则本身。
+这里我们用&gt;sth&lt;表示对sth求值
 
-例如，评估
+即函数表达式（执行函数操作，直观可理解执行 &gt;函数名&lt; ）首先被求值（evaluated），然后参数从左到右依次被求值。接着，函数值会使用这些参数被调用，并且调用表达式的求值结果就是函数调用的结果。
+
+求值过程本质上是递归的，也就是说，它会调用其自身作为步骤之一。递归的讲解会在后面涉及到,下面为简短的过程描述
 
 ```python
->>> sub(pow(2, add(1, 10)), pow(2, 5))
-2016
+>>> max(max(9,1), min(2,3),3)
 ```
 
-需要应用这个评估过程四次。如果我们绘制我们评估的每个表达式，我们可以可视化这个过程的层次结构。
+```
+ 1. evaluate operator &gt;max&lt;(max(9,1), min(2,3),3)
+ 2. evaluate operand 评估操作数 ---> max(&gt;max(9,1), min(2,3),3&lt;) 评估操作数,不能得到值（递归退出点），依参数从左到右依次求值进行递归操作
+    1. evaluate operator  评估操作符 ---&gt; &gt;max&lt;(9,1)
+    2. evaluate operand 评估操作数 ---&gt; max(&gt;9,1&lt;)，能得到值，即到达递归退出点
+    3. apply operator to operand 将操作符应用于操作数
+          返回 9，第一个递归操作结束，
+     1. evaluate operator 评估操作符 ---&gt; &gt;min&lt;(2,3)
+     2. evaluate operand 评估操作数 ---&gt; min(&gt;2,3&lt;)，能得到值，即到达递归退出点
+     3. apply operator to operand 将操作符应用于操作数
+          返回 2，第二个递归操作结束，
+     1. 无操作符
+     2. evaluate operand 评估操作数 &gt;3&lt; 能得到值，到达递归退出点，立刻退出
+     3.    返回 3，第三个递归操作结束
+ 3. evaluate operand 评估操作数 max(&gt;9,2,3&lt;) 能得到值，即到达递归退出点
+ 4. apply operator to operand 将操作符应用于操作数
+    返回 9
+```
 
-这个插图被称为表达式树。在计算机科学中，树通常从上向下生长。树中每个点的对象被称为节点；在这种情况下，它们是与其值配对的表达式。
+下面我们再用中缀运算符 $+-*/$ 解释一遍
 
-评估其根，即顶部的完整表达式，需要首先评估其子表达式的分支。叶子表达式（即，没有分支从它们延伸出来的节点）表示函数或数字。内部节点有两部分：我们应用评估规则的调用表达式，以及该表达式的结果。以树的角度来看待评估，我们可以想象操作数的值从终端节点开始向上渗透，然后在越来越高的层次上结合。
+$(2 + (3 * 4))$
+
+解释器会这样处理：
+
+识别到这是一个加法操作，需要对两个操作数求值。
+
+第一个操作数是 $2$，这是一个基本情况，直接返回 $2$。
+
+第二个操作数是 $(3 * 4)$，这是一个嵌套表达式，需要进一步求值。
+
+对 $(3 * 4)$ 进行求值，识别到这是一个乘法操作，需要对两个操作数求值。
+
+两个操作数 $3$ 和 $4$ 都是基本情况，直接返回 $3$ 和 $4$。
+
+将 $3$ 和 $4$ 进行乘法运算，得到 $12$。
+
+将 $2$ 和 $12$ 进行加法运算，得到最终结果 $14$。
+
+哈哈，有没有发现很神奇，对的，这里运用了递归的思想。递归是一个由主任务一步一步分解（也可以理解我评估，evaluate）成子任务的过程。
+
+我们初步在这里提一嘴：
+
+1. 递归的前提是有终止条件（其实这也是所有算法的前提，即`finite`，算法不能无限进行下去）
+   > In our case: 当我们的表达式中没有表达式时即编译器找不到继续求值的东西，既然一无所有，便及时止损吧，不能一直等那个永远不会出现的表达式直至笔电电量耗尽吧
+   > 我们的表达式就可以得到一个值，这个值就是我们的终止条件。
+2. 递归要求父任务和子任务之间有相同的逻辑，这样才能一步一步分解，调用本身，直至终止条件。
+   > In our case: 专一的编译器，在执行表达式的时候，只干求值这一件事。
+   > 但是为什么要求父元素和子任务之间有相同的逻辑呢？ 这里用伪代码来解释一下：
+
+```python
+def sum(a):
+    如果 a 比 0 大:
+        返回 a + sum(a-1)
+    否则:
+        返回 0
+```
+
+> 这里我们可以看到，我们的父任务和子任务之间有相同的逻辑，都是求和，只是子任务的参数变小了，这样我们就可以一步一步的分解，直至终止条件。
+
+问：以下是否为递归函数？
+
+```python
+def mul(a):
+    如果 a 比 0 大:
+        返回 a + mul(a-1)
+    否则:
+        返回 0
+```
+
+答案将在群和评论区公布
+
+计算
+
+```python
+>>> mul(add(2, mul(4, 6)), add(3, 5))
+```
+
+说实话，61a 的教授讲的很清楚了，详情请自行观看 DQ 1 solution
+
+<FrameModal href="https://pythontutor.com/cp/composingprograms.html#code=def%20mul%28a,b%29%3A%0A%20%20%20%20return%20a%20*%20b%0A%20%20%20%20%0A%20%20%20%20%0Adef%20add%20%28a,b%29%3A%0A%20%20%20%20return%20a%20%2B%20b%0A%20%20%20%20%0A%20%20%20%20%0Amul%28add%282,%20mul%284,%206%29%29,%20add%283,%205%29%29&cumulative=true&mode=edit&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D" />
+> 注：请至少观看完本节视频 environment diagram 后再使用 visualizer进行可视化
+<br />
+
+<br />
+
+<br />
+
+<Quote 
+  quote={{
+    author: 'CS 61a SICP',
+    href: 'https://www.composingprograms.com/pages/12-elements-of-programming.html',}}
+  element={
+    <ImageWrapper label='表达树' link="https://www.composingprograms.com/img/expression_tree.png"/>
+
+}
+/>
+
+评估其根`mul(add(2, mul(4, 6)), add(3, 5))`（root），即顶部的完整表达式，需要首先评估其子表达式`add(2, mul(4, 6))``add(3, 5)`的分支。叶子(leaf)表达式 `mul` `add` `2` `4` `6` `3` `5`（即，没有分支从它们延伸出来的节点）表示函数或数字。内部节点(node)有两部分：我们应用评估规则的调用表达式`add(3, 5)`，以及该表达式的结果`8`。以树的角度来看待评估，我们可以想象操作数的值从终端节点开始向上渗透，然后在越来越高的层次上结合。
 
 接下来，观察第一步的重复应用将我们带到需要评估的地方，而不是调用表达式，而是原始表达式，如数字（例如，2）和名字（例如，add）。我们通过规定来处理原始情况：
 
-- 数字表达式求值为它所代表的数字；
-- 名字表达式求值为当前环境中与该名字关联的值。
-
-注意环境在确定表达式中符号的意义方面的重要作用。在 Python 中，如果不指定有关环境的任何信息，就谈不上表达式的值，例如：
-
-```python
->>> add(x, 1)
-```
-
-在没有环境提供名字 `x`（甚至是名字 `add`）的含义的情况下，这样的表达式是没有意义的。环境提供了评估发生的上下文，这在我们理解程序执行中起着重要作用。
-
-这个评估过程不足以评估所有的 Python 代码，仅限于调用表达式、数字和名字。例如，它不处理赋值语句。执行
-
-```python
->>> x = 3
-```
-
-不会返回一个值，也不会对某些参数求值一个函数，因为赋值的目的是将名字绑定到一个值。通常，语句不是被评估而是被执行；它们不产生值，而是进行某些更改。每种类型的表达式或语句都有其自己的评估或执行过程。
-
-一个严格的注释：当我们说“一个数字表达式求值为一个数字”时，我们实际上是指 Python 解释器将数字表达式求值为一个数字。是解释器赋予了编程语言以意义。鉴于解释器是一个固定的程序，总是表现一致，我们可以说在 Python 程序的上下文中，数字（和表达式）本身求值为值。
+> 当我们说“一个数字表达式求值为一个数字”时，我们实际上是指 Python 解释器将数字表达式求值为一个数字。是解释器赋予了编程语言以意义。鉴于解释器是一个固定的程序，总是表现一致，我们可以说在 Python 程序的上下文中，数字（和表达式）本身求值为值。
+> 如上所见，表达式用于计算值。对于表达式和语句的区别也就在这里，表达式可以是值如：`1` `"1"` `boolean` 函数调用如：`max(1,2)`。
 
 ## 语句
 
@@ -322,7 +450,7 @@ print(z)
 最后总结一下，其实没必要死记什么是表达式，什么是语句，只要记住表达式是计算结果的代码片段，表达式一般会产生一些东西，我们关心谁要这些计算结果（这个返回值可以被赋给一个变量，作为另一个表达式的一部分，或者被直接使用）。
 而语句很独立，他执行某个操作的代码片段就好了，不需要上下文。
 
-## 函数
+# 函数
 
 ```python
 def live_in_wku():
@@ -331,12 +459,26 @@ def live_in_wku():
     # 打豆豆
 ```
 
-函数封装了用于操作数据的逻辑。我们生活在wku，每天有着各自各样的事情（unit），每个事情内部又是各种复杂的逻辑。于是我们把例如吃饭，睡觉，打豆豆的这些操作封装到一个函数中，我们便没有必要去
-关心函数内部发生了什么，他对于我们来说就是个黑箱，作为程序员，学会调用别人写好的函数就行了，而作为程序要考虑的就很多了 😎。
+函数封装了用于操作数据的逻辑。我们生活在wku，每天有着各自各样的事情（一个又一个unit），而每个事情内部又是各种复杂的逻辑。于是我们把例如吃饭，睡觉，打豆豆的这些操作封装到一个函数中，我们没有必要去
+关心函数内部发生了什么，他对于我们来说就是个黑箱，作为程序员，学会调用别人写好的函数就行了，而作为函数库作者要考虑的就很多了 😎。
 
-# 导入库函数
+## 导入库函数
 
-Python 定义了大量函数，包括前面部分提到的运算符函数，但默认情况下并不使所有这些名称都可用。相反，它将其已知的函数和其他量组织到模块中，这些模块共同构成了 Python 库。要使用这些元素，需要导入它们。例如，`math` 模块提供了各种熟悉的数学函数：
+Python 定义了大量函数，包括前面部分提到的运算符函数，但默认情况下并不使所有这些名称都可用。
+相反，它将其已知的函数和其他变量组织到模块（module）中，这些模块共同构成了 Python 库。
+要使用这些元素，需要导入它们。例如，`math` 模块提供了各种熟悉的数学函数：
+
+为什么要把这些东西放到module呢？你说Python同学怎么这样啊，就知道给我们增加负担 😡 天天 import，我python没啥学，几周下来就`from x import y as z`了。
+咱CS也要有自己的abandon 🤓
+
+哈哈哈，当然不是这样的呀，谁不想设计一个程序或计算机语言能提供堪呼完美的易用性（`utility first`）呢？但是我们要知道工程学里面很重要的一个概念就是`trade off`。
+权衡，我们在这里权衡的是什么呢？引入模块，虽然我们能把所有函数引入文件，不用一个一个去import并处理打包，但是 import 这些模块完全可以由ide代劳，我们不会去记忆这些
+模块进行手动导入，这是毫无意义的，且打包工具的完善，也不用我们去手动处理。所以其实，在ide的加持下module系统并没有太多的缺陷，但我们通过隔离命名空间，避免了很多命名冲突，也更容易维护和更新，
+因为修改一个模块不会影响到其他模块。
+
+python把这些东西放到module里，你需要的时候导入就好了，这样既不会污染全局变量，也不会有命名冲突。
+
+`math` 模块提供了常见的数学运算函数：
 
 ```python
 >>> from math import sqrt
@@ -356,67 +498,47 @@ Python 定义了大量函数，包括前面部分提到的运算符函数，但�
 
 `import` 语句指定模块名称（例如，`operator` 或 `math`），然后列出要导入的该模块的命名属性（例如，`sqrt`）。一旦函数被导入，它可以被多次调用。
 
-使用这些运算符函数（例如，`add`）与使用运算符符号本身（例如，`+`）之间没有区别。通常，大多数程序员使用符号和中缀表示法来表达简单的算术运算。
+也就是说，他们被放入了当前作用域的命名空间中
 
-Python 3 库文档列出了每个模块定义的函数，例如 `math` 模块。然而，这些文档是为精通整个语言的开发人员编写的。目前，你可能会发现通过实验一个函数比阅读文档更能了解其行为。随着你熟悉 Python 语言和词汇，这些文档将成为一个宝贵的参考来源。
+使用这些运算符函数（例如，`add`）与使用运算符符号本身（例如，`+`）之间没有区别。通常，大多数程序员使用符号和中缀表示法（`+``-``*``/`）来表达简单的算术运算。
 
-调用用户定义的函数
+## 调用用户定义的函数
 
-让我们再次考虑之前定义的两个简单函数，并说明如何评估用户定义函数的调用表达式。
+函数相当于绑定（bind）表达式到名字（name）上，自带函数和自定义函数无本质区别，此处目的是为了告诉大家如何构建函数
+
+函数定义包含 def 语句，它标明了 `<name>` （名称）和一列带有名字的 `<formal parameters> ` （形式参数）。之后， ` return  （返回）`语句叫做函数体，指定了函数的 ` <return expression>  （返回表达式）`，它是函数无论什么时候调用都需要求值的表达式。
 
 ```python
-from operator import add, mul
-
-def square(x):
-    return mul(x, x)
-
-def sum_squares(x, y):
-    return add(square(x), square(y))
-
-result = sum_squares(5, 12)
+def <name>(<formal parameters>):#signature
+   return <return expression>#body，第一层缩近，为其他语言第一层代码块{}
 ```
 
-#### **评估过程**
+Function signature indicate how many args a funcitno take
+Body defines the computation process expressed by a function
 
-1. **函数 `sum_squares` 的绑定**：
+请注意，在python中缩进为类似其他语言的的`{}`共同表示代码块,代码块是指一组逻辑上相关的代码，
+它们被组织在一起以执行特定的任务或功能。
 
-   - Python 首先评估名称 `sum_squares`，这个名称绑定了全局帧中的用户定义函数。
-   - 基本数字表达式 `5` 和 `12` 评估为它们所表示的数字。
+Procedure to execute a user defined function
 
-2. **应用 `sum_squares`**：
+1. create a new frame
+2. bind the formal parameters to the arguments
+3. execute the body of the function in the new frame
+4. return the value of the return expression
 
-   - Python 通过创建一个新的局部帧来应用 `sum_squares`，在这个局部帧中，`x` 绑定为 `5`，`y` 绑定为 `12`。
+Look up names in the environment
 
-   ```text
-   Global
-   mul
-   add
-   square
-   sum_squares
-   sum_squares
-   x  5
-   y  12
-   ```
+1. look up the name in the current frame
+2. if not found, look up the name in the parent frame
+3. if not found, look up the name in the grandparent frame
+4. if not found, look up the name in the global frame
+5. if not found, look up the name in the built-in frame
 
-3. **评估 `sum_squares` 的主体**：
+很经典，就不翻译赘述了
 
-   - `sum_squares` 的主体包含一个调用表达式 `add(square(x), square(y))`。
-   - `add` 的操作符在全局帧中找到，`square(x)` 和 `square(y)` 作为操作数需要在当前环境中进行评估。
+environment is a sequence of frames, each frame is a mapping of names to values
 
-4. **评估操作数 `square(x)`**：
-
-   - `square` 是一个用户定义的函数，在全局帧中定义。此时，`x` 的值为 `5`。
-   - 创建一个新的局部帧来评估 `square(x)`，在该局部帧中 `x` 绑定为 `5`。
-
-   ```text
-   Global
-   mul
-   add
-   square
-   sum_squares
-   ```
-
-名字与环境
+# 名字与环境（请仔细观看61a 视频，教授讲的很清楚了，下文为仅为中文版翻译）
 
 编程语言的一个关键方面是它提供了使用名字来引用计算对象的手段。如果一个值被赋予了一个名字，我们说该名字绑定到这个值。
 
@@ -459,23 +581,16 @@ result = sum_squares(5, 12)
 4
 ```
 
-并且连续的赋值语句可以将名字重新绑定到一个新值。
+在 Python 中，名字(name)通常被称为变量名或变量，因为它们可以在执行程序的过程中绑定到不同的值。当一个名字通过赋值绑定到一个新值时，它不再绑定到任何以前的值。甚至可以将内置名字绑定到新值。
 
 ```python
->>> f = 2
->>> f
-2
-```
-
-在 Python 中，名字通常被称为变量名或变量，因为它们可以在执行程序的过程中绑定到不同的值。当一个名字通过赋值绑定到一个新值时，它不再绑定到任何以前的值。甚至可以将内置名字绑定到新值。
-
-```python
+# max is a built in function
 >>> max = 5
 >>> max
 5
 ```
 
-将 `max` 赋值为 5 后，名字 `max` 不再绑定到一个函数，因此尝试调用 `max(2, 3, 4)` 会导致错误。
+将 `max` 赋值为 5 后，名字 `max` 不再绑定到一个函数，因此尝试调用 `max(2, 3, 4)` 因为5是不可调用的，他没有指向一个函数 会导致错误。
 
 在执行赋值语句时，Python 会先计算 = 右边的表达式，然后再更改左边名字的绑定。因此，即使在赋值语句中，右侧表达式中也可以引用一个名字。
 
@@ -485,6 +600,18 @@ result = sum_squares(5, 12)
 >>> x
 3
 ```
+
+```python
+a = 1
+b = 2
+b,a = a + b,b
+```
+
+先 evaluate `a = 1`,继续 `b = 2` evaluate到最后一个赋值语句的时候先不管左边的，计算右边 `a + b`然后计算`b`，
+`a + b = 3` `b=2`,右边evaluate完毕，赋值给左边，`a = 3`` b = 2`
+
+def first create func with signature and body, then bind the name to the function in the current frame
+定义函数但并不立马执行
 
 我们还可以在单个语句中将多个值分配给多个名字，= 左边的名字和 = 右边的表达式用逗号分隔。
 
@@ -517,7 +644,7 @@ result = sum_squares(5, 12)
 3
 ```
 
-函数的实现细节不应影响函数的行为，其中之一就是函数的形式参数名称。不同名称的函数如果实现相同的操作，应当具有相同的行为。比如：
+函数的实现细节不应影响函数的行为，其中之一就是函数的形式参数（parameters）名称。不同名称的函数如果实现相同的操作，应当具有相同的行为。比如：
 
 ```python
 >>> def square(x):
@@ -526,9 +653,9 @@ result = sum_squares(5, 12)
         return mul(y, y)
 ```
 
-这个原则表明函数的意义应当与其作者选择的参数名称无关。这样，如果 `square` 函数的参数是 `x`，而 `sum_squares` 函数的参数也是 `x`，它们的绑定不会互相影响。每个函数的局部帧中的名称都是独立的。局部名称的作用域仅限于其定义的函数体，当名称不再可访问时，它就超出了作用域。这种作用域行为是环境模型的内在结果。
+这个原则表明函数的意义应当与其作者选择的参数名称无关。这样，如果 `square` 函数的参数是 `x`，而 `sum_squares` 函数的参数也是 `x`，它们的绑定不会互相影响。局部名称的作用域仅限于其定义的函数体（local space），当名称不再可访问时，它就超出了作用域。这种作用域行为是环境模型的内在结果。
 
-### 1.3.5 命名选择
+## 命名选择 (来自中文版翻译，群里会有拓展)
 
 尽管名称的可替换性表明形式参数名称不完全重要，但选择合适的函数和参数名称对于函数定义的可读性至关重要。以下是一些命名指南，来自 Python 的编码风格指南：
 
@@ -537,13 +664,13 @@ result = sum_squares(5, 12)
 
 虽然这些指南提供了广泛的建议，但 Python 标准库中也存在许多例外。这反映了 Python 语言从不同贡献者那里继承的多样化词汇。
 
-### 1.3.6 函数作为抽象
+## 函数作为抽象
 
 尽管简单，`sum_squares` 函数展现了用户定义函数的强大属性。`sum_squares` 依赖于 `square` 函数，但只关心 `square` 在输入和输出之间定义的关系。
 
 我们可以在不关心如何计算平方的细节的情况下定义 `sum_squares`。函数 `square` 可以被视为一个函数抽象，用户不需要了解其具体实现，只需知道它的行为。实际上，Python 库中的许多函数都是这样的“黑箱”，开发者使用这些函数而无需检查其内部实现。
 
-**函数抽象的三个核心属性**：
+### 函数抽象的三个核心属性：
 
 1. **定义域（Domain）**：函数可以接受的参数集合。例如，`square` 函数的定义域是任何实数。
 2. **值域（Range）**：函数可能返回的值的集合。例如，`square` 函数的值域是所有非负实数。
@@ -551,7 +678,7 @@ result = sum_squares(5, 12)
 
 理解这些属性对于正确使用复杂程序中的函数抽象至关重要。函数的意图应明确，但如何实现这一意图的细节应被抽象掉，使得使用者无需关心函数的内部实现。
 
-### 1.3.7 函数的作用域
+## 函数的作用域
 
 **作用域** 是指在程序中可以访问变量或名称的区域。在函数内部定义的名称仅在该函数内部有效。这种特性允许在不同的函数中使用相同的名称而不会发生冲突。例如，函数 `square` 和 `sum_squares` 都可以使用 `x` 作为参数名称，而这两个 `x` 在各自的函数内部是独立的：
 
@@ -564,9 +691,9 @@ result = sum_squares(5, 12)
 
 在 `square` 函数中，`x` 仅在 `square` 函数的局部作用域内有效。类似地，`sum_squares` 函数中的 `x` 和 `y` 也仅在 `sum_squares` 的局部作用域内有效。这种局部作用域的隔离保证了在函数内对名称的引用不会影响到其他函数或全局环境中的名称。
 
-### 1.3.8 递归与作用域
+## 递归的作用域
 
-递归是函数调用自身的一个技术，允许在解决问题时重复使用相同的函数。递归函数的局部名称作用域遵循与非递归函数相同的规则。每次递归调用都会创建一个新的局部帧，这些局部帧在各自的调用中独立存在：
+递归是函数调用自身的一个技术，允许在解决问题时重复使用相同的函数。递归函数的局部名称作用域遵循与非递归函数相同的规则。
 
 ```python
 >>> def factorial(n):
@@ -578,7 +705,7 @@ result = sum_squares(5, 12)
 
 在 `factorial` 函数中，每次递归调用都创建一个新的局部帧，其中 `n` 是当前调用的局部变量。递归的每一层都使用独立的 `n` 值，因此不会相互干扰。
 
-### 1.3.9 闭包与自由变量
+## 闭包与自由变量 (群内拓展)
 
 **闭包（Closure）** 是一种特殊的函数，其定义的环境包括外部函数的局部变量。闭包允许函数在其外部作用域中访问这些局部变量，即使外部函数已经返回。例如：
 
@@ -592,68 +719,16 @@ result = sum_squares(5, 12)
 10
 ```
 
+这里建议做几道leetcode加深理解，但鉴于我们还没有掌握基本语法，我们会在之后的课程中作为quiz。
+
 在这个例子中，`multiplier` 函数是 `make_multiplier` 的闭包。`multiplier` 函数可以访问 `make_multiplier` 中的 `factor` 变量，即使 `make_multiplier` 已经执行完毕并返回。`factor` 被称为自由变量，它在 `multiplier` 函数的作用域内仍然可用。
 
-### 1.3.10 作用域的总结
+## 作用域的总结
 
 理解作用域和局部名称对于编写清晰和可维护的代码至关重要。局部名称只在定义它们的函数内有效，函数调用创建新的局部帧，每次调用都拥有自己的作用域。递归函数和闭包展示了作用域的更复杂应用，允许我们在复杂的编程任务中有效地管理名称和变量。
 
 总结这些概念有助于编写更可靠和可读的代码，并确保不同函数和代码块之间的名称不会发生冲突或误用。
 
-anatomy of call expression
-
-operator operand operand
-先 operator 再 operand
-apply the function that is a value to the arguments that are values
-
-a funciton is different from just a name, it return an expression there, [25,13], it is re evaluated every
-time it is called
-
-environment diagram visualize the interpreter's process
-with in a frame a name cannot be repeated
-
-```python
-a = 1
-b = 2
-b,a = a,b
-```
-
-execution rule
-
-1. evaluate all the expressions on the right hand side to the left of =
-2. assign the values to the left hand side （bind）
-
-Assignment is a simple means of abstraction, bind names to values
-functions more powerful to bind names to expressions
-
-```python
-def <name>(<formal params>):
-    return <return expression>
-```
-
-function signature indicate how many args a funcitno take
-body defines the computation process expressed by a function
-
-def first create func with signature and body, then bind the name to the function in the current frame
-定义函数但并不立马执行
-
-procedure to execute a user defined function
-
-1. create a new frame
-2. bind the formal parameters to the arguments
-3. execute the body of the function in the new frame
-4. return the value of the return expression
-
-look up names in the environment
-
-1. look up the name in the current frame
-2. if not found, look up the name in the parent frame
-3. if not found, look up the name in the grandparent frame
-4. if not found, look up the name in the global frame
-5. if not found, look up the name in the built-in frame
-
-environment is a sequence of frames, each frame is a mapping of names to values
-
 # Labs
 
-Evaluate nested expressions 14 58npm
+完成61a DQ 1
