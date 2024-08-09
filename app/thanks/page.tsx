@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Quote from '@/components/QuoteWrapper'
-import { FrameModal as Frame } from '@/components/IframWrapper'
 
 export default function page() {
   return (
