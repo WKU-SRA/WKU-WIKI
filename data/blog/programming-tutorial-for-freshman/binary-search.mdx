@@ -11,12 +11,11 @@ import Player from 'components/Player'
 import Divider from '@/components/ui/divider'
 import { TimeStampPlayer } from 'components/Player'
 import ImageWrapper from 'components/ImageWrapper'
-import FrameModal from 'components/IframWrapper'
+import FrameModal from 'components/IframeWrapper'
 import Quote from 'components/QuoteWrapper'
 
-
-
 ### 这是本课程第一次讲到算法，今天将讲解二分查找
+
 #### 二分查找中使用的术语：
 
     目标 Target —— 你要查找的值
@@ -24,18 +23,16 @@ import Quote from 'components/QuoteWrapper'
     左、右指示符 Left，Right —— 我们用来维持查找空间的指标
     中间指示符 Mid —— 我们用来应用条件来确定我们应该向左查找还是向右查找的索引
 
-
-
-
 #### 生活例子：
+
 ##### 当你在玩一个猜数字（一人想一个1~100的数字，另一人猜他想的数字，若猜的数字比想的数字小，则说小，反之亦然。直至猜到数字）的游戏时，本质上运用了二分查找的思想
 
 ##### 翻译成编程问题则是，我们有一个数组（升序）nums: [1,2,3,4, .........., 98, 99, 100]
+
 ##### target则是我们要猜到的数，我们需要在数组(nums)中找到这个target
 
-
-
 ### Python
+
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
@@ -52,8 +49,8 @@ class Solution:
         return -1
 ```
 
-
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -76,6 +73,7 @@ public:
 ```
 
 ### Java
+
 ```Java
 class Solution {
     public int search(int[] nums, int target) {
@@ -97,6 +95,7 @@ class Solution {
 ```
 
 ### Go
+
 ```go
 func lowerBound(nums []int, target int) int {
     left, right := 0, len(nums)-1 // 闭区间 [left, right]
@@ -116,34 +115,44 @@ func lowerBound(nums []int, target int) int {
     return left // 或者 right+1
 }
 ```
+
 #### 如前所述，二分查找是一种在每次比较之后将查找空间一分为二的算法。每次需要查找集合中的索引或元素时，都应该考虑二分查找。就像找大小中从50开始猜起。(学校教授教的语言是Java，选修课中有go语言和C++(可能会有,因本教程以Python为编程语言，则在此其他语言仅为展示))
 
 ### 那我们为什么要使用二分查找(Binary search)，而不是顺序查找（Sequential search）：
+
 ![Description of the GIF](https://i-blog.csdnimg.cn/blog_migrate/b6509e86a642338f6fc8f7caf8c55e32.gif)
 
 #### 根据gif图，我们可以知道二分查找比顺序查找快的多，时间复杂度分别是O(logn)和O(n)
------
+
+---
+
 #### 在此，我们提出一个合理的二分查找，应当具有三个部分：
+
 ##### （1）预处理 —— 如果集合未排序，则进行排序。
+
 ###### **必要性**：二分查找的核心思想是每次通过比较中间元素，将查找范围缩小一半。这种策略只有在集合有序的情况下才能有效，因为无序的集合中，中间元素的值无法提供足够的信息来判断目标元素在哪一侧。
 
 ##### （2）二分查找 —— 使用循环或递归在每次比较后将查找空间划分为两半。
 
 ##### （3）后处理 —— 在剩余空间中确定可行的候选者。
+
 ###### 必要性：二分查找在某些情况下（例如查找的是最小或最大满足某条件的元素）可能需要进一步的处理。
 
 - **确认找到的元素**：有时，我们需要确认最终找到的元素是否符合条件（例如找到的元素是否真的是目标元素）。
 - **处理重复元素**：如果集合中存在重复元素，可能需要后处理来找到第一个或最后一个出现的目标元素。
 - **处理未找到的情况**：如果目标元素不在集合中，后处理可以用于返回一个适当的指标或信息（如目标应该插入的位置）。
 
-----
+---
+
 #### 以下列出二分查找的三种模板（单Python）：
+
 #### 1.
+
 (1). 二分查找的最基础和最基本的形式。
 (2). 查找条件可以在不与元素的两侧进行比较的情况下确定（或使用它周围的特定元素）。
 (3). 不需要后处理，因为每一步中，你都在检查是否找到了元素。如果到达末尾，则知道未找到该元素。
 
------
+---
 
 ```python
 def binarySearch(nums, target):
@@ -166,13 +175,14 @@ def binarySearch(nums, target):
 ```
 
 #### 2.
+
 (1) 一种实现二分查找的高级方法。
 (2) 查找条件需要访问元素的直接右邻居。
 (3) 使用元素的右邻居来确定是否满足条件，并决定是向左还是向右。
 (4) 保证查找空间在每一步中至少有 2 个元素。
 (5 )需要进行后处理。 当你剩下 1 个元素时，循环 / 递归结束。 需要评估剩余元素是否符合条件。
 
------
+---
 
 ```python
 def binarySearch(nums, target):
@@ -197,6 +207,7 @@ def binarySearch(nums, target):
 ```
 
 #### 3
+
 (1) 搜索条件需要访问元素的直接左右邻居。
 (2) 使用元素的邻居来确定它是向右还是向左。
 (3) 保证查找空间在每个步骤中至少有 3 个元素。
@@ -224,37 +235,37 @@ def binarySearch(nums, target):
     return -1
 ```
 
- 以上模板的适用环境：
+以上模板的适用环境：
+
 - **第一种模板**：最直接的实现，适合单一目标查找，不考虑重复元素或复杂条件。
 
-
 - **第二种模板**：适合查找第一个出现的位置，尤其在有重复元素的情况下有用。
-	 1. 适用于查找满足特定条件的第一个元素（如第一个出现的位置）。
-	 2. 在处理可能存在重复元素的数组时，可以用于寻找左边界。
-	 3. 需要后处理来确认最终的 `left` 指针是否是目标元素。
+
+  1. 适用于查找满足特定条件的第一个元素（如第一个出现的位置）。
+  2. 在处理可能存在重复元素的数组时，可以用于寻找左边界。
+  3. 需要后处理来确认最终的 `left` 指针是否是目标元素。
 
 - **第三种模板**：适合查找区间边界或需要精确控制查找范围的情况。
-	 1. 适用于寻找特定条件的边界（如第一个小于或大于某个值的边界） 
-	 2. 查找区间边界的情况，例如查找第一个不小于某值或最后一个不大于某值的位置。
-	 3. 在需要精确控制查找范围的情况下，可以提供更细粒度的后处理。
-
-
+  1. 适用于寻找特定条件的边界（如第一个小于或大于某个值的边界）
+  2. 查找区间边界的情况，例如查找第一个不小于某值或最后一个不大于某值的位置。
+  3. 在需要精确控制查找范围的情况下，可以提供更细粒度的后处理。
 
 ### 以上则是对二分查找的分析，至于其他的二分算法，将会在之后分析，在看完分析之后还是要做题来巩固一下的。
-1. [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/) 
+
+1. [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 2. [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
-3. [704. 二分查找](https://leetcode.cn/problems/binary-search/) 
-4. [744. 寻找比目标字母大的最小字母](https://leetcode.cn/problems/find-smallest-letter-greater-than-target/) 
-5. [2529. 正整数和负整数的最大计数](https://leetcode.cn/problems/maximum-count-of-positive-integer-and-negative-integer/) 
-6. [1385. 两个数组间的距离值](https://leetcode.cn/problems/find-the-distance-value-between-two-arrays/) 
-7. [2300. 咒语和药水的成功对数](https://leetcode.cn/problems/successful-pairs-of-spells-and-potions/) 
-8. [2389. 和有限的最长子序列](https://leetcode.cn/problems/longest-subsequence-with-limited-sum/) 
-9. [1170. 比较字符串最小字母出现频次](https://leetcode.cn/problems/compare-strings-by-frequency-of-the-smallest-character/) 
-10. [2080. 区间内查询数字的频率](https://leetcode.cn/problems/range-frequency-queries/) 
-11. [2563. 统计公平数对的数目](https://leetcode.cn/problems/count-the-number-of-fair-pairs/) 
-12. [2856. 删除数对后的最小数组长度](https://leetcode.cn/problems/minimum-array-length-after-pair-removals/) 
-13. [981. 基于时间的键值存储](https://leetcode.cn/problems/time-based-key-value-store/) 
-14. [1146. 快照数组](https://leetcode.cn/problems/snapshot-array/) 
-15. [1818. 绝对差值和](https://leetcode.cn/problems/minimum-absolute-sum-difference/) 
-16. [911. 在线选举](https://leetcode.cn/problems/online-election/) 
+3. [704. 二分查找](https://leetcode.cn/problems/binary-search/)
+4. [744. 寻找比目标字母大的最小字母](https://leetcode.cn/problems/find-smallest-letter-greater-than-target/)
+5. [2529. 正整数和负整数的最大计数](https://leetcode.cn/problems/maximum-count-of-positive-integer-and-negative-integer/)
+6. [1385. 两个数组间的距离值](https://leetcode.cn/problems/find-the-distance-value-between-two-arrays/)
+7. [2300. 咒语和药水的成功对数](https://leetcode.cn/problems/successful-pairs-of-spells-and-potions/)
+8. [2389. 和有限的最长子序列](https://leetcode.cn/problems/longest-subsequence-with-limited-sum/)
+9. [1170. 比较字符串最小字母出现频次](https://leetcode.cn/problems/compare-strings-by-frequency-of-the-smallest-character/)
+10. [2080. 区间内查询数字的频率](https://leetcode.cn/problems/range-frequency-queries/)
+11. [2563. 统计公平数对的数目](https://leetcode.cn/problems/count-the-number-of-fair-pairs/)
+12. [2856. 删除数对后的最小数组长度](https://leetcode.cn/problems/minimum-array-length-after-pair-removals/)
+13. [981. 基于时间的键值存储](https://leetcode.cn/problems/time-based-key-value-store/)
+14. [1146. 快照数组](https://leetcode.cn/problems/snapshot-array/)
+15. [1818. 绝对差值和](https://leetcode.cn/problems/minimum-absolute-sum-difference/)
+16. [911. 在线选举](https://leetcode.cn/problems/online-election/)
 17. [LCP 08. 剧情触发时间](https://leetcode.cn/problems/ju-qing-hong-fa-shi-jian/)
