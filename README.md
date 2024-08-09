@@ -1,18 +1,12 @@
 # WKU-SRA-WIKI
 
-<div style="display: flex; justify-content: center; align-items: center;">
-<img style="margin-top: 25px;" src="./public/static/favicons/mstile-150x150.png" alt="Logo" width="150" height="150">
-<img src="./public/static/images/logo.png" alt="Logo" width="100" height="100">
-</div>
-
-
-Hi, WKU-SRA-WIKI is a vault of knowledge especially research information, philosophy, and learning for students at WKU, deveolped, mantained, deployed by the members of the WKU-SRA. It's more than just a research manual; it's a living and collective wisdom and passion of its creators.
+Hi, WKU-SRA-WIKI is a vault of knowledge, especially research information, philosophy, and learning for students at WKU. It was developed, maintained, and deployed by the members of the WKU-SRA. It's more than just a research manual; it's a living and collective wisdom and passion of its creators.
 
 The primary content of our website is currently in Chinese. Because Wenzhou-Kean University (WKU) is a Sino-US joint school. We are considering the possibility of offering an English version of our website. Should you be interested in contributing to such a translation effort, your assistance would be greatly appreciated.
 
 ## Table of Contents
 
-- [Tech Stack](#tech-stack)
+- [Tech Stack](#major-tech-stack)
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Contributing](#contributing)
@@ -20,7 +14,7 @@ The primary content of our website is currently in Chinese. Because Wenzhou-Kean
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
-## Major Tech Stack
+## Primary Tech Stack
 
 - [Next.js](https://nextjs.org)
 - [React](https://reactjs.org)
@@ -32,7 +26,7 @@ The primary content of our website is currently in Chinese. Because Wenzhou-Kean
 - [Yarn](https://yarnpkg.com)
 - [Esbuild](https://esbuild.github.io)
 - [React KaTeX](https://react-katex.now.sh) not used, but most likely will be used to render LaTex
-- [tabler](https://tabler.io) 
+- [tabler](https://tabler.io)
 
 ## Introduction
 
@@ -107,7 +101,7 @@ git add .
 git commit -m "Description of your changes"
 ```
 
-Or you can use an editor 
+Or you can use an editor
 
 Git Commit Message Convention
 To maintain a clean and readable commit history, we follow the Conventional Commits specification. Here are some examples:
@@ -138,7 +132,6 @@ Create a Pull Request: Go to the original repository on GitHub and click the "Ne
 - Special thanks to [Timothy](https://github.com/timlrx), we used his starter templete.
 - Thanks to the open source community
 - Thanks to all contributors
-
 
 # WKU-SRA-WIKI
 
@@ -185,20 +178,23 @@ WKU-SRA-WIKI 是一个开源项目，旨在为 WKU 的学生提供全面的研�
 1. 克隆仓库
    ```bash
    git clone https://github.com/WKU-SRA/WKU-WIKI.git
-安装
-bash
-yarn
-请注意，如果您使用的是 Windows 系统，可能需要运行以下命令：
+   安装
+   bash
+   yarn
+   请注意，如果您使用的是 Windows 系统，可能需要运行以下命令：
+   ```
 
 ```bash
 $env:PWD = $(Get-Location).Path
 ```
+
 开发
 首先，运行开发服务器：
 
 ```bash
 yarn dev
 ```
+
 使用浏览器打开 http://localhost:3000 开始愉快的编码。
 
 贡献
@@ -213,6 +209,7 @@ yarn dev
 5. 创建一个新的 Pull Request。
 
 ## Git 工作流程
+
 目前我们没有一个正式的工作流程，最终的工作流程模板将在开发过程中确定，并最终记录在文档中。
 
 Fork 仓库：在 GitHub 上的仓库页面点击右上角的 "Fork" 按钮。
@@ -223,11 +220,13 @@ Fork 仓库：在 GitHub 上的仓库页面点击右上角的 "Fork" 按钮。
 git clone https://github.com/your-username/wku-sra-wiki.git
 cd wku-sra-wiki
 ```
+
 创建一个新的分支：
 
 ```bash
 git checkout -b my-feature-branch
 ```
+
 进行您的更改：实现您的功能或修复错误。
 
 提交您的更改：
@@ -252,6 +251,7 @@ chore: 更新构建任务，包管理器配置等
 ```bash
 git push origin my-feature-branch
 ```
+
 创建 Pull Request：转到 GitHub 上的原始仓库并点击 "New Pull Request" 按钮。清晰地描述您的更改并提交拉取请求。
 
 许可证
@@ -263,9 +263,9 @@ MIT © WKU-SRA
 感谢所有贡献者。
 
 ---
-贡献者：  
+
+贡献者：
 
 <a href="https://wkusci.com">
-<img src="./public/static/images/logo.png" alt="Logo" width="100" height="100">
+温肯科协
 </a>
-
