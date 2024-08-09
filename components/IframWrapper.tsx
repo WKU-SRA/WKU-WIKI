@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Modal from './ui/modal'
 import { useEffect } from 'react'
 
-export function FrameModal({ href }: { href: string }) {
+export default function FrameModal({ href }: { href: string }) {
   return (
     <Modal
       element={
@@ -14,6 +14,7 @@ export function FrameModal({ href }: { href: string }) {
             src={href}
             allowFullScreen
             width="100%"
+            height="100%"
             scrolling="1"
             frameBorder="0"
             title="python interpreter"
@@ -24,7 +25,7 @@ export function FrameModal({ href }: { href: string }) {
   )
 }
 
-export default function IframWrapper({ href }: { href: string }) {
+export function IframWrapper({ href }: { href: string }) {
   return (
     <div className="">
       <iframe

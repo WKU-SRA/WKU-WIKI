@@ -82,6 +82,12 @@ Fireship 的视频已经很详细地介绍了各种编程语言的特性和应�
   不同类型之间会有区别，而每个类型的实现方式也不同，具体内容将在之后的教程中涉及，当然，也有动态类型，比如python，移步到下面代码，你会发现python的属性没有任何修饰
 </div>
 
+<div>
+  java 代码中的`{}
+  `为一个代码块，起到组织代码的作用，相当于python中的四个空格（`tab`）。注：在python规范中，
+  请不要用`tab`替代四个空格。
+</div>
+
 <div> 
     `def` 是 Python 的关键字`key word` 保留字`reserved word`，字如其名，用来定义一些东西，比如定义一个方法呀，定义一个属性呀
 </div>
@@ -165,6 +171,15 @@ public class MilkFrother extends Machine {
         this.milkAmount = milkAmount;
     }
 
+    @Override
+    public void someOperations(){
+       /*
+    Override，当子类拥有和父类相同的签名（即 public void someOperations() 完全一样的方法）时，注意参数也要一样，子类可以覆盖父类的方法。
+    这种情况存在于我们抽象出父类的共有方法，但某一个子类有特殊的执行方法，那么就可以 override 它。具体内容将在 OOP 节展开，这里只是告诉大家这个概念，
+    感兴趣的可以自行寻找资源了解 OOP，因为属于比较重要的程序范式，所以对应资源极其丰富，视频网站排前面的几个应该都还行。
+    */
+}
+
     // Additional methods specific to MilkFrother
     public void someOperations(){
 
@@ -214,7 +229,8 @@ class CoffeeMachine:
 
 `Java` `C++` 是比较典型的面向对象语言，面向对象在有一段时间内可谓说是风靡全球，几乎没有语言不想实现面向对象范式，但面向对象真的是最好的范式吗？值得很多程序员困于这个舒适圈而不愿意接触其他编程范式吗？我们不妨看看反对者的声音
 
-有人说OOP完全是**过度设计（Overengineering）**，OOP的原则和设计模式鼓励将问题分解为对象和类，但是捏，这有时会导致过度设计。开发者可能会创建过多的类和继承层次，使代码变得复杂和难以维护，有时候我们完全不用类来实现业务逻辑，比如爬取某个学校教授的科研方向，
+有人说OOP完全是**过度设计（Overengineering）**，OOP的原则和设计模式鼓励将问题分解为对象和类，但是捏，这有时会导致过度设计。开发者可能会创建过多的类和继承层次，使代码变得复杂和难以维护，有时候我们完全不用类来实现业务逻辑，
+比如爬取某个学校(在学校的允许范围内，此处无任何特指，我们不鼓励在未得到授权的情况下爬取他人网站)教授的科研方向，
 业务逻辑很简单，获取学校官网html，解析html，筛选师资信息里的publications，完全没必要创建类，类都没有肯定也不会涉及继承。**设计模式的滥用**，许多开发者在不需要的情况下使用复杂的设计模式，导致代码冗长和难以理解，类似`singleton`, `factory`, `decorator`, 这些其实很多都能被函数代替，一个函数不行就多来点函数嘛 😝 。
 OOP同时也会带来不必要的**开销**，OOP中的抽象层次和多态机制（如虚函数调用）会增加运行时的开销，导致性能下降。这在需要高性能的系统中（如游戏开发、嵌入式系统）尤为明显。**代码膨胀（Code Bloat）**，OOP中的类和对象往往会导致
 代码量增加（见下代码对比），特别是在大型系统中。这样会使代码库变得臃肿，难以管理。
@@ -253,10 +269,10 @@ def brew_coffee():
 
 """
 This is a higher order function, you are passing function to another function,
-but imo, js is better to illustrate hof, because functions are the first class
+but imo, JS is better to illustrate hof, because functions are the first class
 citizen there. And if you have taken the courese we will give you about higher
 order function, you will find this function did not recieve any parameters, but
-it you can see it is a higher order function, cause it are seeking the parameters from the
+it you can see it is a higher order function, cause it is seeking the parameters from the
 global scope.
 这是一个高阶函数，你正在将一个函数传递给另一个函数，但在我看来，JavaScript 更适合用来说明高阶函数，
 因为在 JavaScript 中函数是一等公民。如果你参加了我们关于高阶函数的课程，你会发现这个函数没有接收任何参数，
