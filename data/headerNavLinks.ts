@@ -5,7 +5,6 @@ const headerNavLinks = [
   { href: '/blog', title: '文章' },
   { href: '/tags', title: '分类' },
   { href: '/thanks', title: '感谢' },
-  ,
 ]
 
 export default headerNavLinks
