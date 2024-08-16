@@ -93,7 +93,7 @@ export default function ListLayoutWithTags({
                   href={`/blog`}
                   className="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
                 >
-                  文章
+                  查看文章
                 </Link>
               )}
               <ul>
