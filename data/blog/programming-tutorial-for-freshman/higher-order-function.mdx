@@ -1,0 +1,217 @@
+---
+series: '编程入门之夏'
+depth: 5
+title: '高阶函数'
+date: '2024-08-11'
+tags: ['CPS', '教程', 'SRA 编程入门之夏']
+draft: false
+summary: '函数兄如此强大，仅仅用普通的调用方式是不是有点太浪费了？'
+authors: ['default']
+---
+
+import VideoPlayer from 'components/Player'
+import getCurrentDateTime from 'lib/utils/date-utils'
+import { TimeStampPlayer } from 'components/Player'
+import Divider from '@/components/ui/divider'
+import ImageWrapper from 'components/ImageWrapper'
+import Quiz from 'components/Quiz'
+import CodeBlock from 'components/Code'
+
+<TimeStampPlayer
+  heading="高阶函数"
+  description=""
+  summary=""
+  checkPoints={[
+    { label: '高阶函数｜Higher-order Functions', time: '00:22:58', content: '泛化一个结构' },
+    {
+      label: '泛化计算过程｜Generalize over computational process',
+      time: '00:29:05',
+      content: '常见的结构可能是计算过程而不是一个值',
+    },
+    { label: '小结', time: '00:36:39', content: '小结' },
+    {
+      label: '局部定义函数｜Lcoal defined functions',
+      time: '00:36:39',
+      content: '在另一个函数内部定义的函数',
+    },
+    {
+      label: '调用表达式作为操作符表达式｜Call expression as operator expressions',
+      time: '00:43:01',
+      content: '',
+    },
+    { label: '高阶函数的作用', time: '00:44:47', content: '创建更复杂的抽象和模式' },
+    { label: '匿名表达式｜Lambda expression', time: '00:36:39', content: '' },
+    {
+      label: ' Lambda expression 的对比',
+      time: '00:49:13',
+      content: 'intrinsic name function vs lambda function',
+    },
+    { label: ' 返回｜Return', time: '00:53:00', content: '理解闭包的前提' },
+    { label: ' Lab 和 解答', time: '00:54:28', content: '很重要的Lab' },
+  ]}
+  link={
+    '//player.bilibili.com/player.html?isOutside=true&aid=427281261&bvid=BV1s3411G7yM&cid=746778651&p=8'
+  }
+/>
+
+# 此节涉及到的前置知识
+
+## Unit test
+
+[test in python](https://www.bilibili.com/video/BV1sZ4y1i7nQ/?spm_id_from=333.337.search-card.all.click&vd_source=68fb5e0bc8eb282333b54cde28f7b586)
+
+## Assert
+
+assert 是一个关键字，用于断言某个条件是否为真。如果条件为真，程序会继续执行；
+如果条件为假（即 assert 表达式的结果为 False），程序将抛出一个 AssertionError 异常，并终止执行。
+
+```python
+>>> assert condition, message
+# condition 是一个布尔表达式，如果其结果为 True，则 assert 语句不会产生任何效果；如果结果为 False，则抛出 AssertionError。
+# message 是一个可选的字符串，如果提供了，它将作为 AssertionError 的错误信息。如果不提供，错误信息将是 AssertionError: assert failed。
+>>> assert 1 > 2, 'math is broken'
+# AssertionError: math is broken
+```
+
+assert 常用于调试
+
+# 高阶函数的作用
+
+- 函数作为一等公民，能被当成值传递
+- 函数作为参数传递且能被当作值返回
+- 移除重复代码
+- 抽象出共性
+
+# Lambda 表达式
+
+`lambda(A function that) x(takes x):(and returns) x + 1`
+
+[匿名函数，python官方中文文档](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#lambda-expressions)
+
+```python
+x = 3
+
+add = x + 1 # 右边被评估为值
+add = lambda x: x + 1 # 右边被评估为函数
+```
+
+Lambda 表达式是函数体具有单个返回表达式的函数，不允许出现赋值和控制语句，且仅仅可用于简单的单行函数，求解和返回一个表达式。
+在语义上，它只是常规函数定义的语法糖。与嵌套函数定义一样，lambda 函数可以引用包含作用域中的变量，即闭包。你可以理解为他可以记住
+所处作用域的变量。
+
+```python
+def add(x):
+    return lambda y: x + y
+
+add(3)(4) # 7, lambda y: x + y 记住了所在作用域的x
+addition = add(3)
+# 在调用这个函数时，它会返回一个新的函数 lambda y: x + y，这个函数相当于
+def anonymous(y):
+    return x + y
+# 而此处的x在寻找变量时会在外部作用域也就是返回他的地方找到x即3
+故该函数最终形式为
+def anonymous(y):
+    return 3 + y
+```
+
+对于匿名函数，没必要学，没必要记，工程做多了，主动去用，自然就会了。
+
+<Quiz
+  correct="3"
+  question={
+    <>
+      Quiz：以下三个代码分别输出什么？
+      <CodeBlock
+        code={`def add(x)
+        return lambda x: x + 1
+    
+    print(add(3)(4))
+    print(add(3)())
+    print(add()(4))
+    print(add(4)(2))`}
+        language="python"
+      />
+    </>
+  }
+  explain={
+    <div className="text-start">
+      <ol>
+        <li>print(add(3)(4)): 5</li>
+        <li>print(add(3)())， print(add()(4)): 抛出异常</li>
+        <li>print(add(4)(2)): 3</li>
+      </ol>
+      <p>第2,3行print均抛出异常，因为均有参数未传递，</p>
+      <p>关于print(add(3)(4))的解释：</p>
+      <p>add(3)返回这个lambda函数 lambda x: x + 1</p>
+      <p>add(3)(4)相当于对这个lambda函数立即调用 (lambda x: x + 1)(4) 返回 5</p>
+      <p>
+        注：匿名函数的 x shadow外部函数的
+        x，这里的lambda访问不到外部的同名变量，因为已经找到了变量就不会向外部环境寻找变量了
+      </p>
+    </div>
+  }
+/>
+
+## 与 def 函数 对比
+
+def 函数是有名字（intrinsic name）的，lambda 函数是匿名的
+
+# 函数作为一等公民
+
+通常，编程语言会限制操作计算元素的途径。带有最少限制的元素被称为具有一等地位。一些一等元素的“权利和特权”是：
+
+1.  它们可以绑定到名称。
+2.  它们可以作为参数向函数传递。
+3.  它们可以作为函数的返回值返回。
+4.  它们可以包含在数据结构中。
+
+# 函数作为修饰器
+
+Python 提供了特殊的语法，将高阶函数用作执行 def 语句的一部分，叫做装饰器。
+
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        result = func()
+        print("Something is happening after the function is called.")
+        return result
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+# Something is happening before the function is called.
+# Hello!
+# Something is happening after the function is called.
+```
+
+say_hello 在被创建时的值并没有绑定到函数，而是被装饰器 @my_decorator 函数装饰起来
+即 say_hello = my_decorator(say_hello)
+
+Labs： 尝试找到一个函数的反函数（inverse）： g(y) such that g(f(x)) -> x
+
+```python
+def search(f):
+    n = 0
+    while True:
+        if f(n):
+            return n
+        n += 1
+
+
+def inverse(f):
+    return lambda y: search(lambda x: f(x) == y)
+
+
+def square(x):
+    return x * x
+
+
+sqrt = inverse(square)
+
+print(sqrt(4))
+2
+```

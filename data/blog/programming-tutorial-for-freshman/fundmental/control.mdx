@@ -1,0 +1,817 @@
+---
+series: 'python-manual'
+depth: 2
+title: 'Python 控制流与函数'
+date: '2024-08-11'
+tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
+draft: false
+summary: '控制是程序执行路径的管理方式,包括顺序、选择(条件判断）、循环、循环控制(跳转)、异常处理等'
+authors: ['default']
+---
+
+import Quiz from 'components/Quiz'
+import CodeBlock from 'components/Code'
+
+# 控制流
+
+[了解更多](https://docs.python.org/zh-cn/3/tutorial/controlflow.html)
+
+## if 语句
+
+```python
+if condition:
+    语句块
+```
+
+如果条件（condition）为真，则执行语句块
+
+- `elif` 为 else if 的缩写，用于避免过多的缩进，`else` 为最后的条件，如果前面的条件都不满足，就执行 `else` 语句块
+
+```python
+>>> x = int(input("Please enter an integer: "))
+Please enter an integer: 42
+>>> if x < 0:
+        x = 0
+        print('Negative changed to zero')
+    elif x == 0:
+        print('Zero')
+    elif x == 1:
+        print('Single')
+    else:
+        print('More')
+```
+
+> Tips: 复制粘贴的过程中请注意缩进，直接粘贴到idel中可能会出现错误，后续会有代码复制功能，敬请期待
+
+## for 语句
+
+在可迭代对象（如列表、元组、字符串、字典、集合等）上进行迭代。可迭代对象是指可以逐个返回其元素的对象。
+
+```python
+>>> wku = "Wenzhou-Kean University"
+>>> for char in wku:
+        print(char)
+W
+e
+...
+y
+```
+
+### 迭代多项集
+
+很难正确地在迭代多项集的同时修改多项集的内容，因为迭代器是直接引用多项集的数据，而不是多项集的副本。
+在迭代的过程中修改多项集有可能会使得迭代器的内部状态与字典的实际状态不一致，比如多项集的大小在迭代过程中发生了变化，破坏了迭代器的内部状态。  
+具体内容会在之后的迭代器中详细介绍
+
+<br />
+更简单的方法是迭代多项集的副本或者创建新的多项集：
+
+```python
+# Create a sample collection
+users = {'Hans': 'active', 'Éléonore': 'inactive', '景太郎': 'active'}
+# 这里的users是一个字典
+
+# Strategy:  Iterate over a copy
+for user, status in users.copy().items():
+    # user是键，status是值, users.copy()为副本，每个键值对（items）是一个元素，每个键只能指向一个值
+    if status == 'inactive':
+        del users[user]
+
+# Strategy:  Create a new collection
+active_users = {}
+for user, status in users.items():
+    if status == 'active':
+        active_users[user] = status
+```
+
+### 深入条件控制
+
+`while` 和 `if` 条件句不只可以进行比较，还可以使用任意运算符。
+
+比较运算符 `in` 和 `not in` 用于执行确定一个**值**是否存在（或不存在）于某个容器中的成员检测。 运算符 `is` 和 `is not` 用于比较两个**对象**是否是同一个对象。 所有**比较运算符**的优先级都一样，且**低于任何数值运算符**。
+
+比较操作**支持链式操作**。例如，$a < b == c$ 校验 a 是否小于 b，且 b 是否等于 c。
+
+比较操作可以用布尔运算符 `and` 和 `or` 组合。并且，比较操作（或其他布尔运算）的结果都可以用 `not` 取反。这些操作符的优先级低于比较操作符；`not` 的优先级最高， `or` 的优先级最低，因此，$A\ and\ not\ B\ or\ C$ 等价于 $(A\  and\  (not B))\ or\ C$。与其他运算符操作一样，此处也可以用圆括号表示想要的组合。
+
+布尔运算符 `and` 和 `or` 是所谓的 `短路 运算符`：其参数从左至右求值，一旦可以确定结果，求值就会停止。例如，如果 A 和 C 为真，B 为假，那么 $A\ and\ B\ and\ C$ 不会对 C 求值。用作普通值而不是布尔值时，短路运算符的返回值通常是最后一个求了值的参数。
+
+还可以把比较运算或其它布尔表达式的结果赋值给变量，例如：
+
+```python
+>>> 1 < 4 and print("Thanks, god. Math is not broken 🥹")
+# 1 < 4 为真，所以输出,如果为假，则不向后执行
+Thanks, god. Math is not broken 🥹
+>>> if (1 < 4):
+        print("Thanks, god. Math is not broken 🥹")
+# 效果是一样的，但是短路逻辑运算 conditon and statement 会更简洁
+>>> charateristic = input("Please enter your charateristic: ")
+Please enter your charateristic: passion
+>>> charateristic == 'passion' and "WKU-SRA are open to you" or "We need more passion"
+WKU-SRA are open to you
+# 如果输入的是 passion，那么输出 WKU-SRA are open to you，否则输出 We need more passion
+```
+
+注意，Python 与 C 不同，在表达式内部赋值必须显式使用 海象运算符 :=。 这避免了 C 程序中常见的问题：要在表达式中写 == 时，却写成了 =。
+用java举一个表达式内部赋值的例子：
+
+- 初始化部分：int i = 0 是赋值操作，将 i 初始化为 0。
+- 条件部分：i < arr.length 是一个条件表达式，在每次迭代前进行评估。如果条件为真，则继续循环；否则，退出循环。
+- 迭代部分：i++ 是一个递增操作，在每次循环结束时执行，将 i 的值增加 1。
+
+```java
+// java
+public class Main {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println("Element at index " + i + ": " + arr[i]);
+        }
+    }
+}
+```
+
+请注意，海象运算符于python3.8版本引入，如果你使用的是更早的版本，你需要升级到3.8或更高版本。
+当然啦，最方便的还是用anaconda创建一个虚拟环境，
+以下为python3.1版本通过anaconda创建虚拟环境的方法：
+
+#### For linux and macOS
+
+```bash
+conda create -n nameofenv python=3.8
+conda activate nameofenv
+```
+
+`nameofenv` 环境激活成功后，你将在shell里看到环境名，如下所示：
+
+```bash
+(myenv) wkusra@sra: tutorial %
+```
+
+Bonus：myenv 为我的环境名，wkusra为我当前用户名，sra为主机名，tutorial 为我的项目名，% 为命令提示符
+最后检查一下python版本
+
+```bash
+python --version
+```
+
+如果版本为3.8，接下来你就可以在虚拟环境中使用海象运算符了，happy hacking 😘
+
+```python
+# python
+some_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+if(n := len(some_list)) > 10:
+    print(f"List is too long ({n} elements, expected <= 10)")
+# n 被赋值为 some_list 的长度，并且这个赋值操作是在 if 表达式内部完成的
+```
+
+n 被赋值为 some_list 的长度，并且这个赋值操作是在 if 表达式内部完成的。
+
+```c
+// c
+if (a = 5) {
+    // 这里的 a = 5 是赋值操作，而不是比较操作
+}
+```
+
+a = 5 是一个赋值操作，而不是比较操作。写c的老哥可能本意是写 a == 5 进行比较，但不小心写成了 a = 5。
+
+# range( )函数
+
+- range() 函数用于生成一个指定范围内的数字序列，可以指定范围的起始、终止和步长
+
+```python
+for i in range(5):
+    print(i)
+0
+1
+...
+4
+# 指定范围的起始、终止
+for i in range(2,5):
+    print(i)
+2
+3
+4
+# 指定范围的起始、终止、步长
+for i in range(0,5,2):
+    print(i)
+0
+2
+4
+```
+
+## range( ) 和 for 配合使用迭代序列
+
+```python
+a = ['Mary', 'had', 'a', 'little', 'lamb']
+for i in range(len(a)):
+    print(i, a[i])
+0 Mary
+1 had
+...
+4 lamb
+```
+
+注： range() 返回的对象在很多方面和列表的行为一样，但其实它和列表不一样。该对象只有在被迭代时才一个一个地返回所期望的列表项，并没有真正生成过一个含有全部项的列表，从而节省了空间。
+
+## 循环的技巧
+
+### 1. 当你需要同时获取索引和值时，使用 enumerate 比使用 range(len(...)) 更简洁：
+
+```python
+a = ['Mary', 'had', 'a', 'little', 'lamb']
+for index, value in enumerate(a):
+    print(index, value)
+# 输出:
+# 0 Mary
+# 1 had
+# 2 a
+# 3 little
+# 4 lamb
+```
+
+### 2. 当你需要同时遍历两个或多个序列时，使用 zip() 函数：
+
+```python
+names = ['Mary', 'John', 'Alice']
+ages = [25, 30, 22]
+for name, age in zip(names, ages):
+    print(f'{name} is {age} years old')
+# 输出:
+# Mary is 25 years old
+# John is 30 years old
+# Alice is 22 years old
+```
+
+### 3. 当你需要逆序遍历一个序列时，使用 reversed() 函数：
+
+```python
+or i in reversed(range(5)):
+    print(i)
+# 输出:
+# 4
+# 3
+# 2
+# 1
+# 0
+```
+
+### 4. 使用 items 方法迭代字典
+
+```python
+d = {'a': 1, 'b': 2, 'c': 3}
+for key, value in d.items():
+    print(key, value)
+# 输出:
+# a 1
+# b 2
+# c 3
+```
+
+### 3. 列表推导式
+
+列表推导式是一种简洁的方式来创建列表：
+
+```python
+squares = [x**2 for x in range(10)]
+print(squares)
+# 输出: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+```
+
+## 循环中的 break、continue 语句及 else 子句
+
+break 语句将跳出最近的一层 for 或 while 循环。请注意是跳出最近一层循环
+
+for 或 while 循环可以包括 else 子句。
+
+- 在 for 循环中，else 子句会在**循环成功结束最后一次迭代之后**执行。
+- 在 while 循环中，它会在循环条件变为假值后执行。
+- 无论哪种循环，如果因为 break 而结束，那么 else 子句就 不会 执行。
+- else 子句用于循环时比起 if 语句的 else 子句，更像 try 语句的。try 语句的 else 子句在未发生异常时执行，循环的 **else 子句则在未发生 break 时执行**。 try 语句和异常详见 异常的处理。
+
+```python
+for n in range(2, 10):
+    for x in range(2, n):
+        if n % x == 0:
+            print(n, 'equals', x, '*', n//x)
+            break
+    else:
+        # loop fell through without finding a factor
+        print(n, 'is a prime number')
+
+2 is a prime number
+3 is a prime number
+4 equals 2 * 2
+5 is a prime number
+6 equals 2 * 3
+7 is a prime number
+8 equals 2 * 4
+9 equals 3 * 3
+```
+
+continue 语句会使循环跳到下一次迭代：
+
+```python
+for num in range(2, 10):
+    if num % 2 == 0:
+        print("Found an even number", num)
+        continue # 跳到下一次迭代,不执行下面的语句
+    print("Found a number", num)
+Found an even number 2
+Found an odd number 3
+Found an even number 4
+Found an odd number 5
+Found an even number 6
+Found an odd number 7
+Found an even number 8
+Found an odd number 9
+```
+
+# pass 语句
+
+pass 语句不执行任何动作。语法上需要一个语句，但程序毋需执行任何动作时，可以使用该语句。例如：
+
+```python
+def complicated_operation(*args):
+    pass   # Remember to implement this!
+```
+
+- pass 可用作函数或条件语句体的占位符，让你保持在更抽象的层次进行思考。pass 会被默默地忽略,你可以理解为to do，但是必须要放点东西在那里，不让python抱怨
+- 在有些时候你需要一个语句，但是你不想执行任何操作，这时候你也可以使用 pass 语句
+
+# match 语句
+
+match 语句接受一个表达式并把它的值与一个或多个 case 块给出的一系列模式进行比较。这表面上像 C、Java 或 JavaScript（以及许多其他程序设计语言）中的 switch 语句，
+但其实它更像 Rust 或 Haskell 中的模式匹配。只有第一个匹配的模式会被执行，并且它还可以提取值的组成部分（序列的元素或对象的属性）赋给变量。
+对于java
+
+```java
+// java
+public class SwitchExample {
+    public static void main(String[] args) {
+        int age = 25;
+
+        switch (age) {
+            case 10:
+                System.out.println("Child");
+                break;
+            case 20:
+                System.out.println("Teenager");
+                break;
+            case 30:
+                System.out.println("Adult");
+                break;
+            default:
+                System.out.println("Age not specified");
+                break;
+        }
+    }
+}
+// 如果在 switch 语句的每个 case 分支中没有使用 break 语句，那么程序会继续执行后续的 case 分支，直到遇到 break 语句或 switch 语句结束。这种行为被称为“fall-through”。
+// Age not specified
+```
+
+```python
+# python
+def http_error(status):
+    match status:
+        case 400:
+            return "Bad request"
+        case 404:
+            return "Not found"
+        case 418:
+            return "I'm a teapot"
+        case _:
+            return "Something's wrong with the internet"
+```
+
+注意最后一个代码块：“变量名” \_ 被作为 通配符 并必定会匹配成功。如果没有 case 匹配成功，则不会执行任何分支。
+你可以使用 `|` 或者 `or` 在一个模式中组合几个字面值:
+
+```python
+case 401 | 403 | 404:
+    return "Not allowed"
+```
+
+## mathch 里的解包
+
+形如解包赋值的模式可被用于绑定变量，解包的过程是指将一个复杂的数据结构（如元组、列表等）
+分解成其组成部分，并将这些部分绑定到变量上。
+
+```python
+# point is an (x, y) tuple
+match point:
+    case (0, 0):
+        print("Origin")
+    case (0, y):
+        print(f"Y={y}")
+    case (x, 0):
+        print(f"X={x}")
+    case (x, y):
+        print(f"X={x}, Y={y}")
+    case _:
+        raise ValueError("Not a point")
+```
+
+如果用类组织数据，可以用“类名后接一个参数列表”这种很像构造器的形式，把属性捕获到变量里：
+
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+def where_is(point):
+    match point:
+        case Point(x=0, y=0):
+            print("Origin")
+        case Point(x=0, y=y):
+            print(f"Y={y}")
+        case Point(x=x, y=0):
+            print(f"X={x}")
+        case Point():
+            print("Somewhere else")
+        case _:
+            print("Not a point")
+```
+
+可以通过在你的类中设置`__match_args__` 特殊属性来为模式中的属性定义一个专门的位置。
+
+```python
+class Point:
+    __match_args__ = ("x", "y")
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+def describe_point(point):
+    match point:
+        case Point(0, y):
+            print(f"Y={y}")
+        case Point(x, 0):
+            print(f"X={x}")
+        case Point(x, y) if x == y:
+            print(f"Diagonal point at {x}")
+        case Point():
+            print("Somewhere else")
+        case _:
+            print("Not a point")
+
+# 测试
+p1 = Point(0, 5)
+p2 = Point(3, 0)
+p3 = Point(4, 4)
+p4 = Point(2, 3)
+
+describe_point(p1)  # 输出: Y=5
+describe_point(p2)  # 输出: X=3
+describe_point(p3)  # 输出: Diagonal point at 4
+describe_point(p4)  # 输出: Somewhere else
+```
+
+我们可以向一个模式添加 if 子句，称为“约束项”。 如果约束项为假值，则 match 将继续尝试下一个 case 语句块。 请注意值的捕获发生在约束项被求值之前。:
+
+```python
+case Point(x, y) if x == y:
+    print(f"Diagonal point at {x}")
+```
+
+- 解包赋值允许将一个序列（如元组或列表）的元素直接赋值给多个变量。元组和列表模式在解包赋值时具有相同的含义，并且都能匹配任意序列，但它们不能匹配迭代器或字符串。
+
+```python
+# 元组解包
+a, b, c = (1, 2, 3)
+print(a, b, c)  # 输出: 1 2 3
+
+# 列表解包
+x, y, z = [4, 5, 6]
+print(x, y, z)  # 输出: 4 5 6
+
+# 扩展解包
+p, q, *rest = [7, 8, 9, 10, 11]
+print(p, q, rest)  # 输出: 7 8 [9, 10, 11]
+
+# 使用 _ 忽略剩余的元素
+m, n, *_ = [12, 13, 14, 15, 16]
+print(m, n)  # 输出: 12 13
+
+# 不能直接解包迭代器
+it = iter([1, 2, 3])
+a, b, c = list(it) # 先转换为列表就可以
+print(a, b, c)  # 输出: 1 2 3
+a, b, c = it  # 但直接解包迭代器会报错
+
+# 不能直接解包字符串
+s = "abc"
+x, y, z = tuple(s) # 先转化为元组就可以
+print(x, y, z)  # 输出: a b c
+x, y, z = s  # 但直接解包迭代器会报错
+```
+
+- 序列模式（Sequence Pattern）如列表、元组等支持扩展解包：`[x, y, *rest] `和`(x, y, *rest)`和相应的解包赋值做的事是一样的。接在 `*` 后的名称也可以为 `_`，所以 `(x, y, *_)` 匹配含至少两项的序列，而不必绑定剩余的项
+- 子模式可使用 as 关键字来捕获:
+
+`case (Point(x1, y1), Point(x2, y2) as p2): `
+
+[了解更多](https://docs.python.org/zh-cn/3/tutorial/controlflow.html)
+
+# [函数](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#defining-functions)
+
+函数使用关键字 `def`，后跟函数名与括号内的形参列表(parameters)。函数语句从下一行开始，并且必须缩进。
+函数内的第一条语句是字符串时，该字符串就是文档字符串，也称为 `docstring`，详见文档字符串。利用文档字符串可以自动生成在线文档或打印版文档，还可以让开发者在浏览代码时直接查阅文档；
+Python 开发者最好养成在代码中加入文档字符串的好习惯。
+
+```python
+def add(a, b):
+    """
+    计算两个数的和。 ‼️ 第一行应为对象用途的简短摘要,保持简洁，不要介绍数据类型和细节
+
+    参数:
+    a (int, float): 第一个数
+    b (int, float): 第二个数
+
+    返回:
+    int, float: 两个数的和
+    """
+    return a + b
+
+    # 访问文档字符串
+print(add.__doc__)
+```
+
+<Quiz  question={<>
+  Quiz：请参考python速览中对文本的介绍，"""\和"""有区别吗，直接返回add.__doc__和打印add.__doc__有区别吗？
+    <CodeBlock code={`\
+def add(a, b):
+    """\\
+    计算两个数的和。 ‼️ 第一行应为对象用途的简短摘要,保持简洁，不要介绍数据类型和细节
+
+    参数:
+    a (int, float): 第一个数
+    b (int, float): 第二个数
+
+    返回:
+    int, float: 两个数的和
+    """
+    return a + b
+
+\# 访问文档字符串
+print(add.**doc**)
+`} language='python'/>
+</>} explain={
+<div className='text-start'>
+<ol>
+<li >
+"""\和"""有区别，"""\ 避免了字符串中的换行符
+</li>
+<li>
+直接返回add.**doc**和打印add.**doc**有区别，  
+ 直接返回会返回一个字符串对象，这个字符串对象包含了文档字符串的内容也即字符串的原始形式。
+打印 add.**doc** 会将文档字符串的内容输出到控制台或标准输出。  
+ </li>
+
+        </ol>
+    </div>} />
+
+- 函数在执行时使用函数局部变量符号表，所有函数变量赋值都存在局部符号表中。引用变量时，首先，在局部符号表里查找变量，然后，是外层函数局部符号表，再是全局符号表，最后是内置名称符号表。因此，尽管可以引用全局变量和外层函数的变量，但最好不要在函数内直接赋值（除非是 global 语句定义的全局变量，或 nonlocal 语句定义的外层函数变量）。
+
+- 在调用函数时会将实际参数（实参，parameter）引入到被调用函数的局部符号表中。因此，实参是使用 **按值调用** 来传递的（其中的**值**始终是对象的**引用**而不是对象的值）。当一个函数调用另外一个函数时，会为该调用创建一个新的局部符号表。
+
+## 函数参数值
+
+### 默认参数值，如果不提供参数，会使用默认值
+
+```python
+def ask_ok(prompt, retries=4, reminder='Please try again!'):
+    while True:
+        ok = input(prompt)
+        if ok in ('y', 'ye', 'yes'):
+            return True
+        if ok in ('n', 'no', 'nop', 'nope'):
+            return False
+        retries = retries - 1
+        if retries < 0:
+            raise ValueError('invalid user response')
+        print(reminder)
+```
+
+该函数可以用以下方式调用：
+
+只给出必选实参：`ask_ok('Do you really want to quit?')`
+
+给出一个可选实参：`ask_ok('OK to overwrite the file?', 2)`
+
+给出所有实参：`ask_ok('OK to overwrite the file?', 2, 'Come on, only yes or no!')`
+
+默认值只计算一次。默认值为列表、字典或类实例等可变对象时，会产生与该规则不同的结果。例如，下面的函数会累积后续调用时传递的参数：
+
+```python
+def f(a, L=[]):
+    L.append(a)
+    return L
+
+print(f(1))
+print(f(2))
+print(f(3))
+[1] # print(f(1)),没有提供L的值，使用默认值[]
+[1, 2] # print(f(2)),没有提供L的值，使用了之前的值[1]
+[1, 2, 3] # print(f(3)),提没有提供L的值，使用了之前的值[1, 2]
+```
+
+不想在后续调用之间共享默认值时，应以如下方式编写函数：
+
+```python
+def f(a, L=None):
+    if L is None:
+        L = []
+    L.append(a)
+    return L
+```
+
+### 关键字参数和位置参数
+
+关键字参数：`kwarg = value`
+位置参数：按照位置传递参数
+
+```python
+def greet(name, message):
+    print(f"{message}, {name}!")
+
+# 使用位置参数，调用函数时，参数的顺序必须与函数定义中的顺序一致。
+greet("Alice", "Hello")
+# 输出: Hello, Alice!
+
+# 使用关键字参数，调用函数时，参数的顺序可以与函数定义中的顺序不同。
+
+greet(message="Hi", name="Bob")
+# 输出: Hi, Bob!
+
+# 混合使用位置参数和关键字参数，可以在同一个函数调用中同时使用位置参数和关键字参数，但位置参数必须在关键字参数之前。
+# 避免歧义，方便解析器解析
+
+greet("Charlie", message="Good morning")
+# 输出: Good morning, Charlie!
+
+```
+
+### \*args 和 \*\*kwargs
+
+- \*args 用于传递一个非键值对的可变数量的**参数列表**给一个函数
+- \*\*kwargs 允许你将不定长度的**键值对**，作为参数传递给一个函数
+- \*\*kwargs 必须在 \*args 之后
+
+```python
+def greet(*names,**couple):
+    for name in names:
+        print(f"Hello, {name}!")
+    for key, value in couple.items():
+        print(f"{key} and {value} are couple")
+
+greet("Alice", "Bob", "Charlie", "David", "Eve", Alice="Bob", Charlie="David")
+Hello, Bob!
+Hello, Charlie!
+Hello, David!
+Hello, Eve!
+Alice and Bob are couple
+Charlie and David are couple
+```
+
+```
+def f(pos1, pos2, /, pos_or_kwd, *, kwd1, kwd2):
+      -----------    ----------     ----------
+        |             |                  |
+        |        Positional or keyword   |
+        |                                - Keyword only
+         -- Positional only
+
+- / 和 * 用来限定参数的位置，/ 之前的参数只能通过位置传递，* 之后的参数只能通过关键字传递
+未使用 / 和 * 时，参数可以按位置或关键字传递给函数。就是正常的调用
+```
+
+```python
+def standard_arg(arg):
+    print(arg)
+
+def pos_only_arg(arg, /):
+    print(arg)
+
+def kwd_only_arg(*, arg):
+    print(arg)
+
+def combined_example(pos_only, /, standard, *, kwd_only):
+    print(pos_only, standard, kwd_only)
+```
+
+下面的函数定义中，kwds 把 name 当作键，因此，可能与位置参数 name 产生潜在冲突：
+
+```python
+def foo(name, **kwds):
+    return 'name' in kwds
+```
+
+调用该函数不可能返回 True，因为关键字 'name' 总与第一个形参绑定。例如：
+
+```python
+foo(1, **{'name': 2})
+# 输出错误
+# 上式为官方文档代码，等价于下式，只是用到了一次解包，但对于新手未使用过解包的可能会有困惑，看下式即可
+foo(1, name=2)
+'''
+错误解析：
+TypeError: foo() got multiple values for argument 'name'
+Python不允许在同一个函数调用中为同一个参数同时提供位置参数和关键字参数
+name参数收到了多个值，一个是作为位置参数的1，另一个是作为关键字参数的{'name': 2}中的 2
+foo(1, name=2)
+你没有限制按关键字，位置传递，解析器于是会把1赋给第一个形参name，这时候突然又出现了name=2，解析器发现多个name
+他不知道关键字name传递给谁，如果你限定第一个参数只能通过位置传递，那么就不会出现这种情况，因为foo(1)按位置传递
+后面的参数name=1按关键字传递，解析器就不会混淆
+'''
+
+```
+
+解决方案：
+
+```python
+def foo(name, /, **kwds):
+    return 'name' in kwds
+
+foo(1, **{'name': 2})
+True
+# 加上 /（仅限位置参数）后，就可以了。此时，函数定义把 name 当作位置参数，'name' 也可以作为关键字参数的键：
+```
+
+tips：
+
+- 形参没意义用仅限位置形参，对于API，使用仅限位置形参
+
+## 解包实参列表
+
+函数调用要求独立的位置参数，但实参在列表或元组里时，要执行相反的操作。例如，内置的 range() 函数要求独立的 start 和 stop 实参。
+如果这些参数不是独立的，则要在调用函数时，用 \* 操作符把实参从列表或元组解包出来：
+
+```python
+list(range(3, 6))            # normal call with separate arguments
+[3, 4, 5]
+args = [3, 6]
+list(range(*args))            # call with arguments unpacked from a list
+[3, 4, 5]
+
+# 同样，字典可以用 ** 操作符传递关键字参数：
+def greet(first_name, last_name, greeting):
+    print(f"{greeting}, {first_name} {last_name}!")
+
+greet(**{"first_name": "Alice", "last_name": "Smith", "greeting": "Hello"})
+
+```
+
+[了解更多](https://docs.python.org/zh-cn/3/tutorial/introduction.html#numbers)
+
+# lambda 函数
+
+- lambda 函数是一种小的匿名函数，可以有任意数量的参数，但只能有一个表达式。lambda 函数不能包含命令，包含的表达式返回一个值。
+  官方文档介绍的很清楚，[请点击查看](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#lambda-expressions)
+
+# 文档字符串
+
+自行了解，[请点击查看](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#documentation-strings)
+
+# 函数注解
+
+可选的用户自定义函数类型的元数据完整信息
+以字典的形式存放在函数的 **annotations** 属性中而对函数的其他部分没有影响
+形参标注的定义方式是在形参名后加冒号，后面跟一个会被求值为标注的值的表达式。 返回值标注的定义方式是加组合符号 ->，后面跟一个表达式，这样的校注位于形参列表和表示 def 语句结束的冒号。
+帮助开发者理解函数参数和返回值的预期类型，可以用于自动生成文档工具，进行静态检测。
+
+```python
+# python
+def f(ham: str, eggs: str = 'eggs') -> str:
+    print("Annotations:", f.__annotations__)
+    print("Arguments:", ham, eggs)
+    return ham + ' and ' + eggs
+
+f('spam')
+Annotations: {'ham': <class 'str'>, 'return': <class 'str'>, 'eggs': <class 'str'>}
+Arguments: spam eggs
+'spam and eggs'
+```
+
+```typescript
+// 可以对比一下typescript，建立在动态语言js的基础上
+function f(ham: string, eggs: string = 'eggs'): string {
+  console.log('Annotations:', f.__annotations__)
+  console.log('Arguments:', ham, eggs)
+  return ham + ' and ' + eggs
+}
+```
+
+对比
+| 特性 | Python 函数注解 | TypeScript 类型注解 |
+|------------|--------------------------------------|-----------------------------------------|
+| 类型检查 | 仅作提示，不进行实际类型检查 | 在编译时进行严格的类型检查 |
+| 运行时行为 | 不影响运行时行为，仅作为元数据存在 | 不影响运行时行为，类型信息在编译后被移除 |
+| 用途 | 类型提示、文档生成、静态分析 | 类型检查、代码补全、文档生成 |
+| 灵活性 | 非强制，开发者可以选择是否使用 | 强制，所有变量和函数都需要类型注解 |

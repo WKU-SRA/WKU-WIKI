@@ -1,0 +1,147 @@
+---
+series: 'python-manual'
+depth: 7
+title: 'Python IO'
+date: '2024-08-11'
+tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
+draft: true
+summary: '有人说，I/O是很多软件系统的瓶颈，提高I/O性能便能很大程度提高整个系统的性能'
+authors: ['default']
+---
+
+# 输入和输出
+
+## 输出格式化
+
+- 使用 格式化字符串字面值 ，要在字符串开头的引号/三引号前添加 f 或 F 。在这种字符串中，可以在 `{` 和 `}`字符之间输入引用的变量，或字面值的 Python 表达式
+
+```python
+>>> year = 2016
+>>> event = 'Referendum'
+>>> f'Results of the {year} {event}'
+
+'Results of the 2016 Referendum'
+```
+
+```python
+import math
+print(f'The value of pi is approximately {math.pi:.3f}.')
+The value of pi is approximately 3.142.
+```
+
+在 ':' 后传递整数，为该字段设置最小字符宽度，常用于列对齐：
+还有一些修饰符可以在格式化前转换值。 '!a' 应用 ascii() ，'!s' 应用 str()，'!r' 应用 repr()：
+
+[请参考](https://docs.python.org/zh-cn/3/library/string.html#formatspec)
+
+- 字符串的 `str.format()` 方法需要更多手动操作。 你仍将使用 `{ 和 }` 来标记变量将被替换的位置并且可以提供详细的格式化指令，但你还需要提供待格式化的信息。 下面的代码块中有两个格式化变量的例子：
+
+```python
+>>> yes_votes = 42_572_654
+>>> total_votes = 85_705_149
+>>> percentage = yes_votes / total_votes
+>>> '{:-9} YES votes  {:2.2%}'.format(yes_votes, percentage)
+' 42572654 YES votes  49.67%'
+```
+
+花括号及之内的字符（称为格式字段）被替换为传递给 `str.format()` 方法的对象。花括号中的数字表示传递给 `str.format()` 方法的对象所在的位置，且使用关键字参数名引用值
+具体请参考[格式字符串语法](https://docs.python.org/zh-cn/3/tutorial/inputoutput.html#the-string-format-method)
+
+- 最后，还可以用字符串切片和合并操作完成字符串处理操作，创建任何排版布局。字符串类型还支持将字符串按给定列宽进行填充，这些方法也很有用。
+  如果不需要花哨的输出，只想快速显示变量进行调试，可以用 `repr()` 或 `str()` 函数把值转化为字符串。
+  `str()` 函数返回供人阅读的值，`repr()` 则生成适于解释器读取的值（如果没有等效的语法，则强制执行 `SyntaxError`）。对于没有支持供人阅读展示结果的对象， `str()` 返回与 `repr()` 相同的值。一般情况下，数字、列表或字典等结构的值，使用这两个函数输出的表现形式是一样的。字符串有两种不同的表现形式。
+
+## 读写文件
+
+`open()` 返回一个 `file objec`t ，最常使用的是两个位置参数和一个关键字参数：`open(filename, mode, encoding=None)`
+
+```python
+f = open('workfile', 'w', encoding="utf-8")
+```
+
+第一个实参是文件名字符串。第二个实参是包含描述文件使用方式字符的字符串。mode 的值包括 `'r'` ，表示文件只能读取；`'w'` 表示只能写入（现有同名文件会被覆盖）；`'a'` 表示打开文件并追加内容，任何写入的数据会自动添加到文件末尾。`'r+'` 表示打开文件进行读写。mode 实参是可选的，省略时的默认值为 `'r'`。
+
+通常情况下，文件是以 `text mode` 打开的，也就是说，你从文件中读写字符串，这些字符串是以特定的 `encoding` 编码的。如果没有指定 `encoding` ，默认的是与平台有关的（见 `open()` ）。因为 `UTF-8` 是现代事实上的标准，除非你知道你需要使用一个不同的编码，否则建议使用 `encoding="utf-8"` 。在模式后面加上一个 `'b'` ，可以用 `binary mode` 打开文件。二进制模式的数据是以 `bytes` 对象的形式读写的。在二进制模式下打开文件时，你不能指定 `encoding` 。
+
+在文本模式下读取文件时，默认把平台特定的行结束符（Unix 上为 `\n`, Windows 上为 `\r\n`）转换为 `\n`。在文本模式下写入数据时，默认把 `\n` 转换回平台特定结束符。这种操作方式在后台修改文件数据对文本文件来说没有问题，但会破坏 `JPEG` 或 `EXE`等二进制文件中的数据。注意，在读写此类文件时，一定要使用二进制模式。
+
+在处理文件对象时，最好使用 with 关键字。优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。而且，使用 with 相比等效的 try-finally 代码块要简短得多：
+
+```python
+with open('workfile', encoding="utf-8") as f:
+    read_data = f.read()
+
+# We can check that the file has been automatically closed.
+f.closed
+True
+```
+
+如果没有使用 `with` 关键字，则应调用 `f.close()` 关闭文件，即可释放文件占用的系统资源。
+
+> 警告 调用 `f.write()`时，未使用 `with` 关键字，或未调用` f.close()`，即使程序正常退出，也**可能** 导致 f.write() 的参数没有完全写入磁盘。
+> 通过 `with` 语句，或调用 `f.close()` 关闭文件对象后，再次使用该文件对象将会失败。
+
+### 文件对象的方法
+
+- `f.read(size)` 从文件读取 size 个字符，当未给定 size 或给定负值时，读取所有字符并返回为字符串。如果文件已到达结尾， `f.read()` 将返回一个空字符串。
+- `f.readline()` 从文件中读取一行；换行符为 '\n' 。如果返回一个空字符串，说明已经到达文件末尾，而空行则由一个换行符表示。如果文件只有一行，且没有换行符， `f.readline()` 将返回一个空字符串。
+- `f.write(string)` 将 string 的内容写入文件，并返回写入的字符数。
+- `f.tell()` 返回一个整数，表示文件对象在文件中的当前位置，即文件指针当前位置。
+- `f.seek(offset, whence)` 改变文件对象的位置。offset 的值，以及如何解释 whence 的值，如下表所示：
+  - whence 的值 偏移量的含义
+  - 0 从文件开头开始计算
+  - 1 从当前位置开始计算
+  - 2 从文件末尾开始计算
+  - 如果文件以文本模式打开（默认），只允许相对于文件开头搜索。如果文件以二进制模式打开，可以使用任何值。
+    在文本文件（模式字符串未使用 b 时打开的文件）中，只允许相对于文件开头搜索（使用 seek(0, 2) 搜索到文件末尾是个例外），唯一有效的 offset 值是能从 f.tell() 中返回的，或 0。其他 offset 值都会产生未定义的行为。
+
+文件对象还有一些额外的方法，如使用频率较低的 isatty() 和 truncate() 等；有关文件对象的完整指南请查阅标准库参考。
+
+### 使用 json 保存结构化数据
+
+> 备注 JSON文件必须以UTF-8编码。当打开JSON文件作为一个 text file 用于读写时，使用 encoding="utf-8" 。
+
+#### pickle
+
+`pickle` 模块可以序列化和反序列化几乎所有的Python对象。
+
+```python
+import pickle
+
+data = {'name': 'Alice', 'age': 30, 'city': 'New York'}
+
+# 将对象序列化到文件
+with open('data.pkl', 'wb') as f:
+    pickle.dump(data, f)
+
+# 从文件反序列化对象
+with open('data.pkl', 'rb') as f:
+    data = pickle.load(f)
+
+print(data)
+# 输出: {'name': 'Alice', 'age': 30, 'city': 'New York'}
+```
+
+#### json
+
+```python
+import json
+
+data = {'name': 'Alice', 'age': 30, 'city': 'New York'}
+
+# 将对象序列化为JSON字符串
+json_string = json.dumps(data)
+print(json_string)
+# 输出: {"name": "Alice", "age": 30, "city": "New York"}
+
+# 将对象序列化到文件
+with open('data.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=4)
+
+# 从文件反序列化对象
+with open('data.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+```
+
+pickle 模块适用于序列化和反序列化Python对象，但生成的字节流不适合与其他编程语言交换数据。
+json 模块适用于序列化和反序列化JSON数据，适合与其他编程语言进行数据交换。

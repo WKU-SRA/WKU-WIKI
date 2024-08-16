@@ -1,0 +1,464 @@
+---
+series: '编程入门之夏'
+depth: 4
+title: '控制｜掌握控制语法,让计算机按照你的意愿执行'
+date: '2024-08-10'
+tags: ['CPS', '教程', 'SRA 编程入门之夏']
+draft: false
+summary: '控制是程序执行路径的管理方式,包括顺序、选择(条件判断）、循环、循环控制(跳转)、异常处理等'
+authors: ['default']
+---
+
+# 引言
+
+前两章节, 我们学习了函数, 了解到函数可以组织和封装代码逻辑, 实现代码复用, 但它们通常是针对特定任务或计算设计的。
+当我们需要在不同情况下执行不同的任务时，函数本身并不提供直接的工具来处理这种**逻辑分支**。
+这时, 我们就需要控制结构来帮助我们实现这种分支。
+
+控制结构可以根据不同的条件来执行不同的代码块，或重复执行某些操作, 从而使得程序能够处理更加复杂的逻辑。
+
+**_通过本章的梳理，你将学习控制流、控制结构的基本概念和用法以及相关分析工具;掌握如何在程序中使用控制结构来实现不同的逻辑分支和循环执行, 为编写更复杂的程序打下基础_**。
+
+鉴于61a的课程内容对于控制的介绍有限, 本章节将不引用相关视频, 链接放在此处:[61a控制课程视频](https://www.bilibili.com/video/BV1s3411G7yM?p=6&vd_source=68fb5e0bc8eb282333b54cde28f7b586)以及[61a官网网站文字材料](https://www.composingprograms.com/pages/14-designing-functions.html), 可自行访问网址学习。
+_ps. 我们还是推荐大家阅读完文章自行学习, 61a课程中引入很多学习方法, 提供对问题解决的深度思考。笔者这里不加赘述 _
+
+# 目录
+
+| 章节                                                                                      | 内容                         |
+| ----------------------------------------------------------------------------------------- | ---------------------------- |
+| 1. [引言](#引言)                                                                          | 简要介绍控制的重要性         |
+| 2. [控制流](#控制流)                                                                      | 解释程序的控制流概念         |
+| 3. [工具篇: 控制流图&流程图&环境图](#工具篇-控制流图流程图环境图)                         | 介绍控制流图、流程图、环境图 |
+| 4. [控制结构](#控制结构)                                                                  | 详细介绍各种控制结构         |
+| &nbsp;&nbsp;&nbsp;&nbsp;1. [顺序](#顺序)                                                  | 顺序结构的定义和示例         |
+| &nbsp;&nbsp;&nbsp;&nbsp;2. [选择(条件判断)](#选择条件判断)                                | 条件判断结构的定义和示例     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [if 语句](#if-语句)                     | if 语句的用法                |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [if-elif-else 语句](#if-elif-else-语句) | if-elif-else 语句的用法      |
+| &nbsp;&nbsp;&nbsp;&nbsp;3. [循环](#循环)                                                  | 循环结构的定义和示例         |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [for 语句](#for-语句)                   | for 语句的用法               |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [while 语句](#while-语句)               | while 语句的用法             |
+| &nbsp;&nbsp;&nbsp;&nbsp;4. [循环控制(跳转)](#循环控制跳转)                                | 循环控制结构的定义和示例     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [break 语句](#break-语句)               | break 语句的用法             |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [continue 语句](#continue-语句)         | continue 语句的用法          |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [pass 语句](#pass-语句)                 | pass 语句的用法              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [goto 语句](#goto-语句)                 | goto 语句的用法              |
+| &nbsp;&nbsp;&nbsp;&nbsp;5. [测试](#测试)                                                  | 测试结构的定义和示例         |
+| &nbsp;&nbsp;&nbsp;&nbsp;6. [异常处理](#异常处理)                                          | 异常处理结构的定义和示例     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [try-except 语句](#try-except-语句)     | try-except 语句的用法        |
+| &nbsp;&nbsp;&nbsp;&nbsp;7. [上下文管理结构](#上下文管理结构)                              | 上下文管理结构的定义和示例   |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [with 语句](#with-语句)                 | try-except 语句的用法        |
+| 8. [Labs](#labs)                                                                          | 实验和练习                   |
+
+---
+
+## 控制, 控制流, 控制结构的关系
+
+程序是一系列指令的集合，**控制**是指在编程中指导程序执行的能力，它是一个广泛的概念，包括了所有影响程序行为的手段，包括决定程序何时执行、执行什么操作以及如何响应不同情况。
+
+这些指令按照一定的顺序执行，这种执行顺序称为程序的路径, 即**控制流**。
+
+但控制不仅决定了程序的执行顺序，还可能影响程序的状态，尤其是在命令式编程中，**控制结构**经常与状态变化相关联。
+
+**控制结构**是编程语言提供的语法元素，用于在代码中实现控制流。它们是**控制流**的具体实现手段，包括顺序、选择、循环、循环控制、异常处理等。
+
+**_介绍三者关系只是为同学们更好理解, 但在实际编程中, 三者是相辅相成的, 无法分割开来。_**
+
+# 控制流
+
+控制流是程序执行过程中的顺序，即程序指令执行的路径。它是控制的一个具体方面，专注于程序如何一步步地执行。
+
+# 工具篇: 控制流图&流程图&环境图
+
+由于非控制主要内容, 笔者这里只作为工具方法简单引入, 感兴趣的同学可以自行深入学习。
+
+## 1. 控制流图(Control Flow Graph)
+
+控制流图是控制流图形化的表示方法，主要用于描述程序的执行路径和逻辑结构，帮助理解程序的控制流和执行顺序。
+它由节点和边组成，节点表示程序的基本块（basic block），边表示程序的控制流转移。
+控制流图的节点通常表示一段代码，如一个语句、一个表达式、一个函数等，边表示控制流转移，如条件分支、循环等。
+
+![不同控制结构对应的控制流图](https://i-blog.csdnimg.cn/blog_migrate/fee5a31349109883d165a3c4ada3f87d.png)
+
+计算整数X和整数Y的最大公约数(GCD)的算法示例:
+
+```python
+int gcd(int x,int y)
+{
+	int q=x;
+	int r=y;
+	while(q!=r)
+	{
+		if (q>r)
+			q=q-r;
+		else
+			r=r-q;
+	}
+	return q;
+}
+```
+
+![控制流图示例](https://i-blog.csdnimg.cn/blog_migrate/42236bfe5262f69968f46b4d2119d92d.jpeg)
+
+## 2. 流程图(Flowchart)
+
+流程图类似于控制流图，是一种用于描述程序执行路径和逻辑结构的图形化表示方法，通常用于描述算法、流程、系统等。
+相比控制流图的复杂性，流程图更加简单，用于描述基本的控制结构，通常包括开始、结束、输入、输出、判断、循环等基本图形。
+不同的是, 流程图更加简单, 用于描述基本的控制结构, 通常包括开始、结束、输入、输出、判断、循环等基本图形。
+![流程图基本图形和功能](https://mmbiz.qpic.cn/mmbiz_png/D8wE99mGyDAk2F9zicxoFuLQhaEwTI7BYECx07LlLav5fBiblMUObEKYzKz4PE7DyLq7IRiag4k54FlZcHib63aVmQ/640?wx_fmt=png)
+
+以下为控制流图示例,摘录自[Medium](https://medium.com/@thube.praful/flow-control-statements-in-python-29fb41a6f842):
+
+```python
+#闰年(Leap Year)是指公历年份能被4整除但不能被100整除，或者能被400整除的年份。
+N = int(input("Enter year in YYYY format:"))
+if N % 4 == 0:
+    if N % 100 == 0:
+        if N % 400 == 0:
+            print("Leap Year")
+        else:
+            print("Not a Leap Year")
+    else:
+        print("Leap Year")
+else:
+    print("Not a Leap Year")
+>>> Enter year in YYYY format: 2000
+Leap Year
+>>> Enter year in YYYY format: 2024
+Not a Leap Year
+>>> Enter year in YYYY format: 2020
+Leap Year
+```
+
+控制流图如下:
+![控制流图](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*GDJbFD2KSAl41E5kKtwJDQ.png)
+
+---
+
+## 3. 环境图(Environment Diagram)
+
+环境图是一种非常有用的工具，可以帮助我们理解程序的执行过程，特别是在调试和理解复杂的程序时。环境图可以帮助我们跟踪变量的值和作用域，以及函数的调用和返回值，从而更好地理解程序的执行过程。
+
+环境图和控制结构在程序执行过程中是紧密相关的。控制结构决定了程序的执行路径，而环境图则帮助我们理解在不同的执行路径下，变量和函数的作用域和状态。
+
+下面是61a课程中绘制环境图的示例:
+![环境图示例](https://pic.imge.cc/2024/08/11/66b8231435926.jpg)
+
+环境图中的每个框表示一个环境（Environment），包含了变量（Variables）和函数（Functions）的定义和值。环境图中的箭头表示变量的引用和赋值，函数的调用和返回值等。
+
+| 环境类型        | 描述                               |
+| --------------- | ---------------------------------- |
+| Global frames   | 全局环境，包含全局变量和函数的定义 |
+| Local frames    | 局部环境，包含局部变量和函数的定义 |
+| Function frames | 函数环境，包含函数的参数和返回值   |
+
+**_-------------- 我是分割线 -------------- _**
+
+| 元素类型      | 描述                             |
+| ------------- | -------------------------------- |
+| Variables     | 变量，表示程序中的数据           |
+| Values        | 值，表示变量所存储的数据         |
+| Functions     | 函数，表示程序中的功能模块       |
+| Arguments     | 参数，表示传递给函数的数据       |
+| Return values | 返回值，表示函数执行后返回的数据 |
+
+此外, 绘制环境图还特别有助于理解递归、闭包、以及函数作用域等编程概念。由于于本章节无关,不展开分析。鉴于61a课程中的环境图方法的具体介绍, 笔者这里只简单引入。关于更多, 可通过[点击此处获取资料](https://docs.google.com/document/d/1GbRF9rB9TtFbf--89MBDEHzygF2E5_E2wpLBh4rb4Z4/edit)与61a视频课程补充学习。
+
+# 控制结构
+
+控制结构是一种用于控制程序执行流程的结构，包括条件判断、循环、循环控制（跳转）、异常处理等。
+
+不同的[编程范式](https://wiki.wkusci.com/blog/programming-tutorial-for-freshman/programming-language)（如命令式、声明式、函数式）提供了不同的控制结构来实现程序逻辑的控制流,一套编写和组织代码的通用方法论, 因此每种范式都有其独特的特点和哲学。
+
+拿我们学习的Python语言举例, Python 是一种多范式编程语言，支持多种编程范式，如命令式、函数式、面向对象等。不同的编程范式可能强调不同类型的控制结构来实现控制流。例如，函数式编程可能更倾向于使用递归，而面向对象编程可能更多使用方法调用。
+对于基础学习, 我们主要介绍命令式编程中的控制结构。
+
+在命令式编程中，程序的状态通常由变量的值表示，而控制结构可以改变这些状态。以下是一个简单的Python示例，展示了如何使用控制结构来改变程序的状态：
+
+```python
+
+# 假设我们有两个变量表示今年和去年的 GPA
+gpa_last_year = 3.5  # 去年的 GPA，初始状态
+gpa_this_year = 3.8  # 今年的 GPA，初始状态
+
+# 计算 GPA 的变化
+gpa_change = gpa_this_year - gpa_last_year  # 状态改变：计算 GPA 变化
+
+# 使用 if 语句进行条件判断，改变输出状态
+if gpa_change > 0:
+    # 如果今年的 GPA 高于去年的 GPA
+    print(f"今年的 GPA 提高了 {gpa_change:.2f} 分")  # 状态改变：输出 GPA 提高的信息
+elif gpa_change < 0:
+    # 如果今年的 GPA 低于去年的 GPA
+    print(f"今年的 GPA 下降了 {gpa_change:.2f} 分")  # 状态改变：输出 GPA 下降的信息
+else:
+    # 如果今年的 GPA 与去年的 GPA 相同
+    print("今年的 GPA 没有变化")  # 状态改变：输出 GPA 无变化的信息
+```
+
+在这个示例中，我们使用` if-elif-else` 语句来根据 GPA 的变化情况输出不同的信息，这种控制结构可以根据不同的条件执行不同的代码块，从而改变程序的状态。为了系统化学习常用控制结构,我们将分为以下几种类型：
+
+## 1. 顺序
+
+顺序结构是一种按照代码顺序执行的控制结构，即按照代码的书写顺序依次执行，没有分支和循环。
+
+```python
+print("Hello, World!")
+print("Welcome to Python Programming!")
+print("Goodbye!")
+>>> Hello, World!
+>>> Welcome to Python Programming!
+>>> Goodbye!
+```
+
+顺序结构是程序的基本结构，程序会按照代码的书写顺序依次执行，每个代码块都会被执行一次。
+
+---
+
+## 2. 选择(条件判断)
+
+条件判断是一种根据条件来选择执行不同代码块的控制结构，通常使用 if 语句来实现。
+
+📚 前置知识：
+
+> expression: 一个表达式，通常是一个数值、字符串、变量等。
+
+> condition: 一个表达式，通常是一个逻辑表达式，用于判断真假。
+
+> boolean: 布尔值，表示真（True）或假（False）
+
+### ● if 语句
+
+`if `语句用于根据条件来选择执行不同的代码块，语法如下：
+
+```python
+if condition:
+    # code block 1
+else:
+    # code block 2
+```
+
+其中，condition 是一个表达式，如果 condition 为真，则执行 code block 1，否则执行 code block 2。
+
+### ● if-elif-else 语句
+
+`if-elif-else `语句用于根据多个条件来选择执行不同的代码块，语法如下：
+
+```python
+if condition1:
+    # code block 1
+elif condition2:
+    # code block 2
+else:
+    # code block 3
+```
+
+其中，condition1、condition2 是表达式，如果 condition1 为真，则执行 code block 1，否则继续判断 condition2，以此类推。
+
+---
+
+## 3. 循环
+
+循环是一种重复执行某些操作的控制结构，通常使用 for 和 while 语句来实现。
+
+### ● for 语句
+
+`for `语句用于遍历一个序列（如列表、元组、字符串等）中的元素，语法如下：
+
+```python
+for item in sequence:
+    # code block
+```
+
+其中，item 是序列中的元素，sequence 是一个序列，for 语句会依次遍历 sequence 中的每个元素，并执行 code block。
+
+### ● while 语句
+
+`while`语句用于根据条件重复执行某些操作，语法如下：
+
+```python
+while condition:
+    # code block
+```
+
+其中，condition 是一个表达式，如果 condition 为真，则重复执行 code block，直到 condition 为假。
+
+---
+
+## 4. 循环控制（跳转）
+
+循环控制（跳转）是一种控制循环执行流程的结构，包括 break、continue、pass、goto等。
+
+### ● break 语句
+
+`break` 语句用于终止循环的执行，语法如下：
+
+```python
+for item in sequence:
+    if condition:
+        break
+```
+
+如果 condition 为真，则终止当前循环的执行。
+
+### ● continue 语句
+
+`continue` 语句用于跳过当前循环的剩余代码，继续执行下一次循环，语法如下：
+
+```python
+for item in sequence:
+    if condition:
+        continue
+```
+
+如果 condition 为真，则跳过当前循环的剩余代码，继续执行下一次循环。
+
+### ● pass 语句
+
+`pass` 语句用于占位，表示不执行任何操作，语法如下：
+
+```python
+if condition:
+    pass
+```
+
+pass 语句通常用于占位，以后可以填充具体的代码。
+
+### ● goto 语句
+
+`goto` 语句用于无条件跳转到指定的代码块，语法如下：
+
+```python
+goto label
+```
+
+其中，label 是一个标签，用于标识代码块的位置。
+
+````
+label:
+    # code block
+    ```
+***goto 语句通常不推荐使用，因为它会导致代码的可读性和维护性变差。***
+
+***
+
+## 5. 测试
+测试函数是验证函数行为的行为是否符合预期。当我们的函数语言现在已经足够复杂时, 我们需要开始测试我们的实现。但便于初学教程理解,此处仅列举简单示例参考。
+
+测试是一种系统地执行此验证的机制。
+测试通常采用包含一个或多个样本的另一个函数的形式对正在测试的函数的调用。然后根据返回的值进行验证预期的结果。与大多数函数不同，这些函数是通用的，测试涉及选择和验证具有特定参数值的调用。
+### ● assert 语句
+`assert `语句用于检查程序执行结果是否符合预期，如果断言失败，则会抛出 AssertionError 异常，语法如下：
+```python
+assert condition, message
+````
+
+其中，condition 是一个表达式，如果 condition 为假，则抛出 AssertionError 异常，message 是一个可选的错误消息。
+
+### ● docstring 文档
+
+测试也可以用文档描述, 这种文档称为文档字符串或简称为 **docstring**。
+docstring 是一种用于描述函数、类、模块等的文档字符串，通常使用三重引号（"""）来定义，语法如下：
+
+```python
+def function_name(parameters):
+    """
+    Description of the function.
+
+    Parameters:
+    - parameters: description of the parameters.
+
+    Returns:
+    - description of the return value.
+    """
+    # code block
+        return value
+
+
+```
+
+docstring 通常包含函数的描述、参数说明、返回值说明等信息，可以通过 help() 函数来查看函数的文档字符串。
+
+---
+
+## 6. 异常处理
+
+异常处理是一种处理程序运行时错误的控制结构，通常使用 try-except 语句来实现。
+
+### ● try-except 语句
+
+try-except 语句用于捕获和处理程序运行时的异常, 语法如下：
+
+```python
+try:
+    # code block
+except Exception as e:
+    # handle exception
+```
+
+其中，try 语句块中包含可能会抛出异常的代码，如果 try 语句块中的代码抛出异常，则会执行 except 语句块中的代码来处理异常。
+
+---
+
+## 7.上下文管理结构
+
+上下文管理结构是一种用于管理资源的控制结构，用于确保某些代码块在进入和退出时能够自动处理资源, 通常使用 with 语句来实现。
+
+### ● with 语句
+
+with 语句用于管理资源，如文件、网络连接等，语法如下：
+
+```python
+with open('file.txt', 'r') as f:
+    # code block
+```
+
+with 语句会在代码块执行完毕后自动关闭资源，无需手动关闭。
+
+# Labs
+
+打开Jupyter Notebook或者其他IDE, 快来动手尝试一下今天学习的控制结构吧~
+
+1. 顺序：
+
+   - 输入两个整数 a 和 b；
+   - 计算 a 和 b 的和、差、积、商和余数；
+   - 输出计算结果。
+
+2. 选择：
+
+   - 输入一个整数 n；
+   - 判断 n 是否为偶数，如果是偶数，则输出“n 是偶数”，否则输出“n 是奇数”。
+
+3. 循环：
+
+   - 输入一个整数 n；
+   - 计算 n 的阶乘 n!；
+   - 输出计算结果。
+
+4. 循环控制（跳转）：
+
+   - 输入一个整数 n；
+   - 计算 n 的所有因子；
+   - 输出计算结果。
+
+5. 测试：
+
+   - 输入一个整数 n；
+   - 判断 n 是否为素数，如果是素数，则输出“n 是素数”，否则输出“n 不是素数”。
+
+6. 异常处理：
+
+   - 输入一个整数 n；
+   - 计算 n 的倒数 1/n；
+   - 如果 n 为 0，则输出“除数不能为 0”，否则输出计算结果。
+
+7. 上下文管理结构：
+   - 打开一个文件 file.txt；
+   - 读取文件的内容；
+   - 输出文件的内容；
+   - 关闭文件。
+
+感谢看到这里, 恭喜今天闯关成功。
+
+你的每一个实验都值得被看见，欢迎分享到评论区，让我们一起讨论和学习吧。
+如需更多应用实例,可参考[61a-Disc1](https://cs61a.org/disc/sol-disc01/)与[61a-HW1](https://cs61a.org/disc/sol-disc01/), 祝好, 下篇见!❤️

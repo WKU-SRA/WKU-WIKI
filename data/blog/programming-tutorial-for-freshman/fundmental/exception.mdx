@@ -1,0 +1,341 @@
+---
+series: 'python-manual'
+depth: 5
+title: 'Python 异常处理'
+date: '2024-08-11'
+tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
+draft: true
+summary: '我们似乎来到了未知的领域，上报一下我们的情况给老板吧'
+authors: ['default']
+---
+
+# 错误解析：
+
+- 语法错误 `SyntaxError`
+  语法错误又称解析错误，是由于代码不符合语法规则导致的错误。例如，缺少冒号、括号不匹配等。
+- 异常
+  - 即使语句或表达式使用了正确的语法，执行时仍可能触发错误。执行时检测到的错误称为 异常，异常不一定导致严重的后果，大多数异常不会被程序处理，而是显示错误信息
+  - 错误信息的最后一行说明程序遇到了什么类型的错误
+  - `ZeroDivisionError`， `NameError` 和 `TypeError`等等，这些都是 Python 的内置异常，标准异常是内置identifier即标识符，不需要导入模块
+
+# 异常处理
+
+使用 `try` 和 `except` 语句可以处理异常。`try` 语句包含可能出现异常的代码，`except` 语句处理异常。类似于其他语言的 `try` 和 `catch` 语句。
+try 语句按照如下方式工作：
+
+- 首先，执行 `try` 子句（在关键字 `try` 和关键字 `except` 之间的语句）
+- 如果没有异常发生，忽略 `except` 子句，`try` 子句执行后结束
+- 如果在执行 `try` 子句的过程中发生了异常，那么 `try` 子句余下的部分将被忽略。如果异常的类型和 `except` 之后的名称相符，那么对应的 `except` 子句将被执行。整个 `try` 语句执行结束，后续代码继续执行，`try`已经传递了一个异常给处理器，他发生异常后的代码不会再执行
+- 如果一个异常没有与任何的 `except` 匹配，那么这个异常将会传递给上层的 `try` 中，或者到程序的最上层（这样将结束程序，并打印出错信息）
+
+```java
+//java
+public class Main {
+    public static void main(String[] args) {
+        try {
+            int a = 1 / 0;
+        } catch (Exception e) {
+            System.out.println("发生异常：" + e);
+        }
+    }
+}
+```
+
+```python
+# python
+try:
+    a = 1 / 0
+except Exception as e:
+    print("发生异常：", e)
+# Exception被用作通配符,为不想指定异常时捕获所有异常
+# 这里是所有非致命异常的基类（不是Exception 的子类的异常通常不被处理，因为它们被用来指示程序应该终）
+```
+
+```python
+# 发生异常： division by zero
+
+try:
+    a = 1 / 0
+except ZeroDivisionError as e:
+    print("发生异常：", e)
+
+# except后为你想要捕获的异常类型，你可以指定多个异常类型，用逗号分隔（ 其实是元组），
+# 发生异常： division by zero
+```
+
+一个 except 子句中的类匹配的异常将是该类本身的实例或其所派生的类的实例（但反过来则不可以 --- 列出派生类的 except 子句 不会匹配其基类的实例）。 例如，下面的代码将依次打印 B, C, D:
+
+```python
+class B(Exception):
+    pass
+
+class C(B):
+    pass
+
+class D(C):
+    pass
+
+for cls in [B, C, D]:
+    try:
+        raise cls()
+    except D:
+        print("D")
+    except C:
+        print("C")
+    except B:
+        print("B")
+```
+
+请注意如果颠倒 except 子句 的顺序（把 except B 放在最前），则会输出 B, B, B --- 即触发了第一个匹配的 except 子句。
+
+# 异常参数
+
+except 子句 可能会在异常名称后面指定一个变量。 这个变量将被绑定到异常实例，该实例通常会有一个存储参数的 args 属性。 为了方便起见，内置异常类型定义了 **str**() 来打印所有参数而不必显式地访问 .args。
+未处理异常的 `__str__()` 输出会被打印为该异常消息的最后部分 ('detail')。
+
+```python
+try:
+    raise Exception('spam', 'eggs')
+except Exception as inst:
+    print(type(inst))    # the exception type
+    print(inst.args)     # arguments stored in .args
+    print(inst)          # __str__ allows args to be printed directly,
+                         # but may be overridden in exception subclasses
+    x, y = inst.args     # unpack args
+    print('x =', x)
+    print('y =', y)
+
+<class 'Exception'>
+('spam', 'eggs')
+('spam', 'eggs')
+x = spam
+y = eggs
+```
+
+`BaseException` 是所有异常的共同基类。它的一个子类， `Exception` ，是所有非致命异常的基类。不是 `Exception` 的子类的异常通常不被处理，因为它们被用来指示程序应该终止。它们包括由 `sys.exit()` 引发的 `SystemExit` ，以及当用户希望中断程序时引发的 `KeyboardInterrupt` 。
+`Exception` 可以被用作通配符(wild card)，捕获（几乎）一切。然而，好的做法是，尽可能具体地说明我们打算处理的异常类型，并允许任何意外的异常传播下去。
+
+处理 Exception 最常见的模式是打印或记录异常，然后重新提出（允许调用者也处理异常）或者抛出新的异常（通常是一个更具体的异常）。
+
+```python
+import sys
+
+try:
+    f = open('myfile.txt')
+    s = f.readline()
+    i = int(s.strip())
+except OSError as err:
+    print("OS error:", err)
+except ValueError:
+    print("Could not convert data to an integer.")
+except Exception as err:
+    print(f"Unexpected {err=}, {type(err)=}")
+    raise
+```
+
+# else, finally in try... except...
+
+else 子句如果存在，它必须放在所有 except 子句 之后。 它适用于 try 子句 没有引发异常但又必须要执行的代码。
+
+- 仅当 try 子句没有引发任何异常时执行。
+- 用途：用于执行那些在 try 子句成功完成后需要运行的代码。
+
+finally 子句如果存在，必须放在所有 except 和 else 子句之后。
+
+- 无论是否发生异常，finally 子句中的代码都会执行。
+- 用于执行清理操作，例如关闭文件、释放资源等。
+- 如果执行 try 子句期间触发了某个异常，则某个 except 子句应处理该异常。如果该异常没有 except 子句处理，在 finally 子句执行后会被重新触发。
+- except 或 else 子句执行期间也会触发异常。 同样，该异常会在 finally 子句执行之后被重新触发。
+- 如果 finally 子句中包含 break、continue 或 return 等语句，异常将不会被重新引发。
+- 如果执行 try 语句时遇到 break,、continue 或 return 语句，则 finally 子句在执行 break、continue 或 return 语句之前执行。
+- 如果 finally 子句中包含 return 语句，则返回值来自 finally 子句的某个 return 语句的返回值，而不是来自 try 子句的 return 语句的返回值。
+
+```python
+try:
+    f = open('myfile.txt')
+    s = f.readline()
+    i = int(s.strip())
+except OSError as err:
+    print("OS error:", err)
+except ValueError:
+    print("Could not convert data to an integer.")
+except Exception as err:
+    print(f"Unexpected {err=}, {type(err)=}")
+    raise
+else:
+    print("No exceptions were raised.")
+finally:
+    print("This will always be executed, whether an exception was raised or not.")
+    try:
+        f.close()
+    except NameError:
+        pass  # f was never opened
+```
+
+你可能觉得else很多余，把else子句的代码放在try子句中也是可以的，但是使用else子句可以避免意外捕获非 try ... except 语句保护的代码触发的异常(else 子句导致的)。
+
+# 触发异常
+
+`raise` 语句允许程序员强制触发指定的异常。`raise` 唯一的参数就是要触发的异常。这个参数必须是异常实例或异常类（派生自 `BaseException` 类，例如 `Exception` 或其子类）。如果传递的是异常类，将通过调用没有参数的构造函数来隐式实例化：
+如果只想判断是否触发了异常，但并不打算处理该异常，则可以使用更简单的 raise 语句重新触发异常：
+
+```python
+try:
+    raise NameError('HiThere')
+except NameError:
+    print('An exception flew by!')
+    raise
+```
+
+# 异常链
+
+如果一个未处理的异常发生在 except 部分内，它将会有被处理的异常附加到它上面，并包括在错误信息中:
+
+```python
+try:
+    open("database.sqlite")
+except OSError:
+    raise RuntimeError("unable to handle error")
+
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: 'database.sqlite'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+RuntimeError: unable to handle error
+```
+
+为了表明一个异常是另一个异常的直接后果， raise 语句允许一个可选的 from 子句:
+
+```python
+def func():
+    raise ConnectionError
+
+try:
+    func()
+except ConnectionError as exc:
+    raise RuntimeError('Failed to open database') from exc
+
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "<stdin>", line 2, in func
+ConnectionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+RuntimeError: Failed to open database
+```
+
+它还允许使用 `from None` 表达禁用自动异常链
+
+# 用户自定义异常
+
+程序可以通过创建新的异常类命名自己的异常（Python 类的内容详见 类）。不论是以直接还是间接的方式，异常都应从 `Exception` 类派生。
+异常类可以被定义成能做其他类所能做的任何事，但通常应当保持简单，它往往只提供一些属性，允许相应的异常处理程序提取有关错误的信息。
+大多数异常命名都以 “Error” 结尾，类似标准异常的命名。
+许多标准模块定义了自己的异常，以报告他们定义的函数中可能出现的错误。
+
+# 引发和处理多个不相关的异常
+
+在有些情况下，有必要报告几个已经发生的异常。这通常是在并发框架中当几个任务并行失败时的情况，但也有其他的用例，有时需要是继续执行并收集多个错误而不是引发第一个异常。
+内置的 ExceptionGroup 打包了一个异常实例的列表，这样它们就可以一起被引发。它本身就是一个异常，所以它可以像其他异常一样被捕获。
+
+```python
+>>> def f():
+        excs = [OSError('error 1'), SystemError('error 2')]
+        raise ExceptionGroup('there were problems', excs)
+
+>>> f()
+    + Exception Group Traceback (most recent call last):
+    |   File "<stdin>", line 1, in <module>
+    |   File "<stdin>", line 3, in f
+    | ExceptionGroup: there were problems
+    +-+---------------- 1 ----------------
+        | OSError: error 1
+        +---------------- 2 ----------------
+        | SystemError: error 2
+        +------------------------------------
+>>> try:
+        f()
+    except Exception as e:
+        print(f'caught {type(e)}: e')
+
+    caught <class 'ExceptionGroup'>: e
+```
+
+通过使用 except* 代替 except ，我们可以有选择地只处理组中符合某种类型的异常。在下面的例子中，显示了一个嵌套的异常组，每个 except* 子句都从组中提取了某种类型的异常，而让所有其他的异常传播到其他子句，并最终被重新引发。
+
+```python
+def f():
+    raise ExceptionGroup(
+        "group1",
+        [
+            OSError(1),
+            SystemError(2),
+            ExceptionGroup(
+                "group2",
+                [
+                    OSError(3),
+                    RecursionError(4)
+                ]
+            )
+        ]
+    )
+
+try:
+    f()
+except* OSError as e:
+    print("There were OSErrors")
+except* SystemError as e:
+    print("There were SystemErrors")
+
+There were OSErrors
+There were SystemErrors
+  + Exception Group Traceback (most recent call last):
+  |   File "<stdin>", line 2, in <module>
+  |   File "<stdin>", line 2, in f
+  | ExceptionGroup: group1
+  +-+---------------- 1 ----------------
+    | ExceptionGroup: group2
+    +-+---------------- 1 ----------------
+      | RecursionError: 4
+      +------------------------------------
+```
+
+注意，嵌套在一个异常组中的异常必须是实例，而不是类型。这是因为在实践中，这些异常通常是那些已经被程序提出并捕获的异常，其模式如下:
+
+```python
+excs = []
+for test in tests:
+    try:
+        test.run()
+    except Exception as e:
+        excs.append(e)
+
+if excs:
+   raise ExceptionGroup("Test Failures", excs)
+```
+
+# 用注释细化异常情况
+
+当一个异常被创建以引发时，它通常被初始化为描述所发生错误的信息。在有些情况下，在异常被捕获后添加信息是很有用的。为了这个目的，异常有一个 add_note(note) 方法接受一个字符串，并将其添加到异常的注释列表。标准的回溯在异常之后按照它们被添加的顺序呈现包括所有的注释。
+
+```python
+try:
+    raise TypeError('bad type')
+except Exception as e:
+    e.add_note('Add some information')
+    e.add_note('Add some more information')
+    raise
+
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: bad type
+Add some information
+Add some more information
+```

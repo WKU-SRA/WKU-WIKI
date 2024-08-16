@@ -1,9 +1,9 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: '温肯科协科研飞跃手册',
+  title: '科协维基',
   author: 'WKU-SRA',
-  headerTitle: '科研飞跃手册',
-  description: '申研、科研、创新、竞赛、实习、就业、留学',
+  headerTitle: 'WKU-SRA-WIKI',
+  description: '科研与创新的最佳资源和指南，助力你在学术和职业生涯中取得成功。',
   language: 'zh-cn',
   theme: 'system', // system, dark or light
   siteUrl: 'https://wiki.wkusci.com',
@@ -13,10 +13,10 @@ const siteMetadata = {
   mastodon: 'https://mastodon.social/@mastodonuser',
   email: 'sra@wku.edu.cn',
   github: 'https://github.com/WKU-SRA',
-  //x: 'https://twitter.com/x',
-  // twitter: 'https://twitter.com/Twitter',
+  x: 'https://twitter.com/WKU_SRA?s=09',
+  //twitter: 'https://twitter.com/Twitter',
   //facebook: 'https://facebook.com',
-  //youtube: 'https://youtube.com',
+  youtube: 'https://youtube.com/@wkusra',
   //linkedin: 'https://www.linkedin.com',
   //threads: 'https://www.threads.net',
   //instagram: 'https://www.instagram.com',

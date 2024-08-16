@@ -1,0 +1,327 @@
+---
+series: 'python-manual'
+depth: 1
+title: 'Python 速览'
+date: '2024-08-11'
+tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
+draft: false
+summary: '👋 快来速览一下 Python！'
+authors: ['default']
+---
+
+import Quiz from 'components/Quiz'
+import CodeBlock from 'components/Code'
+
+# 数字
+
+<Quiz
+  correct="3"
+  question={
+    <>
+      Quiz：以下三个代码分别输出什么？
+      <CodeBlock
+        code={`
+>>> 17 / 3
+>>> 17 // 3
+>>> 17 % 3
+>>> 2 ** 7
+>>> _ + 1
+`}
+        language="python"
+      />
+    </>
+  }
+  explain={
+    <div className="text-start">
+      <ol>
+        <li>5.666666666666667 除法运算 (/) 总是返回浮点数</li>
+        <li>5 floor division (//) 会向下取整</li>
+        <li>2 取余数运算符 (%) 返回除法的余数，也即remainder</li>
+        <li>128 乘方运算符 (**) 2^7</li>
+        <li>129 交互模式下，上次输出的表达式会赋给变量 _ 注意交互模式下</li>
+      </ol>
+    </div>
+  }
+/>
+
+[了解更多](https://docs.python.org/zh-cn/3/tutorial/introduction.html#numbers)
+
+# 文本
+
+## 如何表示文本
+
+- 字符串可同时由`' '`和`" "`表示，但是如果字符串中包含了引号，那么就需要使用转义字符`\`来表示引号或者另外一种引号，例如：
+
+```python
+>>> 'doesn\'t'  # 使用转义字符
+>>> "doesn't"  # 使用另一种引号
+```
+
+## 转义字符
+
+转义字符是编程语言中用来表示那些在字符串中具有特殊含义的字符。它们允许程序员在字符串中包含那些通常不能直接显示的字符，或者在字符串中使用那些具有特定功能的字符。
+我们通过backslash（反斜杠）字符` \`，我们使用它来告诉编译器，你需要注意，这个字符后面的字符是一个转义字符，而不是一个普通字符。也就是说这个`\`的作用就是
+escape（转义）后面的字符，告诉编译器这个字符不是普通字符，而是一个特殊字符，需要特殊处理。
+
+> 注： 转义字符大小写敏感（case sensitive），例如，`\n`和`\N`是不同的转义字符。
+
+### 转义字符表
+
+| 转义字符 | 描述               |
+| -------- | ------------------ |
+| `\'`     | 单引号             |
+| `\"`     | 双引号             |
+| `\\`     | 反斜杠             |
+| `\n`     | 换行               |
+| `\r`     | 回车               |
+| `\t`     | 水平制表符（Tab）  |
+| `\b`     | 退格               |
+| `\f`     | 换页               |
+| `\ooo`   | 八进制表示的字符   |
+| `\xhh`   | 十六进制表示的字符 |
+
+- 如果不想前面特殊字符起作用，可以使用`r' '`或者`r" "`来表示原始字符串，例如：
+
+```python
+>>> print('C:\some\name')  # \n表示换行
+C:\some
+ame
+>>> print(r'C:\some\name')  # 使用r''表示原始字符串
+C:\some\name
+```
+
+> r 表示原始字符串（raw string）不会对反斜杠 \ 进行转义处理。这意味着在原始字符串中，反斜杠 \ 会被视为普通字符，而不是转义字符。
+
+原始字符串（raw string）不能以奇数个反斜杠 \ 结尾。这是因为在原始字符串中，反斜杠 \ 被视为普通字符，而不是转义字符。如果原始字符串以奇数个反斜杠结尾，最后一个反斜杠会被视为转义字符，导致语法错误。
+
+```python
+raw_string = r"C:\some\path\\"
+print(raw_string)  # 输出: C:\some\path\\
+
+raw_string = r"C:\some\path\"
+print(raw_string)  # 语法错误
+```
+
+解决方案:
+
+- 添加一个额外的反斜杠，使其成为偶数个反斜杠：
+- 其他方案请参考[官方QA](https://docs.python.org/zh-cn/3/faq/programming.html#faq-programming-raw-string-backslash)
+
+```python
+raw_string = r"C:\some\path\\"
+print(raw_string)  # 输出: C:\some\path\\
+```
+
+## 多行文本
+
+字符串字面值可以包含多行，可以使用三重引号：`"""..."""`或者`'''...'''`，行尾的换行符会被包含在字符串中，可用\避免
+
+```python
+print("""\
+Usage: thingy [OPTIONS]
+     -h                        Display this usage message
+     -H hostname               Hostname to connect to
+""")
+# 注意\,否则会有一个空行,下面为没有\的情况，多了一个空行
+
+Usage: thingy [OPTIONS]
+     -h                        Display this usage message
+     -H hostname               Hostname to connect to
+
+```
+
+## 字符串连接 (Concatenation)
+
+- 字符串可以通过+连接，也可以通过\*重复：
+- 相邻的两个或多个 字符串字面值 （引号标注的字符）会自动合并,注意只能用于字面量，不能用于变量或表达式，也就是他的直接值（`Py`,`thon`）可以用来操作，但你不能用他们
+  绑定的名字来操作，所以合并多个变量，或合并变量与字面值，要用 +
+
+```python
+>>> 'Py' 'thon'
+'Python' # OK
+>>> prefix = 'Py'
+>>> prefix 'thon'
+# 抛出异常
+```
+
+### bonus： Java 中字符串连接
+
+- 在 Java 中，字符串连接（Concatenation）可以通过使用 + 运算符
+- 以及 StringBuilder 类来实现。
+- Java 11 以上版本可使用`String.repeat()`方法重复字符串, 截止2024年最新版本java， `*` 运算符不支持字符串重复
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        // 使用 + 运算符连接字符串
+        String str1 = "Hello";
+        String str2 = "World";
+        String result = str1 + " " + str2;
+        System.out.println(result);  // 输出: Hello World
+
+          // 使用 StringBuilder 连接字符串
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hello");
+        sb.append(" ");
+        sb.append("World");
+        String result = sb.toString();
+        System.out.println(result);  // 输出: Hello World
+
+    }
+}
+```
+
+使用 + 运算符连接字符串时，Java 会在后台创建一个 StringBuilder 对象来进行连接操作，因此对于少量字符串连接操作，使用 + 运算符是可以接受的。
+对于大量字符串连接操作，建议使用 StringBuilder 或 StringBuffer（线程安全）来提高性能。
+
+## 索引和切片｜index and slice
+
+- 字符串可以通过索引来访问，第一个字符索引为0，计算机的惯例从0开始，负数索引表示从右边开始，-1表示最后一个字符，-2表示倒数第二个字符，以此类推
+- 切片可以通过冒号分隔的两个索引来获取子字符串，包括第一个索引，不包括第二个索引
+
+```python
+wku = 'Wenzhou-Kean University'
+>>> wku[0]  # 索引
+'W'
+>>> wku[-1]  # 索引
+'y'
+>>> wku[0:7]  # 切片
+'Wenzhou'从0开始包括0，到7结束不包括7（故截取到的是index 0 到 index 6 的字符）
+# 省略开始索引时，默认值为 0，省略结束索引时，默认为到字符串的结尾：
+>>> wku[:7]
+'Wenzhou'
+>>> wku[8:]
+'Kean University'
+```
+
+```
+ +---+---+---+---+---+---+---+---+---+---+---+---+---+-------+
+
+ | W | e | n | z | h | o | u | - | K | e | a | n |...|   y   |
+
+ +---+---+---+---+---+---+---+---+---+---+---+---+---+-------+
+ 0   1   2   3   4   5   6   7   8   9  10  11  12...长度-1 长度
+-长度                                            -2   -1
+```
+
+索引越界(超过字符范围)会报错，但是，切片会自动处理越界索引，因为
+索引操作是访问字符串中的单个字符，如果索引超出范围，Python 无法返回一个有效的字符，
+因此会引发 IndexError。切片操作则不会引发异常，切片操作是获取字符串的一个子字符串，
+即使结束索引超出范围，Python 仍然可以返回一个有效的子字符串。因此，Python 会自动处理越界索引，
+将其调整为字符串的末尾。
+
+{' '}
+<Quiz
+  className=""
+  correct="Hello Hello, World World!"
+  options={[
+    'Hello Hello, World! World!',
+    'Hello, Hello, World World!',
+    'Hello Hello, World World!',
+    'Hello Hello, World World',
+  ]}
+  question={
+    <>
+      Quiz：以下代码输出什么？
+      <CodeBlock
+        code={`\
+my_string = "Hello, World!"
+print(my_string[:5],my_string[:-1],my_string[-6:])  `}
+        language="python"
+      />
+    </>
+  }
+  explain={
+    <div className="text-start">
+      <p>答案是：Hello Hello, World World!</p>
+      <p>
+        解释：my_string[:5] 从头开始到索引5（不包括5）的字符，即Hello；my_string[:-1]
+        从头开始到最后一个字符之前的字符，即Hello, World；my_string[-6:]
+        从倒数第6个字符开始到最后一个字符，即World!
+      </p>
+    </div>
+  }
+/>
+
+## 字符串的不可变性质 | Immutable
+
+- 字符串是不可变的，不能修改字符串的值，如果需要修改，只能创建一个新的字符串。
+  原因：不可变就意味可以共享，多个变量可以指向同一个字符串，这样可以节省内存空间，提高效率
+
+[了解更多](https://docs.python.org/zh-cn/3/tutorial/introduction.html#text)
+
+# 列表
+
+- 与 immutable 字符串不同, 列表是 mutable 类型，其内容可以改变
+
+# 列表操作
+
+<Quiz correct="[1, 2, 3, 4, 5]" question={<>
+  Quiz：以下代码分别输出什么？
+    <CodeBlock code={
+    `
+numbers = [1, 2, 3, 4, 5]
+print(numbers)
+
+numbers.append(6)
+print(numbers)
+
+numbers.remove(3)
+print(numbers)
+
+length = len(numbers)
+print(length)
+
+first_element = numbers[0]
+print(first_element)
+
+sub_list = numbers[1:3]
+print(sub_list)
+
+print(numbers + [36, 49, 64, 81, 100])
+
+wku = ['cps','acct','fin','mkt','math']
+temp = wku
+western_kentucky_university = ['eng','hist','bio','chem','phy','astr','ce','ee','thea']
+wku = western_kentucky_university
+
+for course in wku:
+if course not in temp:
+wku.remove(course)
+
+print(western_kentucky_university)
+
+`} language='python'/>
+</>} explain={
+<div className='text-start'>
+<ol>
+<li>
+[1, 2, 3, 4, 5] 创建一个包含数字的列表
+</li>
+<li>
+[1, 2, 3, 4, 5, 6] 使用 append() 方法向列表中添加一个元素
+</li>
+<li>
+[1, 2, 4, 5, 6] 使用 remove() 方法从列表中移除一个元素
+</li>
+<li>
+5 使用 len() 方法获取列表的长度
+</li>
+<li>
+1 访问列表中的第一个元素
+</li>
+<li>
+[2, 4] 使用切片操作获取子列表
+</li>
+<li>
+[1, 2, 4, 5, 6, 36, 49, 64, 81, 100]
+</li>
+<li>
+['hist', 'chem', 'astr', 'ee'],我们对wku的修改影响到了他重新指向的western_kentucky_university 即 pass by object reference
+</li>
+</ol>
+</div>} />
+
+复制列表以及其他任何对象，请了解[浅拷贝和深拷贝](https://docs.python.org/zh-cn/3/library/copy.html)
+
+[了解更多](https://docs.python.org/zh-cn/3/tutorial/datastructures.html#more-on-lists)
