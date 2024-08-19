@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Quote from '@/components/QuoteWrapper'
+import { ArrowRightSquare } from 'lucide-react'
 
 export default function page() {
   return (
@@ -47,11 +48,17 @@ export default function page() {
           </Link>
         </li>{' '}
       </ul>
-      <p className="mt-12 text-muted-foreground">
+      <p className="mt-12  text-muted-foreground">
         Someone may say that placing the attribution in the navigation bar may seem like a foolish
         design choice, but We just want to express our appreciation. Thank you for making the world
         a better place. 真的很感谢你们！
       </p>{' '}
+      <Link className="group flex items-center" href="/about">
+        <ArrowRightSquare className="mr-2 transition-transform duration-300 group-hover:translate-x-2 group-hover:text-blue-500" />
+        <h2 className="mb-12 mt-12 max-w-7xl pl-4 font-sans text-xl font-bold text-neutral-800 group-hover:text-blue-300 dark:text-neutral-200 md:text-5xl ">
+          编者们
+        </h2>
+      </Link>
     </div>
   )
 }
