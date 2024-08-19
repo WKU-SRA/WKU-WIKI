@@ -4,19 +4,79 @@ depth: 5
 title: 'Python 异常处理'
 date: '2024-08-11'
 tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
-draft: true
+draft: false
 summary: '我们似乎来到了未知的领域，上报一下我们的情况给老板吧'
 authors: ['default']
 ---
 
-# 错误解析：
+import Divider from '@/components/ui/divider'
+
+# 前言
+
+其实，我们已经见过很多次Exception老兄了
+
+```java
+// java
+import java.lang.reflect.Field;
+
+public class DynamicFieldExample {
+    /**
+     * 什么是 throws Exception？
+     * throw Exceptions到方法的调用者，告诉调用者这个方法可能会抛出某些异常
+     * 什么时候需要 throws Exception？
+     * 当方法内部可能会抛出异常，但是方法本身不处理异常时，且异常为checked exceptions
+     * 时必须需要在方法签名中声明 throws Exception
+     * 注意，这里的Exception是所有exceptions的父类，你可以用任何继承该类的异常替换
+     * runtime exceptions 即运行时发生的错误 继承 unchecked exceptions 不需要在
+     * 方法签名中声明 throws Exception
+     * 这是因为未检查异常通常表示编程错误，如逻辑错误或不正确的 API 使用，而不是可以合理预期和恢复的情况。
+     * 你开发的时候就要修复这些错误，而不是想着在运行时处理他们。
+     */
+    public static void main(String[] args) throws Exception {
+        // 创建一个实例
+        MyClass obj = new MyClass();
+
+        // 通过对象实例（obj）获取类对象
+        Class<?> clazz = obj.getClass();
+
+        // 动态添加字段，Field 类表示类或接口的一个字段（成员变量）。通过 Field 对象，
+        // 可以获取字段的元数据（如字段名、类型等），并可以动态地访问和修改字段的值。
+        Field field = clazz.getDeclaredField("age");
+        field.setAccessible(true);
+        field.set(obj, 30);
+
+        // 访问动态添加的字段
+        int age = (int) field.get(obj);
+        System.out.println("Age: " + age);
+        // 输出: Age: 30，哈哈，有没有发现private字段也能访问修改，so cool！
+        // 其实嘛，访问修饰符主要作用还是让开发者知道这个字段该不该访问，该不该修改，从java的角度完全限制访问是不可能的
+    }
+}
+
+class MyClass {
+    private int age;
+}
+```
+
+<Divider />
+
+# 语法错误
 
 - 语法错误 `SyntaxError`
   语法错误又称解析错误，是由于代码不符合语法规则导致的错误。例如，缺少冒号、括号不匹配等。
-- 异常
-  - 即使语句或表达式使用了正确的语法，执行时仍可能触发错误。执行时检测到的错误称为 异常，异常不一定导致严重的后果，大多数异常不会被程序处理，而是显示错误信息
-  - 错误信息的最后一行说明程序遇到了什么类型的错误
-  - `ZeroDivisionError`， `NameError` 和 `TypeError`等等，这些都是 Python 的内置异常，标准异常是内置identifier即标识符，不需要导入模块
+
+{' '}
+<Divider />
+
+# 异常
+
+当Python程序遇到错误时，会抛出一个异常。异常是一个事件，它表示程序在运行过程中遇到了某种问题。
+
+- 即使语句或表达式使用了正确的语法，执行时仍可能触发错误。执行时检测到的错误称为 异常，异常不一定导致严重的后果，大多数异常不会被程序处理，而是显示错误信息
+- 错误信息的最后一行说明程序遇到了什么类型的错误
+- `ZeroDivisionError`， `NameError` 和 `TypeError`等等，这些都是 Python 的内置异常，标准异常是内置`identifier`即标识符，不需要导入模块
+
+<Divider />
 
 # 异常处理
 
@@ -47,8 +107,8 @@ try:
     a = 1 / 0
 except Exception as e:
     print("发生异常：", e)
-# Exception被用作通配符,为不想指定异常时捕获所有异常
-# 这里是所有非致命异常的基类（不是Exception 的子类的异常通常不被处理，因为它们被用来指示程序应该终）
+# Exception被用作通配符(wild card),为不想指定异常时捕获所有异常
+# 这里是所有非致命异常的基类（不是Exception 的子类的异常通常不被处理，因为它们被用来指示程序应该终止）
 ```
 
 ```python
@@ -63,7 +123,9 @@ except ZeroDivisionError as e:
 # 发生异常： division by zero
 ```
 
-一个 except 子句中的类匹配的异常将是该类本身的实例或其所派生的类的实例（但反过来则不可以 --- 列出派生类的 except 子句 不会匹配其基类的实例）。 例如，下面的代码将依次打印 B, C, D:
+一个 except 子句中的类匹配的异常将是该类本身的实例或其所派生的类的实例（但反过来则不可以， 列出派生类的 except 子句 不会匹配其基类的实例）。 例如，下面的代码将依次打印 B, C, D:
+
+> 你在 except 子句中指定了一个异常类，那么这个子句不仅会捕获该类的实例，还会捕获所有从该类派生的子类的实例。
 
 ```python
 class B(Exception):
@@ -88,23 +150,25 @@ for cls in [B, C, D]:
 
 请注意如果颠倒 except 子句 的顺序（把 except B 放在最前），则会输出 B, B, B --- 即触发了第一个匹配的 except 子句。
 
+<Divider />
+
 # 异常参数
 
-except 子句 可能会在异常名称后面指定一个变量。 这个变量将被绑定到异常实例，该实例通常会有一个存储参数的 args 属性。 为了方便起见，内置异常类型定义了 **str**() 来打印所有参数而不必显式地访问 .args。
+`except` 子句 可能会在异常名称后面指定一个变量。 这个变量将被绑定到异常实例，该实例通常会有一个存储参数的 `args` 属性。 为了方便起见，内置异常类型定义了 `str()` 来打印所有参数而不必显式地访问 `.args`。
 未处理异常的 `__str__()` 输出会被打印为该异常消息的最后部分 ('detail')。
 
 ```python
-try:
-    raise Exception('spam', 'eggs')
-except Exception as inst:
-    print(type(inst))    # the exception type
-    print(inst.args)     # arguments stored in .args
-    print(inst)          # __str__ allows args to be printed directly,
-                         # but may be overridden in exception subclasses
-    x, y = inst.args     # unpack args
-    print('x =', x)
-    print('y =', y)
-
+>>> try:
+        raise Exception('spam', 'eggs')
+>>> except Exception as inst:
+        print(type(inst))    # the exception type
+        print(inst.args)     # arguments stored in .args
+        print(inst)          # __str__ allows args to be printed directly,
+                            # but may be overridden in exception subclasses
+        x, y = inst.args     # unpack args
+        print('x =', x)
+        print('y =', y)
+# output:
 <class 'Exception'>
 ('spam', 'eggs')
 ('spam', 'eggs')
@@ -135,20 +199,20 @@ except Exception as err:
 
 # else, finally in try... except...
 
-else 子句如果存在，它必须放在所有 except 子句 之后。 它适用于 try 子句 没有引发异常但又必须要执行的代码。
+`else` 子句如果存在，它必须放在所有 `except` 子句 之后。 它适用于 `try` 子句 没有引发异常但又必须要执行的代码。
 
-- 仅当 try 子句没有引发任何异常时执行。
-- 用途：用于执行那些在 try 子句成功完成后需要运行的代码。
+- 仅当 `try` 子句没有引发任何异常时执行。
+- 用途：用于执行那些在 `try` 子句成功完成后需要运行的代码。
 
-finally 子句如果存在，必须放在所有 except 和 else 子句之后。
+`finally` 子句如果存在，必须放在所有 `except` 和 `else` 子句之后。
 
-- 无论是否发生异常，finally 子句中的代码都会执行。
+- 无论是否发生异常，`finally` 子句中的代码都会执行。
 - 用于执行清理操作，例如关闭文件、释放资源等。
-- 如果执行 try 子句期间触发了某个异常，则某个 except 子句应处理该异常。如果该异常没有 except 子句处理，在 finally 子句执行后会被重新触发。
-- except 或 else 子句执行期间也会触发异常。 同样，该异常会在 finally 子句执行之后被重新触发。
-- 如果 finally 子句中包含 break、continue 或 return 等语句，异常将不会被重新引发。
-- 如果执行 try 语句时遇到 break,、continue 或 return 语句，则 finally 子句在执行 break、continue 或 return 语句之前执行。
-- 如果 finally 子句中包含 return 语句，则返回值来自 finally 子句的某个 return 语句的返回值，而不是来自 try 子句的 return 语句的返回值。
+- 如果执行 `try` 子句期间触发了某个异常，则某个 `except` 子句应处理该异常。如果该异常没有 `except` 子句处理，在 `finally` 子句执行后会被重新触发。
+- `except` 或 `else` 子句执行期间也会触发异常。 同样，该异常会在 `finally` 子句执行之后被重新触发。
+- 如果 `finally` 子句中包含 `break`、`continue` 或 `return` 等语句，异常将不会被重新引发。
+- 如果执行 `try` 语句时遇到 `break`,、`continue` 或 `return` 语句，则 `finally` 子句在执行 `break`、`continue` 或 `return` 语句之前执行。
+- 如果 `finally` 子句中包含 `return` 语句，则返回值来自 `finally` 子句的某个 `return` 语句的返回值，而不是来自 `try` 子句的 return 语句的返回值。
 
 ```python
 try:
@@ -172,7 +236,7 @@ finally:
         pass  # f was never opened
 ```
 
-你可能觉得else很多余，把else子句的代码放在try子句中也是可以的，但是使用else子句可以避免意外捕获非 try ... except 语句保护的代码触发的异常(else 子句导致的)。
+你可能觉得`else`很多余，把`else`子句的代码放在`try`子句中也是可以的，但是使用`else`子句可以避免意外捕获非 `try ... except` 语句保护的代码触发的异常(`else` 子句导致的)。
 
 # 触发异常
 
@@ -192,10 +256,10 @@ except NameError:
 如果一个未处理的异常发生在 except 部分内，它将会有被处理的异常附加到它上面，并包括在错误信息中:
 
 ```python
-try:
-    open("database.sqlite")
-except OSError:
-    raise RuntimeError("unable to handle error")
+>>> try:
+        open("database.sqlite")
+>>> except OSError:
+        raise RuntimeError("unable to handle error")
 
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
@@ -211,13 +275,13 @@ RuntimeError: unable to handle error
 为了表明一个异常是另一个异常的直接后果， raise 语句允许一个可选的 from 子句:
 
 ```python
-def func():
-    raise ConnectionError
+>>> def func():
+        raise ConnectionError
 
-try:
-    func()
-except ConnectionError as exc:
-    raise RuntimeError('Failed to open database') from exc
+>>> try:
+        func()
+>>> except ConnectionError as exc:
+        raise RuntimeError('Failed to open database') from exc
 
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
@@ -235,7 +299,7 @@ RuntimeError: Failed to open database
 
 # 用户自定义异常
 
-程序可以通过创建新的异常类命名自己的异常（Python 类的内容详见 类）。不论是以直接还是间接的方式，异常都应从 `Exception` 类派生。
+程序可以通过创建新的异常类命名自己的异常。不论是以直接还是间接的方式，异常都应从 `Exception` 类派生。
 异常类可以被定义成能做其他类所能做的任何事，但通常应当保持简单，它往往只提供一些属性，允许相应的异常处理程序提取有关错误的信息。
 大多数异常命名都以 “Error” 结尾，类似标准异常的命名。
 许多标准模块定义了自己的异常，以报告他们定义的函数中可能出现的错误。
@@ -243,7 +307,7 @@ RuntimeError: Failed to open database
 # 引发和处理多个不相关的异常
 
 在有些情况下，有必要报告几个已经发生的异常。这通常是在并发框架中当几个任务并行失败时的情况，但也有其他的用例，有时需要是继续执行并收集多个错误而不是引发第一个异常。
-内置的 ExceptionGroup 打包了一个异常实例的列表，这样它们就可以一起被引发。它本身就是一个异常，所以它可以像其他异常一样被捕获。
+内置的 `ExceptionGroup` 打包了一个异常实例的列表，这样它们就可以一起被引发。它本身就是一个异常，所以它可以像其他异常一样被捕获。
 
 ```python
 >>> def f():
@@ -323,7 +387,7 @@ if excs:
 
 # 用注释细化异常情况
 
-当一个异常被创建以引发时，它通常被初始化为描述所发生错误的信息。在有些情况下，在异常被捕获后添加信息是很有用的。为了这个目的，异常有一个 add_note(note) 方法接受一个字符串，并将其添加到异常的注释列表。标准的回溯在异常之后按照它们被添加的顺序呈现包括所有的注释。
+当一个异常被创建以引发时，它通常被初始化为描述所发生错误的信息。在有些情况下，在异常被捕获后添加信息是很有用的。为了这个目的，异常有一个 `add_note(note)` 方法接受一个字符串，并将其添加到异常的注释列表。标准的回溯在异常之后按照它们被添加的顺序呈现包括所有的注释。
 
 ```python
 try:

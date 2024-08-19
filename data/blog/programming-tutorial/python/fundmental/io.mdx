@@ -4,14 +4,12 @@ depth: 7
 title: 'Python IO'
 date: '2024-08-11'
 tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
-draft: true
+draft: false
 summary: '有人说，I/O是很多软件系统的瓶颈，提高I/O性能便能很大程度提高整个系统的性能'
 authors: ['default']
 ---
 
-# 输入和输出
-
-## 输出格式化
+# 输出格式化
 
 - 使用 格式化字符串字面值 ，要在字符串开头的引号/三引号前添加 f 或 F 。在这种字符串中，可以在 `{` 和 `}`字符之间输入引用的变量，或字面值的 Python 表达式
 
@@ -51,9 +49,11 @@ The value of pi is approximately 3.142.
   如果不需要花哨的输出，只想快速显示变量进行调试，可以用 `repr()` 或 `str()` 函数把值转化为字符串。
   `str()` 函数返回供人阅读的值，`repr()` 则生成适于解释器读取的值（如果没有等效的语法，则强制执行 `SyntaxError`）。对于没有支持供人阅读展示结果的对象， `str()` 返回与 `repr()` 相同的值。一般情况下，数字、列表或字典等结构的值，使用这两个函数输出的表现形式是一样的。字符串有两种不同的表现形式。
 
-## 读写文件
+[more reference](https://pyformat.info/)
 
-`open()` 返回一个 `file objec`t ，最常使用的是两个位置参数和一个关键字参数：`open(filename, mode, encoding=None)`
+# 读写文件
+
+`open()` 返回一个 `file objec`，最常使用的是两个位置参数和一个关键字参数：`open(filename, mode, encoding=None)`
 
 ```python
 f = open('workfile', 'w', encoding="utf-8")
@@ -63,7 +63,7 @@ f = open('workfile', 'w', encoding="utf-8")
 
 通常情况下，文件是以 `text mode` 打开的，也就是说，你从文件中读写字符串，这些字符串是以特定的 `encoding` 编码的。如果没有指定 `encoding` ，默认的是与平台有关的（见 `open()` ）。因为 `UTF-8` 是现代事实上的标准，除非你知道你需要使用一个不同的编码，否则建议使用 `encoding="utf-8"` 。在模式后面加上一个 `'b'` ，可以用 `binary mode` 打开文件。二进制模式的数据是以 `bytes` 对象的形式读写的。在二进制模式下打开文件时，你不能指定 `encoding` 。
 
-在文本模式下读取文件时，默认把平台特定的行结束符（Unix 上为 `\n`, Windows 上为 `\r\n`）转换为 `\n`。在文本模式下写入数据时，默认把 `\n` 转换回平台特定结束符。这种操作方式在后台修改文件数据对文本文件来说没有问题，但会破坏 `JPEG` 或 `EXE`等二进制文件中的数据。注意，在读写此类文件时，一定要使用二进制模式。
+在文本模式下读取文件时，默认把平台特定的行结束符（Unix 上为 `\n`, Windows 上为 `\r\n`）转换为 `\n`。在文本模式下写入数据时，默认把 `\n` 转换回平台特定结束符。这种操作方式在后台修改文件数据对文本文件来说没有问题，但会破坏 `JPEG` 或 `EXE`等二进制文件中的数据。注意，在读写此类文件时，**一定要使用二进制模式**。
 
 在处理文件对象时，最好使用 with 关键字。优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。而且，使用 with 相比等效的 try-finally 代码块要简短得多：
 
@@ -73,15 +73,16 @@ with open('workfile', encoding="utf-8") as f:
 
 # We can check that the file has been automatically closed.
 f.closed
-True
+# output: True
 ```
 
 如果没有使用 `with` 关键字，则应调用 `f.close()` 关闭文件，即可释放文件占用的系统资源。
 
 > 警告 调用 `f.write()`时，未使用 `with` 关键字，或未调用` f.close()`，即使程序正常退出，也**可能** 导致 f.write() 的参数没有完全写入磁盘。
 > 通过 `with` 语句，或调用 `f.close()` 关闭文件对象后，再次使用该文件对象将会失败。
+> 在 Python 中，with 语句的作用域规则允许在 with 代码块内创建的变量和对象在代码块外仍然可用，这使得资源管理更加简洁和安全。
 
-### 文件对象的方法
+# 文件对象的方法
 
 - `f.read(size)` 从文件读取 size 个字符，当未给定 size 或给定负值时，读取所有字符并返回为字符串。如果文件已到达结尾， `f.read()` 将返回一个空字符串。
 - `f.readline()` 从文件中读取一行；换行符为 '\n' 。如果返回一个空字符串，说明已经到达文件末尾，而空行则由一个换行符表示。如果文件只有一行，且没有换行符， `f.readline()` 将返回一个空字符串。
@@ -97,11 +98,11 @@ True
 
 文件对象还有一些额外的方法，如使用频率较低的 isatty() 和 truncate() 等；有关文件对象的完整指南请查阅标准库参考。
 
-### 使用 json 保存结构化数据
+# 保存结构化数据
 
 > 备注 JSON文件必须以UTF-8编码。当打开JSON文件作为一个 text file 用于读写时，使用 encoding="utf-8" 。
 
-#### pickle
+## pickle
 
 `pickle` 模块可以序列化和反序列化几乎所有的Python对象。
 
@@ -122,7 +123,12 @@ print(data)
 # 输出: {'name': 'Alice', 'age': 30, 'city': 'New York'}
 ```
 
-#### json
+## JSON
+
+JSON（JavaScript Object Notation）是一种轻量级的数据交换格式，广泛用于网络通信和数据存储。
+作为一种人类可读的文本格式，易于理解和编辑，且并非JavaScript专用，由于其广泛用于Web应用，许多编程语言都支持JSON的解析和生成。
+
+JSON 只支持基本数据类型，如字符串、数字、数组（列表）、对象（字典）、布尔值和 null
 
 ```python
 import json

@@ -4,21 +4,29 @@ depth: 6
 title: 'Python 模块'
 date: '2024-08-11'
 tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
-draft: true
+draft: false
 summary: 'Module saves the day'
 authors: ['default']
 ---
 
+import Divider from '@/components/ui/divider'
+
+# 前言
+
+本期内容部分参考[【python】关于import你需要知道的一切！一个视频足够了，码农高天](https://www.bilibili.com/video/BV1K24y1k7XA/?spm_id_from=333.788&vd_source=68fb5e0bc8eb282333b54cde28f7b586)
+观后食用本教程效果更佳哦
+
+<Divider />
+
 # 模版
 
-模块
 退出 Python 解释器后，再次进入时，之前在 Python 解释器中定义的函数和变量就丢失了。因此，编写较长程序时，最好用文本编辑器代替解释器，执行文件中的输入内容，这就是编写脚本 。
 随着程序越来越长，为了方便维护，最好把脚本拆分成多个文件。编写脚本还一个好处，不同程序调用同一个函数时，不用把函数定义复制到各个程序。
 
 为实现这些需求，Python 把各种定义存入一个文件，在脚本或解释器的交互式实例中使用。这个文件就是 模块 ；模块中的定义可以导入到其他模块或主模块（在顶层和计算器模式下，执行脚本中可访问的变量集）。
 
 模块是包含 Python 定义和语句的文件。其文件名是模块名加后缀名 .py 。
-在模块内部，通过全局变量 **name** 可以获取模块名（即字符串）。例如，用文本编辑器在当前目录下创建 fibo.py 文件，输入以下内容：
+在模块内部，通过全局变量 `__name__`可以获取模块名（即字符串）。例如，用文本编辑器在当前目录下创建 fibo.py 文件，输入以下内容：
 
 ```python
 # Fibonacci numbers module
@@ -47,6 +55,8 @@ def fib2(n):   # return Fibonacci series up to n
 
 此操作不会直接把 fibo 中定义的函数名称添加到当前 namespace 中（请参阅[Python 作用域和命名空间](https://docs.python.org/zh-cn/3/tutorial/classes.html#tut-scopes) 了解详情）；它只是将模块名称 fibo 添加到那里。 使用该模块名称你可以访问其中的函数:
 
+> 咳咳咳，我们换一种方式理解吧。我们import的.py文件被python作为一个模块（module）对象引入到我们的当前环境中，模块作为一个对象，他自己维护自己的命名空间。我们可以通过模块名.函数名的方式来调用模块中的函数。这也是为什么，此操作不会直接把 fibo 中定义的函数名称添加到当前 namespace 中
+
 ```python
 >>>fibo.fib(1000)
 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987
@@ -64,14 +74,66 @@ def fib2(n):   # return Fibonacci series up to n
 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377
 ```
 
-6.1. 模块详解
-模块包含可执行语句及函数定义。这些语句用于初始化模块，且仅在 import 语句 第一次 遇到模块名时执行。[1] (文件作为脚本运行时，也会执行这些语句。)
+<Divider />
 
-每个模块都有自己的私有命名空间，它会被用作模块中定义的所有函数的全局命名空间。 因此，模块作者可以在模块内使用全局变量而不必担心与用户的全局变量发生意外冲突。 另一方面，如果你知道要怎么做就可以通过与引用模块函数一样的标记法 modname.itemname 来访问一个模块的全局变量。
+## 模块详解
+
+模块包含可执行语句及函数定义。这些语句用于初始化模块，且仅在 import 语句 第一次 遇到模块名时执行。(文件作为脚本运行时，也会执行这些语句)
+
+- Bonus: `./`中的`.`代表当前文件所在的路径
+  > 为什么 import 语句第一次遇到模块名时才执行呢？我们不妨看看python如何处理import语句的。
+
+```python
+# ./test.py
+import welcome
+import welcome
+# 仅打印一次 sra欢迎你
+```
+
+```python
+# ./welcome.py
+print("sra欢迎你")
+```
+
+```python
+# ./alias
+import welcome as sra_greeting
+print(welcome) # 找不到，因为你把module值赋给了 sra_greeting
+```
+
+> 当python解释器遇到import welcome语句时，会先将welcome以名字的形式检查缓存，看该module是否已经被读取，已经被读取，不会再执行load的过程，直接把module赋值给welcome。如果缓存里没有welcome，解释器需要寻找这个module
+
+1. 先找 `buitin module` （sys,os,math等）
+2. 用 `sys.path` 的路径按顺序寻找 module， 优先查找当前路径下的文件
+3. 找到文件后在单独命名空间运行这个文件，即建立一个module
+4. 更新缓存
+5. module object赋值给 module 名
+
+```python
+import sys
+print(sys.path)
+'''
+output:
+['/Users/sra/python/tutorial',
+'/Applications/PyCharm.app/Contents/plugins/python/helpers/pycharm_display',
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python312.zip',
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12',
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/lib-dynload',
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages', '/Applications/PyCharm.app/Contents/plugins/python/helpers/pycharm_matplotlib_backend']
+
+ 解释: '/Users/sra/python/tutorial' 为test.py文件所在文件夹,我们会优先搜索这个文件夹
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python312.zip': 是 Python 3.12 版本的压缩库文件路径。
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12': 是 Python 3.12 版本的标准库路径。
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/lib-dynload': 是 Python 3.12 版本的动态加载库路径。
+'/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages': 是 Python 3.12 版本的第三方包安装路径(你pip install)。
+'''
+```
+
+每个模块都有自己的私有命名空间，它会被用作模块中定义的所有函数的全局命名空间。 因此，模块作者可以在模块内使用全局变量而不必担心与用户的全局变量发生意外冲突。 另一方面，如果你知道要怎么做就可以通过与引用模块函数一样的标记法 `modname.itemname` 来访问一个模块的全局变量。
 
 模块可以导入其他模块。 根据惯例可以将所有 import 语句都放在模块（或者也可以说是脚本）的开头但这并非强制要求。 如果被放置于一个模块的最高层级，则被导入的模块名称会被添加到该模块的全局命名空间。
 
-还有一种 import 语句的变化形式可以将来自某个模块的名称直接导入到导入方模块的命名空间中。 例如:
+还有一种 import 语句的变化形式可以将来自某个模块的名称直接导入到导入模块的命名空间中。 例如:
 
 ```python
 >>> from fibo import fib, fib2
@@ -80,6 +142,7 @@ def fib2(n):   # return Fibonacci series up to n
 ```
 
 这条语句不会将所导入的模块的名称引入到局部命名空间中（因此在本示例中，fibo 将是未定义的名称）。
+依然会`load module`刷新缓存，但不会把`module object`赋值给`module`名，而是直接把`module`中的函数赋值给`import`的属性名
 
 还有一种变体可以导入模块内定义的所有名称：
 
@@ -89,9 +152,9 @@ def fib2(n):   # return Fibonacci series up to n
 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377
 ```
 
-这种方式会导入所有不以下划线（\_）开头的名称。大多数情况下，不要用这个功能，这种方式向解释器导入了一批未知的名称，可能会覆盖已经定义的名称。
+这种方式会导入所有不以下划线（`_`）开头的名称。大多数情况下，不要用这个功能，这种方式向解释器导入了一批未知的名称，可能会覆盖已经定义的名称。
 
-注意，一般情况下，不建议从模块或包内导入 \*，因为，这项操作经常让代码变得难以理解。不过，为了在交互式编译器中少打几个字，这么用也没问题。
+注意，一般情况下，不建议从模块或包内导入 `*`，因为，这项操作经常让代码变得难以理解。不过，为了在交互式编译器中少打几个字，这么用也没问题。
 
 模块名后使用 as 时，直接把 as 后的名称与导入模块绑定。
 
@@ -111,7 +174,7 @@ from 中也可以使用这种方式，效果类似：
 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377
 ```
 
-备注 为了保证运行效率，每次解释器会话**只导入一次模块**。如果更改了模块内容，必须重启解释器；仅交互测试一个模块时，也可以使用 importlib.reload()，例如 import importlib; importlib.reload(modulename)。
+备注 为了保证运行效率，每次解释器会话**只导入一次模块**。如果更改了模块内容，必须重启解释器；仅交互测试一个模块时，也可以使用 `importlib.reload()，例如 import importlib; importlib.reload(modulename)`。
 
 ## 以脚本方式执行模块
 
@@ -121,7 +184,7 @@ from 中也可以使用这种方式，效果类似：
 python fibo.py <arguments>
 ```
 
-这项操作将执行模块里的代码，和导入模块一样，但会把 **name** 赋值为 "**main**"。 也就是把下列代码添加到模块末尾：
+这项操作将执行模块里的代码，和导入模块一样，但会把 `__name__` 赋值为 `"__main__"`。 也就是把下列代码添加到模块末尾：
 
 ```python
 if __name__ == "__main__":
@@ -152,13 +215,14 @@ python fibo.py 50
 - 被命令行直接运行的脚本所在的目录（或未指定文件时的当前目录）。
 - PYTHONPATH （目录列表，与 shell 变量 PATH 的语法一样）。
 - 依赖于安装的默认值（按照惯例包括一个 site-packages 目录，由 site 模块处理）。
+  > site-packages 是第三方包的安装目录，如pip install的包
+  > 更多细节请参阅 [sys.path 模块搜索路径的初始化](https://docs.python.org/zh-cn/3/library/sys_path_init.html#sys-path-init)。
 
-更多细节请参阅 [sys.path 模块搜索路径的初始化](https://docs.python.org/zh-cn/3/library/sys_path_init.html#sys-path-init)。
-
-> 备注 在支持符号链接的文件系统中，“被命令行直接运行的脚本所在的目录”是符号链接最终指向的目录。换句话说，符号链接所在的目录并 没有 被添加至模块搜索路径。
+> 在支持符号链接（symlink）的文件系统中，“被命令行直接运行的脚本所在的目录”是符号链接最终指向的目录。  
+> 说人话，就是如果你在一个文件夹下有一个软链接(相当于快捷方式)指向了另一个文件夹，那么python会在软链接指向的文件夹下搜索模块，而不是软链接所在的文件夹
 > 初始化后，Python 程序可以更改 sys.path。脚本所在的目录先于标准库所在的路径被搜索。这意味着，脚本所在的目录如果有和标准库同名的文件，那么加载的是该目录里的，而不是标准库的。这一般是一个错误，除非这样的替换是你有意为之。详见 标准模块。
 
-## “已编译的” Python 文件
+## “已编译的” Python 文件 （bonus）
 
 为了快速加载模块，Python 把模块的编译版本缓存在 `__pycache__` 目录中，文件名为 `module.version.pyc`，version 对编译文件格式进行编码，一般是 Python 的版本号。例如，`CPython` 的 3.3 发行版中，spam.py 的编译版本缓存为 `__pycache__/spam.cpython-33.pyc`。这种命名惯例让不同 Python 版本编译的模块可以共存。
 
@@ -175,7 +239,9 @@ Python 在两种情况下不检查缓存。一，从命令行直接载入的模�
 
 本过程的细节及决策流程图，详见 [PEP 3147](https://peps.python.org/pep-3147/)。
 
-## 标准模块
+<Divider />
+
+# 标准模块
 
 Python 自带一个标准模块的库，它在 Python 库参考（此处以下称为"库参考" ）里另外描述。 一些模块是内嵌到编译器里面的， 它们给一些虽并非语言核心但却内嵌的操作提供接口，要么是为了效率，要么是给操作系统基础操作例如系统调入提供接口。 这些模块集是一个配置选项， 并且还依赖于底层的操作系统。 例如，winreg 模块只在 Windows 系统上提供。一个特别值得注意的模块 sys，它被内嵌到每一个 Python 编译器中。sys.ps1 和 sys.ps2 变量定义了一些字符，它们可以用作主提示符和辅助提示符:
 
@@ -195,12 +261,12 @@ C>
 
 变量 `sys.path` 是字符串列表，用于确定解释器的模块搜索路径。该变量以环境变量 `PYTHONPATH` 提取的默认路径进行初始化，如未设置 `PYTHONPATH`，则使用内置的默认路径。可以用标准列表操作修改该变量：
 
-> > > import sys
-sys.path.append('/ufs/guido/lib/python'
-> > >
-> > > )
+```python
+>>> import sys
+>>> sys.path.append('/ufs/guido/lib/python' )
+```
 
-## dir() 函数
+## `dir()` 函数
 
 内置函数 `dir()` 用于查找模块定义的名称。返回结果是经过排序的字符串列表：
 
@@ -232,7 +298,7 @@ sys.path.append('/ufs/guido/lib/python'
  'warnoptions']
 ```
 
-没有参数时，dir() 列出当前已定义的名称：
+没有参数时，`dir()` 列出当前已定义的名称：
 
 ```python
 >>> a = [1, 2, 3, 4, 5]
@@ -280,9 +346,11 @@ sys.path.append('/ufs/guido/lib/python'
  'zip']
 ```
 
-## 包
+<Divider />
 
-包是通过使用“带点号模块名”来构造 Python 模块命名空间的一种方式。 例如，模块名 `A.B` 表示名为 `A`的包中名为 `B` 的子模块。 就像使用模块可以让不同模块的作者不必担心彼此的全局变量名一样，使用带点号模块名也可以让 `NumPy` 或 `Pillow` 等多模块包的作者也不必担心彼此的模块名冲突。
+# 包
+
+包(package)是一种特殊的module，通过使用“带点号模块名”来构造 Python 模块命名空间的一种方式。 例如，模块名 `A.B` 表示名为 `A`的包中名为 `B` 的子模块。 就像使用模块可以让不同模块的作者不必担心彼此的全局变量名一样，使用带点号模块名也可以让 `NumPy` 或 `Pillow` 等多模块包的作者也不必担心彼此的模块名冲突。
 
 假设要为统一处理声音文件与声音数据设计一个模块集（“包”）。声音文件的格式很多（通常以扩展名来识别，例如：`.wav`，`.aiff`，`.au`），因此，为了不同文件格式之间的转换，需要创建和维护一个不断增长的模块集合。为了实现对声音数据的不同处理（例如，混声、添加回声、均衡器功能、创造人工立体声效果），还要编写无穷无尽的模块流。下面这个分级文件树展示了这个包的架构：
 
@@ -313,8 +381,10 @@ sound/                          Top-level package
 ```
 
 导入包时，Python 搜索 `sys.path` 里的目录，查找包的子目录。
+查找到对应包后，查看是否有`__init__.py`并运行此文件内的代码，没有则不运行任何代码，其他包内的module不运行。
+需要有 `__init__.py` 文件才能让 Python 将包含该文件的目录当作包来处理（除非使用 `namespace package`，这是一个相对高级的特性）。 这可以防止重名的目录如 `string` 在无意中屏蔽后继出现在模块搜索路径中的有效模块。 在最简单的情况下，`__init__.py` 可以只是一个空文件，但它也可以执行包的初始化代码或设置`__all__`变量，这将在稍后详细描述。
 
-需要有 `__init__.py` 文件才能让 Python 将包含该文件的目录当作包来处理（除非使用 `namespace package`，这是一个相对高级的特性）。 这可以防止重名的目录如 `string` 在无意中屏蔽后继出现在模块搜索路径中的有效模块。 在最简单的情况下，`__init__.py` 可以只是一个空文件，但它也可以执行包的初始化代码或设置`__all__ `变量，这将在稍后详细描述。
+> 提示，python官方教程文档基于 python 3.1， 但在 Python 3.3 及之后的版本中，`__init__.py` 文件不再是必须的。Python 3.3 引入了命名空间包（namespace package）的概念，使得没有 **init**.py 文件的目录也可以被当作包来处理。
 
 还可以从包中导入单个模块，例如：
 
@@ -326,6 +396,24 @@ import sound.effects.echo
 
 ```python
 sound.effects.echo.echofilter(input, output, delay=0.7, atten=4)
+```
+
+在 Python 中，单独导入包（package）不会加载包中所有模块的代码,不会更新缓存。
+只有在明确导入包中的某个模块时，才会加载该模块的代码(在package里增加一个属性指向module)，更新缓存。
+
+```python
+import package # 单独导入包
+print(dir(package)) # ['__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__']
+
+import package.test # 明确导入包中的某个模块
+print(dir(package)) # ['__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', 'test']
+```
+
+注：
+
+```python
+import package.test as t
+print(package) # NameError: name 'package' is not defined, 因为你把 test module 赋值给了 t
 ```
 
 另一种导入子模块的方法是 ：
@@ -401,6 +489,8 @@ from sound.effects import *
 
 你还可以编写相对导入代码，即使用 `from module import name` 形式的 `import `语句。 这些导入使用前导点号来表示相对导入所涉及的当前包和上级包。 例如对于 `surround` 模块，可以使用:
 
+相对路径都是先通过相对路径找到绝对路径后再import的。
+
 ```python
 from . import echo
 from .. import formats
@@ -408,6 +498,17 @@ from ..filters import equalizer
 ```
 
 注意，相对导入基于当前模块名。因为主模块名永远是 `"__main__"` ，所以如果计划将一个模块用作 Python 应用程序的主模块，那么该模块内的导入语句必须始终使用绝对导入。
+
+```python
+# test.py
+from . import echo
+```
+
+```bash
+python test
+```
+
+直接运行`test`，这个`module`会被当成`main module` `import`进来，而`main module`不属于任何package，所以相对路径转化绝对路径失败
 
 ## 多目录中的包
 

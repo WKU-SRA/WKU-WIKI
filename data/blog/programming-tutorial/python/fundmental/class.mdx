@@ -285,7 +285,11 @@ print(brian.occupation)
 # 如何实现只读
 class MyClass:
     def __init__(self, value):
-        self.__value = value # 以 _ 开头的属性是私有的，但只是程序员之间的约定，不是强制，你要修改_value 也是可以的，__value 才是完全私有的
+        self.__value = value
+        # 以 _ 开头的属性是私有的，但只是程序员之间的约定，不是强制，你要修改_value 也是可以的，__value 才是完全私有的(class definition里)。
+        # 当然，你真想访问__value也是可以的，python只是做name mangling
+        # 双下滑和单下滑前缀均会对语义产生影响，在from mofule import *时均不会被引入
+        # 都到这里了，顺便提一嘴 __dunderscore__ 定义特殊的方法和特性
 
     @property
     def value(self):
@@ -465,9 +469,9 @@ x.r, x.i
 - 数据属性不需要声明；像局部变量一样，首次赋值时它们就产生了。 例如，如果 `x` 是上面创建的 `MyClass` 的实例，那么 `x.counter` 将创建一个名为 `counter` 的新数据属性，而 `x.counter = 1` 将修改它。注意，这样做不会影响类属性(这里的counter为实例属性)。 你也可以使用 `del` 语句删除实例属性。且该数据属性只对当前实例有效。
 - 方法是“属于”一个对象的函数。 对象的方法在定义类时就已经绑定了。 这就是为什么它们有一个 `self` 参数(类似java的`this`,字如其意，`self`和`this`都用来表示引用自己)，以便它们可以访问它们的数据属性。- 注意通过实例访问类的方法时，不需要传递 `self` 参数。但是，如果通过类访问方法，则必须传递 `self` 参数。
   `python
-    x.f()
-    MyClass.f(x)
-    `
+  x.f()
+  MyClass.f(x)
+  `
   Bonus: 静态方法（static method）方法和类方法（class method）
 - 静态方法是类的方法，不需要访问类的实例。静态方法使用 `@staticmethod` 装饰器来定义。静态方法不需要 `self` 参数和`cls`，因此它们不会访问实例的数据属性。不能访问类属性或实例属性，只能访问定义在方法内部的局部变量。通常用于逻辑上属于类但不需要访问类或实例的任何属性或方法的功能。
 

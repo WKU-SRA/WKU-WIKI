@@ -46,9 +46,9 @@ import Divider from '@/components/ui/divider'
   - 在这种结构中，pop() 方法用于移除并返回栈顶的元素。
   - 惯例是 `push()`用于添加元素，`pop()`用于移除元素。
 - Bonus: `extend(iterable)`
-  iterable 为可迭代对象，如列表、元组、字符串等。  
-   - 我们首先明确extend接收的是一个对象，那怎么保证他是可迭代的呢？  
-   - 实现可迭代的对象，需要实现 `__iter__()` 方法，返回一个迭代器对象。- 迭代器对象需要实现 `__next__()` 方法，返回迭代器的下一个元素。当迭代器没有元素时，`__next__()` 方法会触发 StopIteration 异常。- 举例：
+  iterable 为可迭代对象，如列表、元组、字符串等。
+  - 我们首先明确extend接收的是一个对象，那怎么保证他是可迭代的呢？
+  - 实现可迭代的对象，需要实现 `__iter__()` 方法，返回一个迭代器对象。- 迭代器对象需要实现 `__next__()` 方法，返回迭代器的下一个元素。当迭代器没有元素时，`__next__()` 方法会触发 StopIteration 异常。- 举例：
 
 ```python
 class MyIterable:
