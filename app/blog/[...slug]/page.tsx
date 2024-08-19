@@ -15,7 +15,6 @@ import { notFound } from 'next/navigation'
 import ClientComponent from './wrapper'
 import GiscusComments from '@/components/GiscusComments'
 import BlogSidebar from '@/components/BlogSideBar'
-import { list } from 'postcss'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
