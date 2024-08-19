@@ -23,6 +23,7 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': 'error',
+    'no-sparse-arrays': 'off',
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/anchor-is-valid': [
       'error',
