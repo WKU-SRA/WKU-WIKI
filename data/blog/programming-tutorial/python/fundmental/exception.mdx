@@ -2,14 +2,12 @@
 series: 'python-manual'
 depth: 5
 title: 'Python 异常处理'
-date: '2024-08-11'
+date: '2024-08-14'
 tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
 draft: false
 summary: '我们似乎来到了未知的领域，上报一下我们的情况给老板吧'
 authors: ['default']
 ---
-
-import Divider from '@/components/ui/divider'
 
 # 前言
 
@@ -58,7 +56,7 @@ class MyClass {
 }
 ```
 
-<Divider />
+<divider />
 
 # 语法错误
 
@@ -66,7 +64,8 @@ class MyClass {
   语法错误又称解析错误，是由于代码不符合语法规则导致的错误。例如，缺少冒号、括号不匹配等。
 
 {' '}
-<Divider />
+
+<divider />
 
 # 异常
 
@@ -76,7 +75,7 @@ class MyClass {
 - 错误信息的最后一行说明程序遇到了什么类型的错误
 - `ZeroDivisionError`， `NameError` 和 `TypeError`等等，这些都是 Python 的内置异常，标准异常是内置`identifier`即标识符，不需要导入模块
 
-<Divider />
+<divider />
 
 # 异常处理
 
@@ -150,7 +149,7 @@ for cls in [B, C, D]:
 
 请注意如果颠倒 except 子句 的顺序（把 except B 放在最前），则会输出 B, B, B --- 即触发了第一个匹配的 except 子句。
 
-<Divider />
+<divider />
 
 # 异常参数
 

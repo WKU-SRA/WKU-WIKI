@@ -9,23 +9,15 @@ summary: '有人说，一个函数可以解决任何问题。一个不够？那�
 authors: ['default']
 ---
 
-import Player from 'components/Player'
-import Divider from '@/components/ui/divider'
-import { TimeStampPlayer } from 'components/Player'
-import ImageWrapper from 'components/ImageWrapper'
-import FrameModal from 'components/IframeWrapper'
-import Quote from 'components/QuoteWrapper'
-import Modal from 'components/ui/modal'
-
 # 引言
 
 诶，我点进来之前的时候就觉得奇怪了，为什么编程入门之夏是从函数开始讲的，我学Java，函数都在后面的章节了呀 (WKU新生编程入门所用教材安排在第六章)，首先呢，我们
 借鉴 CS 61a 的课程安排，而在 CS 61a 中贯穿整个课程的便是抽象，我们没必要一来就以解决问题为方向，虽然这个阶段，你不能使用编程语言解决问题，但你能对编程有一个
 更深入的了解，且Python接近人类自然语言的语法，动态语言的类型，凭借你的自觉就也能写一些东西，我们相信这也是伯克利这样的高校课程安排的原因吧。
 
-<Divider />
+<divider />
 
-<TimeStampPlayer
+<tsplayer
   heading="函数"
   summary=""
   checkPoints={[
@@ -91,9 +83,9 @@ import Modal from 'components/ui/modal'
     '//player.bilibili.com/player.html?isOutside=true&aid=427281261&bvid=BV1s3411G7yM&cid=746779396&p=3'
   }
 />
-<Divider />
+<divider />
 
-<Divider />
+<divider />
 
 # Python 入门教程 - 语句与表达式
 
@@ -108,7 +100,7 @@ Python 代码由表达式和语句组成。广义上讲，计算机程序包括�
 
 <Modal
   element={
-    <Quote
+    <quote
       quote={{
         author: 'CS 61a lecture',
         href: 'https://cs61a.org/',
@@ -126,7 +118,7 @@ Python 代码由表达式和语句组成。广义上讲，计算机程序包括�
 
 <Modal
   element={
-    <Quote
+    <quote
       quote={{
         author: 'CS 61a  lecture',
         href: 'https://cs61a.org/',
@@ -174,7 +166,7 @@ print(result)  # 输出 5
 你发现了吗，他在计算一个值，而 `def add(a, b):` 这是个函数定义，他是一个操作，他只是定义了一个操作，没有调用也没干任何事情。
 所以呢，其实就是文字游戏，没必要去记
 
-<Quote
+<quote
   paraphrased
   quote={{
     author: 'CS 61 a lecture',
@@ -411,7 +403,7 @@ def mul(a):
 
 说实话，61a 的教授讲的很清楚了，详情请自行观看 DQ 1 solution
 
-<FrameModal href="https://pythontutor.com/cp/composingprograms.html#code=def%20mul%28a,b%29%3A%0A%20%20%20%20return%20a%20*%20b%0A%20%20%20%20%0A%20%20%20%20%0Adef%20add%20%28a,b%29%3A%0A%20%20%20%20return%20a%20%2B%20b%0A%20%20%20%20%0A%20%20%20%20%0Amul%28add%282,%20mul%284,%206%29%29,%20add%283,%205%29%29&cumulative=true&mode=edit&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D" />
+<frame href="https://pythontutor.com/cp/composingprograms.html#code=def%20mul%28a,b%29%3A%0A%20%20%20%20return%20a%20*%20b%0A%20%20%20%20%0A%20%20%20%20%0Adef%20add%20%28a,b%29%3A%0A%20%20%20%20return%20a%20%2B%20b%0A%20%20%20%20%0A%20%20%20%20%0Amul%28add%282,%20mul%284,%206%29%29,%20add%283,%205%29%29&cumulative=true&mode=edit&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D" />
 > 注：请至少观看完本节视频 environment diagram 后再使用 visualizer进行可视化
 <br />
 
@@ -419,7 +411,7 @@ def mul(a):
 
 <br />
 
-<Quote 
+<quote 
   quote={{
     author: 'CS 61a SICP',
     href: 'https://www.composingprograms.com/pages/12-elements-of-programming.html',}}
