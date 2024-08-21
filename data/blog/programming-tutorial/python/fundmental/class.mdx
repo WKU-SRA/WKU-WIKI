@@ -2,14 +2,12 @@
 series: 'python-manual'
 depth: 4
 title: 'Python 类'
-date: '2024-08-11'
+date: '2024-08-14'
 tags: ['CPS', '官方文档拓展', 'SRA 编程入门之夏']
 draft: false
 summary: 'Python里的类，这样用'
 authors: ['default']
 ---
-
-import Divider from '@/components/ui/divider'
 
 类提供了把**数据**和**功能**绑定在一起的方法。创建新类时创建了新的对象类型，从而能够创建该类型的新**实例**。实例具有能**维持自身状态**的属性，还具有能**修改自身状态**的方法（由其所属的类来定义）。
 和其他编程语言相比，Python 的类只使用了很少的新语法和语义。Python 的类有点类似于 C++ 和 Modula-3 中类的结合体，而且支持面向对象编程（OOP）的所有标准特性：类的继承机制（inheritance）支持多个基类（Java不支持多继承，但可以通过接口（interface）来实现类似的功能。即`implements`多个接口）、派生（derived）的类能覆盖基类（override）的方法、类的方法能调用基类中的同名方法(使用`super()`)。对象可包含任意数量和类型的数据。和模块一样，类也支持 Python **动态**特性：在运行时创建，创建后还可以修改。
@@ -154,7 +152,7 @@ Proxy 和 Reflection 属于元编程（Meta Programming），程序可以像数�
 - 方法调用的拦截：动态代理通过实现 InvocationHandler 接口来拦截方法调用。InvocationHandler 的 invoke 方法使用反射来调用目标对象的方法。
 - 灵活性和动态性：反射允许在运行时检查和调用类的方法和字段，这为动态代理提供了必要的灵活性，使得代理对象可以在运行时动态地处理方法调用。
 
-<Divider />
+<divider />
 
 # 名称和对象
 
@@ -210,7 +208,7 @@ end.
 
 > ChatGPT 曾言，ModifyArray使用var关键字按引用传递数组，因此对数组的修改会反映在原始数组中。如果不使用var关键字，数组将按值传递，函数内的修改不会影响原始数组。
 
-<Divider />
+<divider />
 
 # 作用域和命名空间
 
@@ -392,7 +390,7 @@ print("In global scope:", spam)
 > 注意，局部 赋值（这是默认状态）不会改变 scope_test 对 spam 的绑定。 nonlocal 赋值会改变 scope_test 对 spam 的绑定，而 global 赋值会改变模块层级的绑定。
 > 而且，global 赋值前没有 spam 的绑定。
 
-<Divider />
+<divider />
 
 # 类
 
@@ -460,7 +458,7 @@ x.r, x.i
 # (3.0, -4.5)
 ```
 
-<Divider />
+<divider />
 
 ## 对象实例
 
@@ -469,9 +467,9 @@ x.r, x.i
 - 数据属性不需要声明；像局部变量一样，首次赋值时它们就产生了。 例如，如果 `x` 是上面创建的 `MyClass` 的实例，那么 `x.counter` 将创建一个名为 `counter` 的新数据属性，而 `x.counter = 1` 将修改它。注意，这样做不会影响类属性(这里的counter为实例属性)。 你也可以使用 `del` 语句删除实例属性。且该数据属性只对当前实例有效。
 - 方法是“属于”一个对象的函数。 对象的方法在定义类时就已经绑定了。 这就是为什么它们有一个 `self` 参数(类似java的`this`,字如其意，`self`和`this`都用来表示引用自己)，以便它们可以访问它们的数据属性。- 注意通过实例访问类的方法时，不需要传递 `self` 参数。但是，如果通过类访问方法，则必须传递 `self` 参数。
   `python
-  x.f()
-  MyClass.f(x)
-  `
+x.f()
+MyClass.f(x)
+`
   Bonus: 静态方法（static method）方法和类方法（class method）
 - 静态方法是类的方法，不需要访问类的实例。静态方法使用 `@staticmethod` 装饰器来定义。静态方法不需要 `self` 参数和`cls`，因此它们不会访问实例的数据属性。不能访问类属性或实例属性，只能访问定义在方法内部的局部变量。通常用于逻辑上属于类但不需要访问类或实例的任何属性或方法的功能。
 
@@ -521,7 +519,7 @@ Bonus in Bonus:
 
 其实吧，python 的 class method 更像java的 static method
 
-<Divider />
+<divider />
 
 ## 方法对象
 
@@ -539,7 +537,7 @@ Bonus in Bonus:
 | **访问方式** | 通过实例访问类的方法 | 通过方法对象的 `__func__` 属性 |
 | **重用**     | 绑定到特定实例       | 不绑定到特定实例，可以重用     |
 
-<Divider />
+<divider />
 
 ## 实例变量
 
@@ -565,7 +563,7 @@ class Dog:
 'Buddy'
 ```
 
-<Divider />
+<divider />
 
 ## 补充
 
@@ -615,7 +613,7 @@ def add(self, x):
 
 每个值都是一个对象，因此具有 类 （也称为 类型），并存储为 object.**class** 。
 
-<Divider />
+<divider />
 
 ## 继承
 
@@ -662,7 +660,7 @@ Python有两个内置函数可被用于继承机制：
 - 使用 isinstance() 来检查一个实例的类型: isinstance(obj, int) 仅会在 obj.**class** 为 int 或某个派生自 int 的类时为 True。
 - 使用 issubclass() 来检查类的继承关系: issubclass(bool, int) 为 True，因为 bool 是 int 的子类。 但是，issubclass(float, int) 为 False，因为 float 不是 int 的子类。
 
-<Divider />
+<divider />
 
 ### 多重继承
 
@@ -711,7 +709,7 @@ if __name__ == "__main__":
     dfs(root)
 ```
 
-<Divider />
+<divider />
 
 # 私有变量
 

@@ -9,20 +9,16 @@ summary: '配置你的开发环境，为接下来的学习做好准备'
 authors: ['default']
 ---
 
-import VideoPlayer from 'components/Player'
 import getCurrentDateTime from 'lib/utils/date-utils'
-import { TimeStampPlayer } from 'components/Player'
-import Divider from '@/components/ui/divider'
-import ImageWrapper from 'components/ImageWrapper'
 
 # 欢迎登船
 
 <span style={{ whiteSpace: 'pre-wrap' }}>{getCurrentDateTime()}</span> !
-<Divider />
+<divider />
 
 # 领取你的学生包
 
-<TimeStampPlayer
+<tsplayer
   heading="领取GitHub学生权益"
   summary=" GitHub是通用的代码托管网站，也是全球最大的开源社区，在这里你能接触到最新的科技。
     当然，作为学生的我们，也可以使用GitHub给我们的学生权益，在开发的路上畅通无阻 🚀   "
@@ -41,7 +37,7 @@ import ImageWrapper from 'components/ImageWrapper'
 
 咳咳，都到这里了，不加入一下科协的官方[GitHub](https://github.com/WKU-SRA)组织吗？还有我们的 [HuggingFace](https://huggingface.co/WKU-SRA)也可以加入哦🥹！
 
-<Divider />
+<divider />
 
 # 搭建你的Python环境
 
@@ -83,7 +79,7 @@ math.ceil(10.5)
 
 作为新手，我们肯定有很多新特性需要学习，在我们写代码的时候，不想直接在项目中测试，那么交互式解释器，让我们无需新开文件就可以调试代码，不用担心代码的污染。
 
-<Divider />
+<divider />
 
 ## 安装Python
 
@@ -137,7 +133,7 @@ MacOS一般自带Python,检查Python是否安装成功：
 
    若未添加python到环境变量，请参考[下文](configure-your-computer/#解决方案)的解决方案。
 
-<Divider />
+<divider />
 
 # 安装 Anaconda
 
