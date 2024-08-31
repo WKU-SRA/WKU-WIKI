@@ -2,8 +2,8 @@
 const siteMetadata = {
   title: '科协维基',
   author: 'WKU-SRA',
-  headerTitle: 'WKU-SRA-WIKI',
-  description: '科研与创新的最佳资源和指南，助力你在学术和职业生涯中取得成功。',
+  headerTitle: 'SRA-WIKI',
+  description: '科研与创新的最佳资源和指南，助力你在学术和职业生涯中取得成功',
   language: 'zh-cn',
   theme: 'system', // system, dark or light
   siteUrl: 'https://wiki.wkusci.com',
