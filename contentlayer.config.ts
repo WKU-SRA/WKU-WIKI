@@ -95,6 +95,7 @@ export const Blog = defineDocumentType(() => ({
   filePathPattern: 'blog/**/*.mdx',
   contentType: 'mdx',
   fields: {
+    member_only: { type: 'boolean' },
     series: { type: 'string' },
     depth: { type: 'number' },
     title: { type: 'string', required: true },
