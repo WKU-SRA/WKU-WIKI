@@ -3,7 +3,7 @@ import { genPageMetadata } from 'app/seo'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowUp } from 'lucide-react'
-import { sortedPosts } from 'lib/utils/sorting'
+import { sortedPosts } from 'lib/helpers/blog-sorting-helper'
 
 const POSTS_PER_PAGE = 5
 

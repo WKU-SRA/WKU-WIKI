@@ -5,6 +5,7 @@ import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import PostSimple from '@/layouts/PostSimple'
 import PostLayout from '@/layouts/PostLayout'
 import PostBanner from '@/layouts/PostBanner'
+import { components } from '@/components/MDXComponents'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -45,7 +46,7 @@ const ClientComponent: React.FC<ClientComponentProps> = ({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
-        <MDXLayoutRenderer code={post.body.code} toc={post.toc} />
+        <MDXLayoutRenderer components={components} code={post.body.code} toc={post.toc} />
       </Layout>
     </>
   )

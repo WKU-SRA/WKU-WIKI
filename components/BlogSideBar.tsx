@@ -71,7 +71,7 @@ export default function BlogSidebar({ lists }: SidebarProps) {
   return (
     <div
       className={cn(
-        'fixed left-1 top-2 mx-auto max-h-[90vh] w-auto max-w-7xl flex-1 flex-col overflow-auto rounded-md border border-neutral-200 bg-gray-100 opacity-30 hover:opacity-100 dark:border-neutral-700 dark:bg-neutral-800 md:min-h-[300px] md:flex-row md:opacity-60 lg:opacity-100',
+        'fixed left-1 top-24 mx-auto max-h-[90vh] w-auto max-w-7xl flex-1 flex-col overflow-auto rounded-md border border-neutral-200 bg-gray-100 opacity-30 hover:opacity-100 dark:border-neutral-700 dark:bg-neutral-800 md:min-h-[300px] md:flex-row md:opacity-60 lg:opacity-100',
         'h-auto'
       )}
     >
@@ -136,7 +136,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="whitespace-pre font-medium text-blue-300 dark:text-white"
       >
-        科研飞跃手册
+        科协维基百科
       </motion.span>
     </Link>
   )
