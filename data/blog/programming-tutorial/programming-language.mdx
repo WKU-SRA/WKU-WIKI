@@ -9,11 +9,6 @@ summary: '编程语言这么多，他们到底有啥区别'
 authors: ['default']
 ---
 
-import Player from 'components/Player'
-import Divider from '@/components/ui/divider'
-import { TimeStampPlayer } from 'components/Player'
-import ImageWrapper from 'components/ImageWrapper'
-
 # 欢迎
 
 欢迎登舰 🧑‍✈️ 来杯咖啡？☕️
@@ -22,7 +17,7 @@ import ImageWrapper from 'components/ImageWrapper'
 
 # 编程语言的历史
 
-<TimeStampPlayer
+<TSplayer
   description="下一个改变历史的也许就是你"
   heading="编程语言的历史"
   summary=" A new level of abstraction ! 为什么需要了解编程语言的历史呢？纵观人类发展史，无论是科研或是工程，人类都是在不断抽象已有的知识和经验，以更高层次的抽象来简化复杂问题，提高效率和生产力。了解编程语言发展史便也是对抽象哲学的再理解    "
@@ -51,7 +46,7 @@ import ImageWrapper from 'components/ImageWrapper'
 
 Fireship 的视频已经很详细地介绍了各种编程语言的特性和应用场景，我们在这里就不赘述了，接下来我们把重心放到编程范式上。
 
-<Player
+<player
   link={
     '//player.bilibili.com/player.html?isOutside=true&aid=472440059&bvid=BV15T411F7js&cid=817843452&p=1'
   }
@@ -389,14 +384,6 @@ SELECT * FROM CoffeeOrders WHERE status = "Pending";
 小sql知道如何去操作咖啡机，如何研磨咖啡豆，如何冲泡咖啡。他按照自己的方式和步骤，最终制作出一杯符合html要求的咖啡。这种方式就是声明式编程，程序员只需要描述目标和结果，而具体的操作过程由底层系统处理。
 
 关于声明式编程，为什么要使用它，大家可以阅读下面 React （JavaScript 库，常用于网页开发） 文档
-
-<div className="relative overflow-hidden">
-  <iframe
-    allowFullScreen
-    className="min-h-[600px] w-full"
-    src="https://react.dev/learn/reacting-to-input-with-state#how-declarative-ui-compares-to-imperative"
-  />
-</div>
 
 <Divider />
 
