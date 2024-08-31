@@ -15,6 +15,8 @@ import { notFound } from 'next/navigation'
 import ClientComponent from './wrapper'
 import GiscusComments from '@/components/GiscusComments'
 import BlogSidebar from '@/components/BlogSideBar'
+import { Protect } from '@clerk/nextjs'
+import LoginPrompt from '@/components/LoginPrompt'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -108,19 +110,35 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   })
 
   const Layout = layouts[post.layout || defaultLayout]
-
   return (
     <>
-      <ClientComponent
-        jsonLd={jsonLd}
-        mainContent={mainContent}
-        authorDetails={authorDetails}
-        next={next}
-        prev={prev}
-        post={post}
-      />
-      <BlogSidebar lists={lists} />
-      <GiscusComments />
+      {post?.member_only ? (
+        <Protect fallback={<LoginPrompt />}>
+          <ClientComponent
+            jsonLd={jsonLd}
+            mainContent={mainContent}
+            authorDetails={authorDetails}
+            next={next}
+            prev={prev}
+            post={post}
+          />
+          <BlogSidebar lists={lists} />
+          <GiscusComments />
+        </Protect>
+      ) : (
+        <>
+          <ClientComponent
+            jsonLd={jsonLd}
+            mainContent={mainContent}
+            authorDetails={authorDetails}
+            next={next}
+            prev={prev}
+            post={post}
+          />
+          <BlogSidebar lists={lists} />
+          <GiscusComments />
+        </>
+      )}
     </>
   )
 }

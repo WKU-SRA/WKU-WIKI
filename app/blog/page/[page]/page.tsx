@@ -1,6 +1,6 @@
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import { allBlogs } from 'contentlayer/generated'
-import { sortedPosts } from 'lib/utils/sorting'
+import { sortedPosts } from 'lib/helpers/blog-sorting-helper'
 
 const POSTS_PER_PAGE = 5
 

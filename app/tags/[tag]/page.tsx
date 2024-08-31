@@ -4,7 +4,7 @@ import ListLayout from '@/layouts/ListLayoutWithTags'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
-import { sortedPosts } from 'lib/utils/sorting'
+import { sortedPosts } from 'lib/helpers/blog-sorting-helper'
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const tag = decodeURI(decodeURI(params.tag))
