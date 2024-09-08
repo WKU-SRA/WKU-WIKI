@@ -111,16 +111,33 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   const Layout = layouts[post.layout || defaultLayout]
   return (
     <>
-      <ClientComponent
-        jsonLd={jsonLd}
-        mainContent={mainContent}
-        authorDetails={authorDetails}
-        next={next}
-        prev={prev}
-        post={post}
-      />
-      <BlogSidebar lists={lists} />
-      <GiscusComments />
+      {post?.member_only ? (
+        <Protect fallback={<LoginPrompt />}>
+          <ClientComponent
+            jsonLd={jsonLd}
+            mainContent={mainContent}
+            authorDetails={authorDetails}
+            next={next}
+            prev={prev}
+            post={post}
+          />
+          <BlogSidebar lists={lists} />
+          <GiscusComments />
+        </Protect>
+      ) : (
+        <>
+          <ClientComponent
+            jsonLd={jsonLd}
+            mainContent={mainContent}
+            authorDetails={authorDetails}
+            next={next}
+            prev={prev}
+            post={post}
+          />
+          <BlogSidebar lists={lists} />
+          <GiscusComments />
+        </>
+      )}
     </>
   )
 }
