@@ -61,7 +61,7 @@ const MobileNav = () => {
                 leaveFrom="translate-x-0 opacity-95"
                 leaveTo="translate-x-full opacity-0"
               >
-                <Dialog.Panel className="fixed left-0 top-0 z-10 h-full w-full bg-white opacity-95 duration-300 dark:bg-gray-950 dark:opacity-[0.98]">
+                <Dialog.Panel className="fixed left-0 top-14 z-10 h-full w-full bg-white opacity-95 duration-300 dark:bg-gray-950 dark:opacity-[0.98]">
                   <nav className="fixed mt-8 h-full text-left">
                     {headerNavLinks.map((link) => (
                       <div key={link!.title} className="px-12 py-4">
