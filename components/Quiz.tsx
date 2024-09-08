@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from './ui/button'
-import Modal from './ui/modal'
+import Modal from './ui/window'
 import { cn } from 'lib/utils'
 import { ReactNode, useState } from 'react'
 export default function Quiz({
