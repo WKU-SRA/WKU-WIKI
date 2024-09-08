@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
-import Modal from './ui/modal'
+import Modal from './ui/window'
 import Slider from './Slider'
 
 const ResizableModal = ({ element }) => {

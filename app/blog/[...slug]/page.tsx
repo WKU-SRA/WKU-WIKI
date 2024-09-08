@@ -15,7 +15,6 @@ import { notFound } from 'next/navigation'
 import ClientComponent from './wrapper'
 import GiscusComments from '@/components/GiscusComments'
 import BlogSidebar from '@/components/BlogSideBar'
-import { Protect } from '@clerk/nextjs'
 import LoginPrompt from '@/components/LoginPrompt'
 
 const defaultLayout = 'PostLayout'
