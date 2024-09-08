@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import Modal from './ui/modal'
+import Modal from './ui/window'
 import { useEffect } from 'react'
 
 export default function FrameModal({ href }: { href: string }) {
