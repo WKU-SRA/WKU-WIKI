@@ -6,7 +6,7 @@ The primary content of our website is currently in Chinese. Because Wenzhou-Kean
 
 ## Table of Contents
 
-- [Tech Stack](#major-tech-stack)
+- [Tech Stack](#primary-tech-stack)
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Contributing](#contributing)
@@ -24,9 +24,7 @@ The primary content of our website is currently in Chinese. Because Wenzhou-Kean
 - [Prettier](https://prettier.io)
 - [PostCSS](https://postcss.org)
 - [Yarn](https://yarnpkg.com)
-- [Esbuild](https://esbuild.github.io)
-- [React KaTeX](https://react-katex.now.sh) not used, but most likely will be used to render LaTex
-- [tabler](https://tabler.io)
+- [tabler](https://tabler.io) 
 
 ## Introduction
 
@@ -125,10 +123,28 @@ Create a Pull Request: Go to the original repository on GitHub and click the "Ne
 
 ## License
 
-[MIT]() © [WKU-SRA](https://github.com/WKU-SRA)
+[MIT](https://github.com/WKU-SRA/WKU-WIKI/blob/main/LICENSE) © [WKU-SRA](https://github.com/WKU-SRA)
 
 ## Acknowledgements
 
 - Special thanks to [Timothy](https://github.com/timlrx), we used his starter templete.
 - Thanks to the open source community
-- Thanks to all contributors
+- Thank you to all the contributors of the current WIKI project.
+- Thank you to all the contributors of the `nextjs-tailwind-starter`(https://github.com/timlrx/tailwind-nextjs-starter-blog) project.
+
+
+
+## 致谢
+
+- 特别感谢 Timothy，我们使用了他的基础模板。
+- 感谢开源社区。
+- 感谢原模版项目所有贡献者。
+- 感谢本维基项目贡献者。
+
+---
+贡献者：  
+
+<a href="https://wkusci.com">
+温肯科协
+</a>
+
