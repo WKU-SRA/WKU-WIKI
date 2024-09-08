@@ -12,7 +12,7 @@ import CodeBlock from 'components/Code'
 import VideoPlayer from 'components/Player'
 import { TimeStampPlayer } from 'components/Player'
 import ImageWrapper from 'components/ImageWrapper'
-import Modal from 'components/ui/modal'
+import Window from 'components/ui/window'
 import Quote from 'components/QuoteWrapper'
 import FrameModal from 'components/IframeWrapper'
 import Player from 'components/Player'
@@ -20,7 +20,7 @@ import Player from 'components/Player'
 export const components: MDXComponents = {
   Frame: FrameModal,
   Quote,
-  Modal,
+  Window,
   Quiz,
   CodeBlock,
   TSplayer: TimeStampPlayer,
